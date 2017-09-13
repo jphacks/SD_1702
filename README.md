@@ -1,4 +1,7 @@
 # サンプル（プロダクト名）
+
+[![Watch the video](https://raw.github.com/GabLeRoux/WebMole/master/ressources/WebMole_Youtube_Video.png)](http://youtu.be/vt5fpE0bzSY)
+
 ## 製品概要
 ### X Tech（X → 今回皆さんが選定した好きな言葉に書き換えてください）
 
