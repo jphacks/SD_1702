@@ -74,7 +74,7 @@ class Calculator {
         print(han)
         print("符: \(fu)", terminator:"")
         
-        var hanindex = han - 1
+        let hanindex = han == 0 ? 0 : han - 1
         var fuindex: Int
         if (fu == 25) {
             fuindex = 1

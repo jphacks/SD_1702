@@ -44,6 +44,8 @@ class Hand {
         }
         if (!invalidHand) {
             getTenpaiCandidate()
+        } else {
+            print("不正")
         }
     }
     // 鳴いている場合はその面子をリストで入力
@@ -249,13 +251,20 @@ class Hand {
         
         for i in 1 ..< 26 {
             while tmpTiles[i - 1] > 0 && tmpTiles[i] > 0 && tmpTiles[i + 1] > 0 {
-                let shuntsu = Syuntsu(isOpen: false, tile1: Tile(rawValue: i - 1)!, tile2: Tile(rawValue: i)!, tile3: Tile(rawValue: i + 1)!)
+                let shuntsu = Syuntsu(
+                    isOpen: false,
+                    tile1: Tile(rawValue: i - 1)!,
+                    tile2: Tile(rawValue: i)!,
+                    tile3: Tile(rawValue: i + 1)!
+                )
                 
                 if (shuntsu.isMentsu) {
                     resultList.append(shuntsu)
                     tmpTiles[i - 1] -= 1
                     tmpTiles[i] -= 1
                     tmpTiles[i + 1] -= 1
+                } else {
+                    break
                 }
             }
         }
