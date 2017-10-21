@@ -32,6 +32,7 @@
 		5AA52CC01F9B51E1006107AB /* Solver_GeneralSituation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA52CB51F9B51E1006107AB /* Solver_GeneralSituation.swift */; };
 		5AA52CC11F9B51E1006107AB /* Solver_CompMentsu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA52CB61F9B51E1006107AB /* Solver_CompMentsu.swift */; };
 		5AA52CC21F9B51E1006107AB /* Solver_Tenpai.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA52CB71F9B51E1006107AB /* Solver_Tenpai.swift */; };
+		5AA52CC41F9B65AA006107AB /* Solver_Syanten.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA52CC31F9B65AA006107AB /* Solver_Syanten.swift */; };
 		5AEEBAAD1F98994D00E006F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEEBAAC1F98994D00E006F3 /* AppDelegate.swift */; };
 		5AEEBAAF1F98994D00E006F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEEBAAE1F98994D00E006F3 /* ViewController.swift */; };
 		5AEEBAB21F98994D00E006F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AEEBAB01F98994D00E006F3 /* Main.storyboard */; };
@@ -67,6 +68,7 @@
 		5AA52CB51F9B51E1006107AB /* Solver_GeneralSituation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solver_GeneralSituation.swift; sourceTree = "<group>"; };
 		5AA52CB61F9B51E1006107AB /* Solver_CompMentsu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solver_CompMentsu.swift; sourceTree = "<group>"; };
 		5AA52CB71F9B51E1006107AB /* Solver_Tenpai.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solver_Tenpai.swift; sourceTree = "<group>"; };
+		5AA52CC31F9B65AA006107AB /* Solver_Syanten.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Solver_Syanten.swift; sourceTree = "<group>"; };
 		5AEEBAA91F98994D00E006F3 /* JongHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JongHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AEEBAAC1F98994D00E006F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5AEEBAAE1F98994D00E006F3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				5AA52CAF1F9B51DF006107AB /* Solver_Kotsu.swift */,
 				5AA52CAE1F9B51DF006107AB /* Solver_Mentsu.swift */,
 				5AA52CB01F9B51E0006107AB /* Solver_PersonalSituation.swift */,
+				5AA52CC31F9B65AA006107AB /* Solver_Syanten.swift */,
 				5AA52CB21F9B51E0006107AB /* Solver_Syuntsu.swift */,
 				5AA52CB71F9B51E1006107AB /* Solver_Tenpai.swift */,
 				5AA52CAD1F9B51DF006107AB /* Solver_Toitsu.swift */,
@@ -231,6 +234,7 @@
 				5A46BE8C1F9AD93D008F1ACB /* AVCapture.swift in Sources */,
 				5A46BE9A1F9AE51B008F1ACB /* Tile.swift in Sources */,
 				5AA52CBE1F9B51E1006107AB /* Solver_Calculator.swift in Sources */,
+				5AA52CC41F9B65AA006107AB /* Solver_Syanten.swift in Sources */,
 				5AA52CB81F9B51E1006107AB /* Solver_Toitsu.swift in Sources */,
 				5AA52CC01F9B51E1006107AB /* Solver_GeneralSituation.swift in Sources */,
 				5AA52CBC1F9B51E1006107AB /* Solver_Yaku.swift in Sources */,

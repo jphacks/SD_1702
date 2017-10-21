@@ -20,7 +20,7 @@ class Syanten {
     
     // シャンテン数を返す
     func getSyantenNum() -> Int {
-        return min(getKokusiSyantenNum, getTiitoituSyantenNum, getNormalSyantenNum)
+        return min(getKokusiSyantenNum(), getTiitoituSyantenNum(), getNormalSyantenNum())
     }
     
     //国士無双のシャンテン数を返すyo///////////////////////////////////////
@@ -29,17 +29,17 @@ class Syanten {
         //老頭牌
         
         for i in 0 ..< 34 {
-            if (Tile(rawValue: i).isYaochu()) {
+            if (Tile(rawValue: i)?.isYaochu())! {
                 if (tmp[i] > 0) {
                     syanten_kokusi -= 1
                 }
                 if (tmp[i] >= 2 && !toituflag) {
-                    toitsuflag = true
+                    toituflag  = true
                 }
             }
         }
         //頭
-        syanten_kokusi -= toitsuflag ? 1 : 0
+        syanten_kokusi -= toituflag ? 1 : 0
         return syanten_kokusi
     }
 
@@ -48,8 +48,8 @@ class Syanten {
         var toitu = 0, syanten_tiitoi = 6
         //トイツ数を数える
         for i in 0..<34{
-            if(tmp[i] >= 2) toitu += 1
-            if(tmp[i] == 4) toitu -= 1
+            if(tmp[i] >= 2) {toitu += 1}
+            if(tmp[i] == 4) {toitu -= 1}
         }
         syanten_tiitoi -= toitu
         return syanten_tiitoi
@@ -81,11 +81,11 @@ class Syanten {
 
     //メンツ抜き出しの関数//////////////////////////
     func mentu_cut(i: Int){
-        var j  =0
+        var j = 0
         //牌が見つかるまで飛ばす
         for k in i..<34{
             j = k
-            if(tmp[j] > 0) break
+            if(tmp[j] > 0) {break}
         }
         
         //メンツを抜き終わったのでターツ抜きへ
