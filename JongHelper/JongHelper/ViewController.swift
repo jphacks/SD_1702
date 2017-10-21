@@ -22,6 +22,7 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
     private var jikazeCellIndexPath = IndexPath(row: 0, section: 0)
     private var doraCellIndexPath: [IndexPath] = Array(repeating: IndexPath(row: 0, section: 0), count: 4)
     private var tehaiCellIndexArray: [Int] = Array(repeating: 0, count: 14)
+    private let initTehaiArray: [Tile] = Array(repeating: Tile.p7, count: 14)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +56,8 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
         // デリゲートをセット
         tapGesture.delegate = self
         self.view.addGestureRecognizer(tapGesture)
+        
+        setTehaiView(initTehaiArray, animated: false)
     }
     
     @objc func tapped(_ sender: UITapGestureRecognizer){
@@ -191,6 +194,12 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
     
     //tableview===============================================================
 
+    func setTehaiView(_ list: [Tile], animated: Bool) {
+        for tv in (self.tehaiView.tableViews)! {
+            let index = IndexPath(row: list[tv.tag - 1].rawValue, section: 0)
+            tv.scrollToRow(at: index, at: UITableViewScrollPosition.middle, animated: true)
+        }
+    }
 
 }
 
