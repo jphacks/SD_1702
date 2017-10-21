@@ -259,7 +259,11 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         } else {
             print("NOTEN")
             let syanten = Syanten(hand: arr)
-            notenView.syantenLabel.text = String(syanten.getSyantenNum()) + "シャンテン"
+            if(x.invalidHand) {
+                notenView.syantenLabel.text = "手牌が不正です"
+            } else {
+                notenView.syantenLabel.text = String(syanten.getSyantenNum()) + "シャンテン"
+            }
         }
         switchView(x.isTenpai)
         
