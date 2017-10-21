@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A46BE861F9AD40F008F1ACB /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A46BE851F9AD40F008F1ACB /* opencv2.framework */; };
+		5A46BE891F9AD48A008F1ACB /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A46BE881F9AD48A008F1ACB /* OpenCVWrapper.mm */; };
+		5A46BE8C1F9AD93D008F1ACB /* AVCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A46BE8B1F9AD93D008F1ACB /* AVCapture.swift */; };
 		5AEEBAAD1F98994D00E006F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEEBAAC1F98994D00E006F3 /* AppDelegate.swift */; };
 		5AEEBAAF1F98994D00E006F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEEBAAE1F98994D00E006F3 /* ViewController.swift */; };
 		5AEEBAB21F98994D00E006F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AEEBAB01F98994D00E006F3 /* Main.storyboard */; };
@@ -15,6 +18,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5A46BE851F9AD40F008F1ACB /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
+		5A46BE871F9AD48A008F1ACB /* JongHelper-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JongHelper-Bridging-Header.h"; sourceTree = "<group>"; };
+		5A46BE881F9AD48A008F1ACB /* OpenCVWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCVWrapper.mm; sourceTree = "<group>"; };
+		5A46BE8A1F9AD49A008F1ACB /* OpenCVWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenCVWrapper.h; sourceTree = "<group>"; };
+		5A46BE8B1F9AD93D008F1ACB /* AVCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCapture.swift; sourceTree = "<group>"; };
 		5AEEBAA91F98994D00E006F3 /* JongHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JongHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AEEBAAC1F98994D00E006F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5AEEBAAE1F98994D00E006F3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -29,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A46BE861F9AD40F008F1ACB /* opencv2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,12 +63,17 @@
 		5AEEBAAB1F98994D00E006F3 /* JongHelper */ = {
 			isa = PBXGroup;
 			children = (
+				5A46BE851F9AD40F008F1ACB /* opencv2.framework */,
 				5AEEBAAC1F98994D00E006F3 /* AppDelegate.swift */,
 				5AEEBAAE1F98994D00E006F3 /* ViewController.swift */,
 				5AEEBAB01F98994D00E006F3 /* Main.storyboard */,
 				5AEEBAB31F98994D00E006F3 /* Assets.xcassets */,
 				5AEEBAB51F98994D00E006F3 /* LaunchScreen.storyboard */,
 				5AEEBAB81F98994D00E006F3 /* Info.plist */,
+				5A46BE881F9AD48A008F1ACB /* OpenCVWrapper.mm */,
+				5A46BE871F9AD48A008F1ACB /* JongHelper-Bridging-Header.h */,
+				5A46BE8A1F9AD49A008F1ACB /* OpenCVWrapper.h */,
+				5A46BE8B1F9AD93D008F1ACB /* AVCapture.swift */,
 			);
 			path = JongHelper;
 			sourceTree = "<group>";
@@ -96,6 +110,7 @@
 				TargetAttributes = {
 					5AEEBAA81F98994D00E006F3 = {
 						CreatedOnToolsVersion = 9.0.1;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -137,7 +152,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5AEEBAAF1F98994D00E006F3 /* ViewController.swift in Sources */,
+				5A46BE8C1F9AD93D008F1ACB /* AVCapture.swift in Sources */,
 				5AEEBAAD1F98994D00E006F3 /* AppDelegate.swift in Sources */,
+				5A46BE891F9AD48A008F1ACB /* OpenCVWrapper.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,15 +291,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8X3BYN2T6R;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/JongHelper",
+				);
 				INFOPLIST_FILE = JongHelper/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.weakest34.JongHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "JongHelper/JongHelper-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -292,15 +316,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8X3BYN2T6R;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/JongHelper",
+				);
 				INFOPLIST_FILE = JongHelper/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = net.weakest34.JongHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "JongHelper/JongHelper-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
