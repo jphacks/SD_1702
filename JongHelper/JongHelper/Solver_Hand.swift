@@ -220,6 +220,14 @@ class Hand {
         }
     }
     
+    func calculateSyantenNum -> Int {
+        if (isTenpai) {
+            return 0
+        }
+        
+        
+    }
+    
     func countRemainderTiles() -> Int {
         return tmpTiles.reduce(0) {(num1: Int, num2: Int) -> Int in num1 + num2 }
     }
