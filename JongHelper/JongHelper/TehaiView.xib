@@ -19,10 +19,10 @@
                     <rect key="frame" x="0.0" y="225" width="667" height="150"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F38-kd-bKe">
-                            <rect key="frame" x="4" y="11" width="500" height="128"/>
+                            <rect key="frame" x="4" y="0.0" width="500" height="100"/>
                             <subviews>
                                 <tableView clipsSubviews="YES" tag="1" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="TNM-Vp-PS7" userLabel="Table View1">
-                                    <rect key="frame" x="0.0" y="41" width="32" height="45"/>
+                                    <rect key="frame" x="0.0" y="27" width="32" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="32" id="CFe-WU-6m2"/>
@@ -32,7 +32,7 @@
                                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </tableView>
                                 <tableView clipsSubviews="YES" tag="2" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="hsQ-dU-M5z" userLabel="Table View2">
-                                    <rect key="frame" x="36" y="42" width="32" height="45"/>
+                                    <rect key="frame" x="36" y="28" width="32" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="32" id="JU4-Fe-IxS"/>
@@ -42,7 +42,7 @@
                                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </tableView>
                                 <tableView clipsSubviews="YES" tag="3" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="IH6-tV-EJc" userLabel="Table View3">
-                                    <rect key="frame" x="72" y="42" width="32" height="45"/>
+                                    <rect key="frame" x="72" y="28" width="32" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="45" id="7qY-cS-54X"/>
@@ -52,7 +52,7 @@
                                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </tableView>
                                 <tableView clipsSubviews="YES" tag="4" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Iq5-HI-UT7" userLabel="Table View4">
-                                    <rect key="frame" x="108" y="41" width="32" height="45"/>
+                                    <rect key="frame" x="108" y="27" width="32" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="32" id="cbf-dS-KK2"/>
@@ -62,7 +62,7 @@
                                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </tableView>
                                 <tableView clipsSubviews="YES" tag="5" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kve-n5-BHn" userLabel="Table View5">
-                                    <rect key="frame" x="144" y="41" width="32" height="45"/>
+                                    <rect key="frame" x="144" y="27" width="32" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="45" id="eny-Na-0EG"/>
@@ -72,7 +72,7 @@
                                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </tableView>
                                 <tableView clipsSubviews="YES" tag="6" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="gLG-UW-WQf" userLabel="Table View6">
-                                    <rect key="frame" x="180" y="41" width="32" height="45"/>
+                                    <rect key="frame" x="180" y="27" width="32" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="32" id="T1u-7Q-voe"/>
@@ -82,7 +82,7 @@
                                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </tableView>
                                 <tableView clipsSubviews="YES" tag="7" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="9G2-SY-HVq" userLabel="Table View7">
-                                    <rect key="frame" x="216" y="41" width="32" height="45"/>
+                                    <rect key="frame" x="216" y="27" width="32" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="45" id="IR2-Y2-Nrc"/>
@@ -92,7 +92,7 @@
                                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </tableView>
                                 <tableView clipsSubviews="YES" tag="8" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="mPF-6j-Uw2" userLabel="Table View8">
-                                    <rect key="frame" x="252" y="41" width="32" height="45"/>
+                                    <rect key="frame" x="252" y="27" width="32" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="32" id="FRp-7x-3Ic"/>
@@ -102,7 +102,7 @@
                                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </tableView>
                                 <tableView clipsSubviews="YES" tag="9" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="5na-d8-0VX" userLabel="Table View9">
-                                    <rect key="frame" x="288" y="41" width="32" height="45"/>
+                                    <rect key="frame" x="288" y="27" width="32" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="45" id="MDM-Mi-Y2t"/>
@@ -112,7 +112,7 @@
                                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </tableView>
                                 <tableView clipsSubviews="YES" tag="10" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="MgV-3N-wC4" userLabel="Table View10">
-                                    <rect key="frame" x="324" y="41" width="32" height="45"/>
+                                    <rect key="frame" x="324" y="27" width="32" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="45" id="7XL-xP-HmZ"/>
@@ -122,7 +122,7 @@
                                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </tableView>
                                 <tableView clipsSubviews="YES" tag="11" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="aL9-DH-kLd" userLabel="Table View11">
-                                    <rect key="frame" x="360" y="42" width="32" height="45"/>
+                                    <rect key="frame" x="360" y="28" width="32" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="32" id="WiK-1d-zNj"/>
@@ -132,7 +132,7 @@
                                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </tableView>
                                 <tableView clipsSubviews="YES" tag="12" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="zAF-Vh-DMg" userLabel="Table View12">
-                                    <rect key="frame" x="396" y="42" width="32" height="45"/>
+                                    <rect key="frame" x="396" y="28" width="32" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="32" id="jJ1-HZ-QlP"/>
@@ -142,7 +142,7 @@
                                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </tableView>
                                 <tableView clipsSubviews="YES" tag="13" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UqG-Qb-v2g" userLabel="Table View13">
-                                    <rect key="frame" x="432" y="41" width="32" height="45"/>
+                                    <rect key="frame" x="432" y="27" width="32" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="45" id="4Ea-E4-Fer"/>
@@ -152,7 +152,7 @@
                                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </tableView>
                                 <tableView clipsSubviews="YES" tag="14" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="bwj-Io-mqe" userLabel="Table View14">
-                                    <rect key="frame" x="468" y="41" width="32" height="45"/>
+                                    <rect key="frame" x="468" y="27" width="32" height="45"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="45" id="3OC-Aj-zml"/>
@@ -190,7 +190,7 @@
                                 <constraint firstItem="mPF-6j-Uw2" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="k2k-uA-Axv"/>
                                 <constraint firstItem="Iq5-HI-UT7" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="mvT-H0-CD8"/>
                                 <constraint firstItem="gLG-UW-WQf" firstAttribute="leading" secondItem="kve-n5-BHn" secondAttribute="trailing" constant="4" id="pYV-bg-9wA"/>
-                                <constraint firstAttribute="height" constant="128" id="pbU-cc-2fb"/>
+                                <constraint firstAttribute="height" constant="100" id="pbU-cc-2fb"/>
                                 <constraint firstItem="kve-n5-BHn" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="reX-qf-FGF"/>
                                 <constraint firstItem="TNM-Vp-PS7" firstAttribute="leading" secondItem="F38-kd-bKe" secondAttribute="leading" id="y6Q-0g-F7E"/>
                                 <constraint firstItem="aL9-DH-kLd" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="yt4-BX-edr"/>
@@ -373,12 +373,29 @@
                                 <constraint firstAttribute="width" constant="160" id="x6s-UM-IDK"/>
                             </constraints>
                         </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oJf-Gt-It8">
+                            <rect key="frame" x="0.0" y="100" width="50" height="50"/>
+                            <color key="backgroundColor" red="0.90588235294117647" green="0.29803921568627451" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="50" id="Bmj-LB-jUo"/>
+                                <constraint firstAttribute="width" constant="50" id="wMf-Oh-pOP"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <state key="normal" title="Capture">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="pushCapture:" destination="iN0-l3-epB" eventType="touchUpInside" id="ZNp-Cb-Apd"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="6qa-s1-E2M" secondAttribute="trailing" id="2la-2F-IVL"/>
                         <constraint firstAttribute="height" constant="150" id="Dnf-jf-m2e"/>
-                        <constraint firstItem="F38-kd-bKe" firstAttribute="centerY" secondItem="JS0-aN-Ji9" secondAttribute="centerY" id="JMf-hE-2wN"/>
+                        <constraint firstAttribute="bottom" secondItem="F38-kd-bKe" secondAttribute="bottom" constant="50" id="Mpk-Nj-MqT"/>
+                        <constraint firstItem="oJf-Gt-It8" firstAttribute="leading" secondItem="JS0-aN-Ji9" secondAttribute="leading" id="QWo-Hs-3uC"/>
+                        <constraint firstAttribute="bottom" secondItem="oJf-Gt-It8" secondAttribute="bottom" id="YGM-Z9-HR2"/>
                         <constraint firstItem="F38-kd-bKe" firstAttribute="leading" secondItem="JS0-aN-Ji9" secondAttribute="leading" constant="4" id="alE-Gm-Jlr"/>
                         <constraint firstItem="6qa-s1-E2M" firstAttribute="centerY" secondItem="JS0-aN-Ji9" secondAttribute="centerY" id="nIG-mA-gAr"/>
                     </constraints>

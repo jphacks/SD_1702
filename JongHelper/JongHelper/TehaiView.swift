@@ -8,13 +8,23 @@
 
 import UIKit
 
+protocol TehaiViewDelegate {
+    func pushCapture()
+}
+
+
 class TehaiView: UIView {
+    
+    var delegate: TehaiViewDelegate?
+    
     @IBOutlet var tableViews: [UITableView]!
     @IBOutlet var tableViewDora: [UITableView]!
-    
     @IBOutlet weak var tableViewJikaze: UITableView!
     @IBOutlet weak var tableViewBakaze: UITableView!
     
+    @IBAction func pushCapture(_ sender: UIButton) {
+        delegate?.pushCapture()
+    }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)!

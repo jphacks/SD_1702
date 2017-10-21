@@ -85,6 +85,8 @@ enum Tile: Int {
         let imgDir = "Resource/Hai/"
         var imgName: String
         switch self {
+        case .null:
+            imgName = "none.png"
         case .Ton:
             imgName = "ji1-66-90-l.png"
         case .Nan:
