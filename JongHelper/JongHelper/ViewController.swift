@@ -324,9 +324,11 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         let generalsituation = GeneralSituation(isHoutei: false, bakaze: bakazeTile, dora: dora, honba: 1)
         let personalsituation = PersonalSituation(isParent: false, isTsumo: false, isIppatsu: false, isReach: false, isDoubleReach:
             false, isTyankan: false, isRinsyan: false, jikaze: jikazeTile)
-        var matiArr: [Tile] = []
-        var suteArr: [Tile] = []
+        var matiArr: Set<Tile> = []
+        var suteArr: Set<Tile> = []
         var isTenpai = false
+        var invalidHand = false
+        var minSyanten = 99
         for i in 0..<14 {//13個にして聴牌かどうか確認
             var arr = tehaiTileArray
             arr.remove(at: i)
@@ -335,46 +337,53 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
                 isTenpai = true
                 //print("tenpai-num: \(x.tenpaiSet.count)")
                 for tenpai in x.tenpaiSet {
-                    tenpai.printTenpai()
+                    //tenpai.printTenpai()
                     for hai in tenpai.wait { // 待ち牌ついか
-                        matiArr.append(hai)
+                        matiArr.insert(hai)
                     }
                     for hai in tenpai.uki { // 捨て牌追加
-                        suteArr.append(hai)
+                        suteArr.insert(hai)
                     }
-                    for last in tenpai.uki {
+                    /*for last in tenpai.uki {
                         let compmentsu = CompMentsu(tenpai: tenpai, last: last, isOpenHand: x.isOpenHand)
                         let calculator = Calculator(compMentsu: compmentsu, generalSituation: generalsituation, personalSituation: personalsituation)
                         calculator.calculateScore()
-                    }
-                }
-            }
-            if(isTenpai) {
-                //ビューに待ちを表示
-                for (k, elem) in matiArr.enumerated() {
-                    //self.tenpaiView.matiHaiImage[k].image = elem.toUIImage()
-                }
-                //ビューに捨て牌を表示
-                for (k, elem) in suteArr.enumerated() {
-                    //self.tenpaiView.gomiHaiImage[k].image = elem.toUIImage()
+                    }*/
                 }
             } else {
                 let syanten = Syanten(hand: arr)
                 if(x.invalidHand) {
-                    notenView.syantenLabel.text = "手牌が不正です"
+                    invalidHand = true
                 } else {
-                    notenView.syantenLabel.text = String(syanten.getSyantenNum()) + "シャンテン"
-                    for g in syanten.gomi {
-                        suteArr.append(g)
-                    }
-//                    for (k, elem) in suteArr.enumerated() {
-//                        notenView.haiImage[k].image = elem.toUIImage()
-//                    }
+                    minSyanten = min(minSyanten, syanten.getSyantenNum())
                     
+                    for g in syanten.gomi {
+                        suteArr.insert(g)
+                    }
                 }
             }
-            switchView(x.isTenpai)
         }
+        print("まち：\(matiArr.count) すて：\(suteArr.count)")
+        if(invalidHand){
+            notenView.syantenLabel.text = "手牌が不正です"
+        } else {
+            if(isTenpai) {
+                //ビューに待ちを表示
+                for (k, elem) in matiArr.enumerated() {
+                    self.tenpaiView.matiHaiImage[k].image = elem.toUIImage()
+                }
+                //ビューに捨て牌を表示
+                for (k, elem) in suteArr.enumerated() {
+                    self.tenpaiView.gomiHaiImage[k].image = elem.toUIImage()
+                }
+            } else {
+                for (k, elem) in suteArr.enumerated() {
+                    notenView.haiImage[k].image = elem.toUIImage()
+                }
+                notenView.syantenLabel.text = String(minSyanten) + "シャンテン"
+            }
+        }
+        switchView(isTenpai)
     }
 
 }
