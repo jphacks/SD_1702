@@ -18,17 +18,18 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     
     let avCapture = AVCapture()
     let openCVWrapper = OpenCVWrapper()
-    
-    var tehaiArray: [Tile] = [Tile.Ton, Tile.Nan, Tile.Sya, Tile.Pe, Tile.Haku, Tile.Hatu, Tile.Tyun, Tile.m1, Tile.m9, Tile.p1, Tile.p9, Tile.s1, Tile.s9, Tile.Haku]
     let bakazeList = [Tile.Ton, Tile.Nan, Tile.Sya, Tile.Pe, Tile.Haku, Tile.Hatu, Tile.Tyun]
     let jikazeList = [Tile.Ton, Tile.Nan, Tile.Sya, Tile.Pe]
     var tehaiCellIndexPath: [IndexPath] = Array(repeating: IndexPath(row: 0, section: 0), count: 14)
     var bakazeCellIndexPath = IndexPath(row: 0, section: 0)
     var jikazeCellIndexPath = IndexPath(row: 0, section: 0)
     var doraCellIndexPath: [IndexPath] = Array(repeating: IndexPath(row: 0, section: 0), count: 4)
-    var tehaiCellIndexArray: [Int] = Array(repeating: 0, count: 14)
-    let initTehaiArray: [Tile] = Array(repeating: Tile.p7, count: 14)
+    var doraTileArray: [Tile] = [Tile.m1, Tile.null, Tile.null, Tile.null]
+    //let initTehaiArray: [Tile] = Array(repeating: Tile.p7, count: 14)
+    //let initTehaiArray: [Tile] = [Tile.m2,Tile.m3,Tile.m4,Tile.m2,Tile.m3,Tile.m4,Tile.p2,Tile.p3,Tile.p4,Tile.s3,Tile.s4,Tile.m7,Tile.m7,Tile.Haku]
+    var tehaiTileArray = [Tile.m2,Tile.m3,Tile.m4,Tile.m2,Tile.m3,Tile.m4,Tile.p2,Tile.p3,Tile.p4,Tile.s3,Tile.s4,Tile.m7,Tile.m7,Tile.Haku]
     
+    var isFirstCalc = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,8 +65,29 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         addSubviewWithAutoLayoutBottom(childView: tehaiView!, parentView: self.view)
         tehaiView.delegate = self
         
-        setTehaiView(initTehaiArray, animated: false)
+        setTehaiView(tehaiTileArray, animated: false)
+
         switchView(false)
+        
+        let tapGesture:UITapGestureRecognizer = UITapGestureRecognizer(
+            target: self,
+            action: #selector(ViewController.tapped(_:)))
+        // デリゲートをセット
+        tapGesture.delegate = self
+        self.view.addGestureRecognizer(tapGesture)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        //setTehaiView(initTehaiArray, animated: false)
+    }
+    
+    @objc func tapped(_ sender: UITapGestureRecognizer){
+        if sender.state == .ended {
+            //print(tehaiCellIndexPath)
+            //print(indexPathToTileArray(tehaiCellIndexPath))
+            //setTehaiView(initTehaiArray, animated: false)
+        }
     }
     
     func switchView(_ b: Bool) {
@@ -87,9 +109,10 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         let nsArr = openCVWrapper.getTehaiArray(image)
         let tehaiIntArr = nsArr as! [Int]
         if(tehaiIntArr.count == 14){
-            self.tehaiArray = getTehaiListFromInt(tehaiIntArr)
-            setTehaiView(self.tehaiArray, animated: true)
-            self.calculate(tehaiArray)
+            //self.tehaiArray = getTehaiListFromInt(tehaiIntArr)
+            let arr = intArrToTile(tehaiIntArr)
+            setTehaiView(arr, animated: true)
+            self.calculate(fromTalbe: false)
         }
     }
     // TehaiViewDelegate
@@ -135,7 +158,10 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         } else if(tableView.tag == 21) {
             return 4
         } else if(tableView.tag >= 31 && tableView.tag <= 34){
-            return 34
+            if(tableView.tag == 31) {
+                return 34
+            }
+            return 35
         }
         return 1
     }
@@ -145,6 +171,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
 
         } else if(tableView.tag >= 1 && tableView.tag <= 14) {
             tehaiCellIndexPath[tableView.tag - 1] = indexPath
+            //tehaiTileArray[tableView.tag - 1] = Tile(rawValue: indexPath.row)!
             let cell = tableView.dequeueReusableCell(withIdentifier: "TehaiCell", for:indexPath) as! TehaiTableViewCell
             cell.haiImage.image = Tile(rawValue: indexPath.row)?.toUIImage()
             return cell
@@ -161,9 +188,14 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         } else if(tableView.tag >= 31 && tableView.tag <= 34){
             doraCellIndexPath[tableView.tag - 31] = indexPath
             let cell = tableView.dequeueReusableCell(withIdentifier: "TehaiCell", for:indexPath) as! TehaiTableViewCell
-            cell.haiImage.image = Tile(rawValue: indexPath.row)?.toUIImage()
+            if(tableView.tag == 31) {
+                cell.haiImage.image = Tile(rawValue: indexPath.row)?.toUIImage()
+            } else {
+                cell.haiImage.image = Tile(rawValue: indexPath.row - 1)?.toUIImage()
+            }
             return cell
         }
+        
         var celll : UITableViewCell!
         return celll
     }
@@ -186,10 +218,10 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         stopTehaiCell(scrollView)
-        self.calculate(getTehaiListFromTable())
+        self.calculate(fromTalbe: true)
     }
     
-    // 減速開始時 -> ★呼ばれない場合あり
+    // 減速開始時
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         stopTehaiCell(scrollView)
     }
@@ -200,22 +232,53 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             
         } else if(tv.tag >= 1 && tv.tag <= 14){
             tv.scrollToRow(at: tehaiCellIndexPath[tv.tag - 1], at: UITableViewScrollPosition.middle, animated: true)
+            tehaiTileArray[tv.tag - 1] = Tile(rawValue: tehaiCellIndexPath[tv.tag - 1].row)!
+            //tv.scrollToRow(at: IndexPath(row: tehaiTileArray[tv.tag - 1].rawValue, section: 0), at: UITableViewScrollPosition.middle, animated: true)
         } else if(tv.tag == 20) {
             tv.scrollToRow(at: bakazeCellIndexPath, at: UITableViewScrollPosition.middle, animated: true)
         } else if(tv.tag == 21) {
             tv.scrollToRow(at: jikazeCellIndexPath, at: UITableViewScrollPosition.middle, animated: true)
         } else if(tv.tag >= 31 && tv.tag <= 34){
-            tv.scrollToRow(at: doraCellIndexPath[tv.tag - 31], at: UITableViewScrollPosition.middle, animated: true)
+            if(tv.tag == 31){
+                tv.scrollToRow(at: doraCellIndexPath[tv.tag - 31], at: UITableViewScrollPosition.middle, animated: true)
+            } else {
+                tv.scrollToRow(at: doraCellIndexPath[tv.tag - 31], at: UITableViewScrollPosition.middle, animated: true)
+            }
+            doraTileArray[tv.tag - 31] = Tile(rawValue: doraCellIndexPath[tv.tag - 31].row)!
         }
     }
     
     //tableview===============================================================
+    
+    func indexPathToTileArray(_ indexPaths: [IndexPath]) -> [Tile] {
+        var tiles: [Tile] = []
+        for elem in indexPaths {
+            tiles.append(Tile(rawValue: elem.row)!)
+        }
+        return tiles
+    }
+    
+    func tileToIndexPathArray(_ tiles: [Tile]) -> [IndexPath] {
+        var indexPaths: [IndexPath] = []
+        for elem in tiles {
+            indexPaths.append(IndexPath(row: elem.rawValue, section: 0))
+        }
+        return indexPaths
+    }
 
     func setTehaiView(_ list: [Tile], animated: Bool) {
         for tv in (self.tehaiView.tableViews)! {
             let index = IndexPath(row: list[tv.tag - 1].rawValue, section: 0)
-            tv.scrollToRow(at: index, at: UITableViewScrollPosition.middle, animated: true)
+            tv.scrollToRow(at: index, at: UITableViewScrollPosition.middle, animated: animated)
         }
+    }
+    
+    func intArrToTile(_ arr: [Int]) -> [Tile] {
+        var tiles: [Tile] = []
+        for i in arr {
+            tiles.append(Tile(rawValue: i)!)
+        }
+        return tiles
     }
     
     func getTehaiListFromInt(_ list: [Int]) -> [Tile] {
@@ -234,15 +297,23 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         return tehaiList
     }
     
-    func calculate(_ tehaiArray: [Tile]) {
-        var arr = tehaiArray
+    func calculate(fromTalbe: Bool) {
+        var arr = tehaiTileArray
         arr.removeLast()
-        for elem in arr {
-            print("\(elem) ", terminator: "")
+        let x = Hand(inputtedTiles: arr)
+        //ドラのリスト作る
+        var dora: [Tile] = []
+        var isFirst = true
+        for i in 0..<doraCellIndexPath.count {
+            if(isFirst) {
+                isFirst = false
+                dora.append(doraTileArray[i])
+            } else if(doraTileArray[i].rawValue != Tile.null.rawValue) {
+                dora.append(Tile(rawValue: doraTileArray[i].rawValue - 1)!)
+            }
         }
-        var x = Hand(inputtedTiles: arr)
-        //どらは後で直す
-        let generalsituation = GeneralSituation(isHoutei: false, bakaze: Tile.Ton, dora: [Tile.s1], honba: 1)
+        print(dora)
+        let generalsituation = GeneralSituation(isHoutei: false, bakaze: Tile.Ton, dora: dora, honba: 1)
         let personalsituation = PersonalSituation(isParent: false, isTsumo: false, isIppatsu: false, isReach: false, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: Tile.Nan)
         
         if (x.isTenpai) {
@@ -257,6 +328,9 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
                 }
             }
         } else {
+            for elem in arr {
+                print("\(elem) ", terminator: "")
+            }
             print("NOTEN")
             let syanten = Syanten(hand: arr)
             if(x.invalidHand) {
@@ -266,7 +340,6 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             }
         }
         switchView(x.isTenpai)
-        
     }
 
 }
