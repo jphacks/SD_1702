@@ -26,6 +26,7 @@
 		5AEEBAB21F98994D00E006F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AEEBAB01F98994D00E006F3 /* Main.storyboard */; };
 		5AEEBAB41F98994D00E006F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AEEBAB31F98994D00E006F3 /* Assets.xcassets */; };
 		5AEEBAB71F98994D00E006F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AEEBAB51F98994D00E006F3 /* LaunchScreen.storyboard */; };
+		99F971DB1F9B270B00EECF7A /* solver in Resources */ = {isa = PBXBuildFile; fileRef = 99F971DA1F9B270B00EECF7A /* solver */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		5AEEBAB31F98994D00E006F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5AEEBAB61F98994D00E006F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5AEEBAB81F98994D00E006F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		99F971DA1F9B270B00EECF7A /* solver */ = {isa = PBXFileReference; lastKnownFileType = folder; path = solver; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +87,8 @@
 		5AEEBAAB1F98994D00E006F3 /* JongHelper */ = {
 			isa = PBXGroup;
 			children = (
+				99F971DA1F9B270B00EECF7A /* solver */,
+				5A46BE9B1F9B0221008F1ACB /* templates */,
 				5A46BE8D1F9AE180008F1ACB /* Resource */,
 				5A46BE9B1F9B0221008F1ACB /* templates */,
 				5A46BE851F9AD40F008F1ACB /* opencv2.framework */,
@@ -172,7 +176,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A46BE921F9AE1D1008F1ACB /* TehaiView.xib in Resources */,
-				5A46BEA61F9B1DB0008F1ACB /* TenpaiView.xib in Resources */,
+				99F971DB1F9B270B00EECF7A /* solver in Resources */,
 				5A46BE9C1F9B0221008F1ACB /* templates in Resources */,
 				5A46BE8E1F9AE181008F1ACB /* Resource in Resources */,
 				5A46BEA01F9B139C008F1ACB /* NotenView.xib in Resources */,
