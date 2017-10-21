@@ -12,7 +12,8 @@
 #import <UIKit/UIKit.h>
 
 @interface OpenCVWrapper: NSObject
-- (NSArray*)getTehaiArray:(UIImage*)image;
+- (NSArray *) getFeatures:(UIImage *)image;
+//- (NSArray *) getTehaiArray:(UIImage *)image;
 - (UIImage *) filter:(UIImage *)image;
 @end
 

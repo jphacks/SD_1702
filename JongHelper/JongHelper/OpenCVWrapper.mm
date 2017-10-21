@@ -31,6 +31,17 @@ static const int ANGLE_SEARCH_CANNY_LOW = 10;
 static const int ANGLE_SEARCH_CANNY_HIGH = 200;
 static const int ANGLE_SEARCH_WIDTH = 3;
 
+
+static const int TARGET_WIDTH = 30;
+static const int TARGET_HEIGHT = 42;
+
+static const int PADDING_TOP = 3;
+static const int PADDING_BOTTOM = 3;
+static const int PADDING_LEFT = 3;
+static const int PADDING_RIGHT = 3;
+
+cv::Point2f gCornerQuad[4];
+
 static cv::Mat loadMatFromFile(NSString *fileName)
 {
     NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
@@ -41,7 +52,7 @@ static cv::Mat loadMatFromFile(NSString *fileName)
 
 - (id) init {
     if (self = [super init]) {
-        
+        /*
         templates.push_back(loadMatFromFile(@"templates/manzu/1m.JPG")); // 1 2m 8m
         templates.push_back(loadMatFromFile(@"templates/manzu/2m.JPG")); // 3 8m
         templates.push_back(loadMatFromFile(@"templates/manzu/3m.JPG")); // 1 2m
@@ -90,10 +101,73 @@ static cv::Mat loadMatFromFile(NSString *fileName)
             templatesKeypoints.push_back(keypoints);
             templatesDescripters.push_back(descripter);
         }
+         */
     }
     return self;
 }
 
+- (NSArray *)getFeatures:(UIImage *)image
+{
+    cv::Mat mat;
+    UIImageToMat(image, mat);
+    
+    int width = mat.size().width;
+    int height = mat.size().height;
+    
+    // 射影変換
+    
+    cv::Point2f cornerQuadPixel[4];
+    
+    cornerQuadPixel[0] = cv::Point2f(gCornerQuad[0].x * width, gCornerQuad[0].y * height);
+    cornerQuadPixel[1] = cv::Point2f(gCornerQuad[1].x * width, gCornerQuad[1].y * height);
+    cornerQuadPixel[2] = cv::Point2f(gCornerQuad[2].x * width, gCornerQuad[2].y * height);
+    cornerQuadPixel[3] = cv::Point2f(gCornerQuad[3].x * width, gCornerQuad[3].y * height);
+    
+    int persWidth = (TARGET_WIDTH + PADDING_LEFT + PADDING_RIGHT) * 14;
+    int persHeight = TARGET_HEIGHT + PADDING_TOP + PADDING_BOTTOM;
+    
+    cv::Point2f outputQuadPixel[4];
+    
+    outputQuadPixel[0] = cv::Point2f(0, persHeight);
+    outputQuadPixel[1] = cv::Point2f(persWidth, persHeight);
+    outputQuadPixel[2] = cv::Point2f(persWidth, 0);
+    outputQuadPixel[3] = cv::Point2f(0, 0);
+    
+    cv::Mat output(cv::Size(persWidth, persHeight), mat.type());
+    cv::Mat transform = cv::getPerspectiveTransform(cornerQuadPixel, outputQuadPixel);
+    cv::warpPerspective(mat, output, transform, output.size());
+
+    // グレースケール
+    
+    cv::cvtColor(output, output, cv::COLOR_BGRA2GRAY);
+    
+    // 二値化
+    cv::threshold(output, output, 0, 1, cv::THRESH_BINARY_INV | cv::THRESH_OTSU);
+    
+    // 14分割してNSArrayに変換
+    
+    NSMutableArray *features = [NSMutableArray array];
+    
+    for (int i = 0; i < 14; ++i) {
+        int lt = (TARGET_WIDTH + PADDING_LEFT + PADDING_RIGHT) * i;
+        cv::Rect rect(lt + PADDING_LEFT, PADDING_TOP, TARGET_WIDTH, TARGET_HEIGHT);
+        cv::Mat roi(output, rect);
+        
+        NSMutableArray *feature = [NSMutableArray array];
+        
+        for (int y = 0; y < TARGET_WIDTH; ++y) {
+            for (int x = 0; x < TARGET_HEIGHT; ++x) {
+                NSInteger val = roi.data[y * roi.step + x * roi.elemSize()];
+                [feature addObject:[NSNumber numberWithInteger:val]];
+            }
+        }
+        
+        [features addObject:feature];
+    }
+    
+    return features;
+}
+/*
 - (NSArray*)getTehaiArray:(UIImage *)image
 {
     cv::Mat mat;
@@ -215,7 +289,7 @@ static cv::Mat loadMatFromFile(NSString *fileName)
         [array addObject:[NSNumber numberWithInt:0]];
     }
     return array;
-}
+}*/
 
 - (UIImage *)filter:(UIImage *)image
 {
@@ -299,6 +373,11 @@ static cv::Mat loadMatFromFile(NSString *fileName)
         cornerQuad[1] = pRight;
         cornerQuad[2] = pRight + normal;
         cornerQuad[3] = pLeft + normal;
+        
+        gCornerQuad[0] = cv::Point2f(cornerQuad[0].x / width, cornerQuad[0].y / height);
+        gCornerQuad[1] = cv::Point2f(cornerQuad[1].x / width, cornerQuad[1].y / height);
+        gCornerQuad[2] = cv::Point2f(cornerQuad[2].x / width, cornerQuad[2].y / height);
+        gCornerQuad[3] = cv::Point2f(cornerQuad[3].x / width, cornerQuad[3].y / height);
         
         int outputWidth = TEMPLATE_WIDTH * 14;
         int outputHeight = TEMPLATE_HEIGHT;

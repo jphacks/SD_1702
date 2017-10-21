@@ -31,6 +31,8 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     
     var isFirstCalc = true
     
+    let recognizer = Recognizer()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -106,14 +108,22 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     }
     // AVCaptureDelegate
     func photo(image: UIImage){
-        let nsArr = openCVWrapper.getTehaiArray(image)
+        //let nsArr = openCVWrapper.getTehaiArray(image)
+        let features = openCVWrapper.getFeatures(image)
+        
+        for (index, feature) in features!.enumerated() {
+            print("\(recognizer.recognize(feature: feature as! NSArray)) ", terminator:"")
+        }
+        
+        /*
         let tehaiIntArr = nsArr as! [Int]
         if(tehaiIntArr.count == 14){
             //self.tehaiArray = getTehaiListFromInt(tehaiIntArr)
             let arr = intArrToTile(tehaiIntArr)
             setTehaiView(arr, animated: true)
             self.calculate(fromTalbe: false)
-        }
+        }*/
+        
     }
     // TehaiViewDelegate
     func pushCapture() {
