@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var imageView: UIImageView!
 
@@ -26,6 +26,7 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
     private var doraCellIndexPath: [IndexPath] = Array(repeating: IndexPath(row: 0, section: 0), count: 4)
     private var tehaiCellIndexArray: [Int] = Array(repeating: 0, count: 14)
     private let initTehaiArray: [Tile] = Array(repeating: Tile.p7, count: 14)
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,25 +60,25 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
         tehaiView.tableViewBakaze.dataSource = self
         tehaiView.tableViewBakaze.register(UINib(nibName: "TehaiTableViewCell", bundle:nil), forCellReuseIdentifier:"TehaiCell")
         addSubviewWithAutoLayoutBottom(childView: tehaiView!, parentView: self.view)
-        
-        //タップジェスチャー
-        let tapGesture:UITapGestureRecognizer = UITapGestureRecognizer(
-            target: self,
-            action: #selector(ViewController.tapped(_:)))
-        // デリゲートをセット
-        tapGesture.delegate = self
-        self.view.addGestureRecognizer(tapGesture)
+        tehaiView.delegate = self
+//        //タップジェスチャー
+//        let tapGesture:UITapGestureRecognizer = UITapGestureRecognizer(
+//            target: self,
+//            action: #selector(ViewController.tapped(_:)))
+//        // デリゲートをセット
+//        tapGesture.delegate = self
+//        self.view.addGestureRecognizer(tapGesture)
         
         setTehaiView(initTehaiArray, animated: false)
         switchView(true)
     }
     
-    @objc func tapped(_ sender: UITapGestureRecognizer){
-        if sender.state == .ended {
-            //画面タップ時
-            avCapture.takePicture()
-        }
-    }
+//    @objc func tapped(_ sender: UITapGestureRecognizer){
+//        if sender.state == .ended {
+//            //画面タップ時
+//            avCapture.takePicture()
+//        }
+//    }
     
     func switchView(_ b: Bool) {
         if(b){
@@ -89,10 +90,11 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
         }
     }
     
+    // AVCaptureDelegate
     func capture(image: UIImage) {
         imageView.image = openCVWrapper.filter(image)
     }
-    
+    // AVCaptureDelegate
     func photo(image: UIImage){
         let nsArr = openCVWrapper.getTehaiArray(image)
         let tehaiIntArr = nsArr as! [Int]
@@ -100,6 +102,10 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
             self.tehaiArray = getTehaiListFromInt(tehaiIntArr)
             setTehaiView(self.tehaiArray, animated: true)
         }
+    }
+    // TehaiViewDelegate
+    func pushCapture() {
+        avCapture.takePicture()
     }
 
     override func didReceiveMemoryWarning() {
@@ -191,6 +197,7 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         stopTehaiCell(scrollView)
+        self.calculate()
     }
     
     // 減速開始時 -> ★呼ばれない場合あり
@@ -239,11 +246,30 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
     }
     
     func calculate() {
-        var arr = tehaiArray
+        var arr = getTehaiList()
         arr.removeLast()
         var x = Hand(inputtedTiles: arr)
+        //どらは後で直す
         let generalsituation = GeneralSituation(isHoutei: false, bakaze: Tile.Ton, dora: [Tile.s1], honba: 1)
         let personalsituation = PersonalSituation(isParent: false, isTsumo: false, isIppatsu: false, isReach: false, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: Tile.Nan)
+        
+        if (x.isTenpai) {
+            print("TENPAI")
+            print("tenpai-num: \(x.tenpaiSet.count)")
+            for tenpai in x.tenpaiSet {
+                tenpai.printTenpai()
+                for last in tenpai.uki {
+                    let compmentsu = CompMentsu(tenpai: tenpai, last: last, isOpenHand: x.isOpenHand)
+                    let calculator = Calculator(compMentsu: compmentsu, generalSituation: generalsituation, personalSituation: personalsituation)
+                    calculator.calculateScore()
+                }
+            }
+        } else {
+            print("NOTEN")
+        }
+        for elem in arr {
+            print("\(elem) ", terminator: "")
+        }
     }
 
 }
