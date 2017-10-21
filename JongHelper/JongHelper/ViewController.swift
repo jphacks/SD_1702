@@ -110,19 +110,19 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     func photo(image: UIImage){
         //let nsArr = openCVWrapper.getTehaiArray(image)
         let features = openCVWrapper.getFeatures(image)
-        
+        var arr: [Int] = []
         for (index, feature) in features!.enumerated() {
-            print("\(recognizer.recognize(feature: feature as! NSArray)) ", terminator:"")
+            //print("\(recognizer.recognize(feature: feature as! NSArray)) ", terminator:"")
+            arr.append(recognizer.recognize(feature: feature as! NSArray))
         }
         
-        /*
-        let tehaiIntArr = nsArr as! [Int]
-        if(tehaiIntArr.count == 14){
+        //let tehaiIntArr = nsArr as! [Int]
+        if(arr.count == 14){
             //self.tehaiArray = getTehaiListFromInt(tehaiIntArr)
-            let arr = intArrToTile(tehaiIntArr)
-            setTehaiView(arr, animated: true)
+            let arr2 = intArrToTile(arr)
+            setTehaiView(arr2, animated: true)
             self.calculate(fromTalbe: false)
-        }*/
+        }
         
     }
     // TehaiViewDelegate
