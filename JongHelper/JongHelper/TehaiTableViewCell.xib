@@ -34,7 +34,7 @@
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="haiImage" destination="M0j-f9-62S" id="3H8-tH-2dT"/>
+                <outlet property="haiImage" destination="M0j-f9-62S" id="v5D-Hn-aMQ"/>
             </connections>
         </tableViewCell>
     </objects>
