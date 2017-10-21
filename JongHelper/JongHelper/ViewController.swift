@@ -12,20 +12,22 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     
     @IBOutlet weak var imageView: UIImageView!
 
-    private let avCapture = AVCapture()
-    let openCVWrapper = OpenCVWrapper()
     var tehaiView: TehaiView!
     var notenView: NotenView!
     var tenpaiView: TenpaiView!
-    private var tehaiArray: [Tile] = [Tile.Ton, Tile.Nan, Tile.Sya, Tile.Pe, Tile.Haku, Tile.Hatu, Tile.Tyun, Tile.m1, Tile.m9, Tile.p1, Tile.p9, Tile.s1, Tile.s9, Tile.Haku]
-    private let bakazeList = [Tile.Ton, Tile.Nan, Tile.Sya, Tile.Pe, Tile.Haku, Tile.Hatu, Tile.Tyun]
-    private let jikazeList = [Tile.Ton, Tile.Nan, Tile.Sya, Tile.Pe]
-    private var tehaiCellIndexPath: [IndexPath] = Array(repeating: IndexPath(row: 0, section: 0), count: 14)
-    private var bakazeCellIndexPath = IndexPath(row: 0, section: 0)
-    private var jikazeCellIndexPath = IndexPath(row: 0, section: 0)
-    private var doraCellIndexPath: [IndexPath] = Array(repeating: IndexPath(row: 0, section: 0), count: 4)
-    private var tehaiCellIndexArray: [Int] = Array(repeating: 0, count: 14)
-    private let initTehaiArray: [Tile] = Array(repeating: Tile.p7, count: 14)
+    
+    let avCapture = AVCapture()
+    let openCVWrapper = OpenCVWrapper()
+    
+    var tehaiArray: [Tile] = [Tile.Ton, Tile.Nan, Tile.Sya, Tile.Pe, Tile.Haku, Tile.Hatu, Tile.Tyun, Tile.m1, Tile.m9, Tile.p1, Tile.p9, Tile.s1, Tile.s9, Tile.Haku]
+    let bakazeList = [Tile.Ton, Tile.Nan, Tile.Sya, Tile.Pe, Tile.Haku, Tile.Hatu, Tile.Tyun]
+    let jikazeList = [Tile.Ton, Tile.Nan, Tile.Sya, Tile.Pe]
+    var tehaiCellIndexPath: [IndexPath] = Array(repeating: IndexPath(row: 0, section: 0), count: 14)
+    var bakazeCellIndexPath = IndexPath(row: 0, section: 0)
+    var jikazeCellIndexPath = IndexPath(row: 0, section: 0)
+    var doraCellIndexPath: [IndexPath] = Array(repeating: IndexPath(row: 0, section: 0), count: 4)
+    var tehaiCellIndexArray: [Int] = Array(repeating: 0, count: 14)
+    let initTehaiArray: [Tile] = Array(repeating: Tile.p7, count: 14)
     
     
     override func viewDidLoad() {
@@ -87,6 +89,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         if(tehaiIntArr.count == 14){
             self.tehaiArray = getTehaiListFromInt(tehaiIntArr)
             setTehaiView(self.tehaiArray, animated: true)
+            self.calculate(tehaiArray)
         }
     }
     // TehaiViewDelegate
@@ -183,7 +186,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         stopTehaiCell(scrollView)
-        self.calculate()
+        self.calculate(getTehaiListFromTable())
     }
     
     // 減速開始時 -> ★呼ばれない場合あり
@@ -223,7 +226,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         return arr
     }
     
-    func getTehaiList() -> [Tile] {
+    func getTehaiListFromTable() -> [Tile] {
         var tehaiList: [Tile] = []
         for i in 0..<14 {
             tehaiList.append(Tile(rawValue: tehaiCellIndexPath[i].row)!)
@@ -231,9 +234,12 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         return tehaiList
     }
     
-    func calculate() {
-        var arr = getTehaiList()
+    func calculate(_ tehaiArray: [Tile]) {
+        var arr = tehaiArray
         arr.removeLast()
+        for elem in arr {
+            print("\(elem) ", terminator: "")
+        }
         var x = Hand(inputtedTiles: arr)
         //どらは後で直す
         let generalsituation = GeneralSituation(isHoutei: false, bakaze: Tile.Ton, dora: [Tile.s1], honba: 1)
@@ -252,11 +258,11 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             }
         } else {
             print("NOTEN")
+            let syanten = Syanten(hand: arr)
+            notenView.syantenLabel.text = String(syanten.getSyantenNum()) + "シャンテン"
         }
         switchView(x.isTenpai)
-        for elem in arr {
-            print("\(elem) ", terminator: "")
-        }
+        
     }
 
 }
