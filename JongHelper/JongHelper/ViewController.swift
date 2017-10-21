@@ -109,7 +109,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     // AVCaptureDelegate
     func photo(image: UIImage){
         //let nsArr = openCVWrapper.getTehaiArray(image)
-        let features = openCVWrapper.getFeatures(image)
+        let features = openCVWrapper.getTehaiArray(image)
         var arr: [Int] = []
         for (index, feature) in features!.enumerated() {
             //print("\(recognizer.recognize(feature: feature as! NSArray)) ", terminator:"")

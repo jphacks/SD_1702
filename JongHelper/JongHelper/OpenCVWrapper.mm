@@ -167,8 +167,8 @@ static cv::Mat loadMatFromFile(NSString *fileName)
     
     return features;
 }
-/*
-- (NSArray*)getTehaiArray:(UIImage *)image
+
+- (NSArray *)getTehaiArray:(UIImage *)image
 {
     cv::Mat mat;
     cv::Mat filtered;
@@ -226,6 +226,7 @@ static cv::Mat loadMatFromFile(NSString *fileName)
         }
     }
     NSMutableArray *array = [NSMutableArray array];
+    NSMutableArray *features = [NSMutableArray array];
     if (detected) {
         cv::Rect localRect(detectedAreaRect.x, detectedAreaRect.y - center + trimHeight / 2, detectedAreaRect.width, detectedAreaRect.height);
         cv::Mat detectedArea(labels, localRect);
@@ -275,21 +276,40 @@ static cv::Mat loadMatFromFile(NSString *fileName)
         int h = output.size().height;
         const int padding_w = 8;
         const int padding_h = 8;
+        
+        
         for(int i = 0; i < 14; i++){
             cv::Rect rect(i * w + padding_w, padding_h, w - padding_w, h - padding_h);
             cv::Mat roi(output, rect);
-            haiArr[i] = roi;
+            //haiArr[i] = roi;
+            
+            cv::Mat resized_roi(cv::Size(TARGET_WIDTH, TARGET_HEIGHT), roi.type());
+            cv::resize(roi, resized_roi, resized_roi.size());
+            cv::cvtColor(resized_roi, resized_roi, cv::COLOR_BGRA2GRAY);
+            cv::threshold(resized_roi, resized_roi, 0, 1, cv::THRESH_BINARY_INV | cv::THRESH_OTSU);
+            
+            NSMutableArray *feature = [NSMutableArray array];
+            
+            for (int y = 0; y < TARGET_WIDTH; ++y) {
+                for (int x = 0; x < TARGET_HEIGHT; ++x) {
+                    NSInteger val = resized_roi.data[y * resized_roi.step + x * resized_roi.elemSize()];
+                    [feature addObject:[NSNumber numberWithInteger:val]];
+                }
+            }
+            
+            [features addObject:feature];
         }
-        for(int i = 0; i < 14; i++){
-            [array addObject:[NSNumber numberWithInt:[[self class] detectFromMat:haiArr[i]]]];
-        }
+        //for(int i = 0; i < 14; i++){
+        //    [array addObject:[NSNumber numberWithInt:[[self class] detectFromMat:haiArr[i]]]];
+        //}
+        return features;
         
     } else {
         std::cout << "認識失敗" << std::endl;
         [array addObject:[NSNumber numberWithInt:0]];
     }
-    return array;
-}*/
+    return features;
+}
 
 - (UIImage *)filter:(UIImage *)image
 {
@@ -394,6 +414,12 @@ static cv::Mat loadMatFromFile(NSString *fileName)
         
         
         // 輪郭点 をプレビュー
+        //cv::Point2f delta = (pRight - pLeft) / 14;
+        
+        for (int i = 0; i < 14; ++i) {
+            cv::line(mat, pRight, pLeft, cv::Scalar(0, 255, 0, 255), 5);
+        }
+        
         cv::circle(mat, pLeft, 10, cv::Scalar(0, 255, 0, 255), -1);
         cv::circle(mat, pRight, 10, cv::Scalar(0, 255, 0, 255), -1);
         cv::circle(mat, pLeft + normal, 10, cv::Scalar(0, 255, 0, 255), -1);
