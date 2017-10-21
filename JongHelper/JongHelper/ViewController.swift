@@ -237,6 +237,14 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
         }
         return tehaiList
     }
+    
+    func calculate() {
+        var arr = tehaiArray
+        arr.removeLast()
+        var x = Hand(inputtedTiles: arr)
+        let generalsituation = GeneralSituation(isHoutei: false, bakaze: Tile.Ton, dora: [Tile.s1], honba: 1)
+        let personalsituation = PersonalSituation(isParent: false, isTsumo: false, isIppatsu: false, isReach: false, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: Tile.Nan)
+    }
 
 }
 

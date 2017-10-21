@@ -28,21 +28,21 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ji1-66-90-l.png" translatesAutoresizingMaskIntoConstraints="NO" id="ozV-Ja-OXc" userLabel="haiimg1">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ozV-Ja-OXc" userLabel="haiimg1">
                             <rect key="frame" x="8" y="52.5" width="33" height="45"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="33" id="9uk-74-suU"/>
                                 <constraint firstAttribute="height" constant="45" id="RUB-ne-qZI"/>
                             </constraints>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ji1-66-90-l.png" translatesAutoresizingMaskIntoConstraints="NO" id="Vhf-a6-9cs" userLabel="haiimg2">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Vhf-a6-9cs" userLabel="haiimg2">
                             <rect key="frame" x="57" y="52" width="33" height="45"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="33" id="XNy-Iz-gSw"/>
                                 <constraint firstAttribute="height" constant="45" id="e36-iH-z15"/>
                             </constraints>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ji1-66-90-l.png" translatesAutoresizingMaskIntoConstraints="NO" id="Jil-0o-0MK" userLabel="haiimg3">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Jil-0o-0MK" userLabel="haiimg3">
                             <rect key="frame" x="106" y="53" width="33" height="45"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="33" id="GhO-wA-czh"/>
@@ -92,7 +92,4 @@
             <point key="canvasLocation" x="-57.5" y="40.5"/>
         </view>
     </objects>
-    <resources>
-        <image name="ji1-66-90-l.png" width="66" height="90"/>
-    </resources>
 </document>
