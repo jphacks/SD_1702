@@ -15,6 +15,8 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
     private let avCapture = AVCapture()
     let openCVWrapper = OpenCVWrapper()
     var tehaiView: TehaiView!
+    var notenView: NotenView!
+    var tenpaiView: TenpaiView!
     private var tehaiArray: [Tile] = [Tile.Ton, Tile.Nan, Tile.Sya, Tile.Pe, Tile.Haku, Tile.Hatu, Tile.Tyun, Tile.m1, Tile.m9, Tile.p1, Tile.p9, Tile.s1, Tile.s9, Tile.Haku]
     private let bakazeList = [Tile.Ton, Tile.Nan, Tile.Sya, Tile.Pe, Tile.Haku, Tile.Hatu, Tile.Tyun]
     private let jikazeList = [Tile.Ton, Tile.Nan, Tile.Sya, Tile.Pe]
@@ -29,6 +31,14 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         avCapture.delegate = self
+        
+        //ノーテン時のビュー
+        notenView = UINib(nibName: "NotenView", bundle: nil).instantiate(withOwner: self, options: nil).first as? NotenView
+        addSubviewWithAutoLayoutTop(childView: notenView!, parentView: self.view)
+        
+        //テンパイ時のビュー
+        tenpaiView = UINib(nibName: "TenpaiView", bundle: nil).instantiate(withOwner: self, options: nil).first as? TenpaiView
+        addSubviewWithAutoLayoutTop(childView: tenpaiView!, parentView: self.view)
         
         //手牌ビューのレイヤー追加
         tehaiView = UINib(nibName: "TehaiView", bundle: nil).instantiate(withOwner: self, options: nil).first as? TehaiView
@@ -48,7 +58,7 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
         tehaiView.tableViewBakaze.delegate = self
         tehaiView.tableViewBakaze.dataSource = self
         tehaiView.tableViewBakaze.register(UINib(nibName: "TehaiTableViewCell", bundle:nil), forCellReuseIdentifier:"TehaiCell")
-        addSubviewWithAutoLayout(childView: tehaiView!, parentView: self.view)
+        addSubviewWithAutoLayoutBottom(childView: tehaiView!, parentView: self.view)
         
         //タップジェスチャー
         let tapGesture:UITapGestureRecognizer = UITapGestureRecognizer(
@@ -59,13 +69,23 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
         self.view.addGestureRecognizer(tapGesture)
         
         setTehaiView(initTehaiArray, animated: false)
+        switchView(true)
     }
     
     @objc func tapped(_ sender: UITapGestureRecognizer){
         if sender.state == .ended {
             //画面タップ時
-            //setTehaiView(tehaiArray, animated: true)
             avCapture.takePicture()
+        }
+    }
+    
+    func switchView(_ b: Bool) {
+        if(b){
+            notenView.isHidden = true
+            tenpaiView.isHidden = false
+        } else {
+            notenView.isHidden = false
+            tenpaiView.isHidden = true
         }
     }
     
@@ -87,14 +107,25 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
         // Dispose of any resources that can be recreated.
     }
     
-    // 親viewに対してフルで表示するためのautolayoutの制約
-    private func addSubviewWithAutoLayout(childView: UIView, parentView: UIView) {
+    // 親viewに対して上半分で表示するためのautolayoutの制約
+    private func addSubviewWithAutoLayoutTop(childView: UIView, parentView: UIView) {
         parentView.addSubview(childView)
         parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .top, relatedBy: .equal, toItem: parentView, attribute: .top, multiplier: 1.0, constant: 0))
+        parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .right, relatedBy: .equal, toItem: parentView, attribute: .right, multiplier: 1.0, constant: 0))
+        parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .bottom, relatedBy: .equal, toItem: parentView, attribute: .bottom, multiplier: 1.0, constant: 200))
+        parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .left, relatedBy: .equal, toItem: parentView, attribute: .left, multiplier: 1.0, constant: 0))
+    }
+    
+    // 親viewに対して上半分で表示するためのautolayoutの制約
+    private func addSubviewWithAutoLayoutBottom(childView: UIView, parentView: UIView) {
+        parentView.addSubview(childView)
+        parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .top, relatedBy: .equal, toItem: parentView, attribute: .top, multiplier: 1.0, constant: 200))
         parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .right, relatedBy: .equal, toItem: parentView, attribute: .right, multiplier: 1.0, constant: 0))
         parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .bottom, relatedBy: .equal, toItem: parentView, attribute: .bottom, multiplier: 1.0, constant: 0))
         parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .left, relatedBy: .equal, toItem: parentView, attribute: .left, multiplier: 1.0, constant: 0))
     }
+    
+    
     
     //tableview===============================================================
     // tag: 0->役リスト 1~14->手牌 20->場風 21->自風 31~34->ドラ
@@ -116,23 +147,7 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if(tableView.tag == 0){
-           /* let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for:indexPath) as! NotenUIViewTableViewCell
-            //仮に国士無双を表示している
-            cell.hai1.image = Tile.Ton.toUIImage()
-            cell.hai2.image = Tile.Nan.toUIImage()
-            cell.hai3.image = Tile.Sya.toUIImage()
-            cell.hai4.image = Tile.Pe.toUIImage()
-            cell.hai5.image = Tile.Haku.toUIImage()
-            cell.hai6.image = Tile.Hatu.toUIImage()
-            cell.hai7.image = Tile.Tyun.toUIImage()
-            cell.hai8.image = Tile.m1.toUIImage()
-            cell.hai9.image = Tile.m9.toUIImage()
-            cell.hai10.image = Tile.p1.toUIImage()
-            cell.hai11.image = Tile.p9.toUIImage()
-            cell.hai12.image = Tile.s1.toUIImage()
-            cell.hai13.image = Tile.s9.toUIImage()
-            cell.hai14.image = Tile.Haku.toUIImage()
-            return cell*/
+
         } else if(tableView.tag >= 1 && tableView.tag <= 14) {
             tehaiCellIndexPath[tableView.tag - 1] = indexPath
             let cell = tableView.dequeueReusableCell(withIdentifier: "TehaiCell", for:indexPath) as! TehaiTableViewCell
