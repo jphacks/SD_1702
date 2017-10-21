@@ -1,5 +1,5 @@
 //
-//  OpenCVWrapper.m
+//  OpenCVWrapper.mm
 //  JongHelper
 //
 //  Created by Satoshi Kobayashi on 2017/10/21.

@@ -1,5 +1,5 @@
 //
-//  Open.h
+//  OpenCVWrapper.h
 //  JongHelper
 //
 //  Created by Satoshi Kobayashi on 2017/10/21.

@@ -10,6 +10,12 @@
 		5A46BE861F9AD40F008F1ACB /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A46BE851F9AD40F008F1ACB /* opencv2.framework */; };
 		5A46BE891F9AD48A008F1ACB /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A46BE881F9AD48A008F1ACB /* OpenCVWrapper.mm */; };
 		5A46BE8C1F9AD93D008F1ACB /* AVCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A46BE8B1F9AD93D008F1ACB /* AVCapture.swift */; };
+		5A46BE8E1F9AE181008F1ACB /* Resource in Resources */ = {isa = PBXBuildFile; fileRef = 5A46BE8D1F9AE180008F1ACB /* Resource */; };
+		5A46BE911F9AE1D1008F1ACB /* TehaiTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A46BE8F1F9AE1D0008F1ACB /* TehaiTableViewCell.xib */; };
+		5A46BE921F9AE1D1008F1ACB /* TehaiView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A46BE901F9AE1D0008F1ACB /* TehaiView.xib */; };
+		5A46BE941F9AE1F0008F1ACB /* TehaiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A46BE931F9AE1F0008F1ACB /* TehaiView.swift */; };
+		5A46BE961F9AE204008F1ACB /* TehaiTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A46BE951F9AE204008F1ACB /* TehaiTableViewCell.swift */; };
+		5A46BE9A1F9AE51B008F1ACB /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A46BE991F9AE51B008F1ACB /* Tile.swift */; };
 		5AEEBAAD1F98994D00E006F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEEBAAC1F98994D00E006F3 /* AppDelegate.swift */; };
 		5AEEBAAF1F98994D00E006F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEEBAAE1F98994D00E006F3 /* ViewController.swift */; };
 		5AEEBAB21F98994D00E006F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AEEBAB01F98994D00E006F3 /* Main.storyboard */; };
@@ -23,6 +29,12 @@
 		5A46BE881F9AD48A008F1ACB /* OpenCVWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCVWrapper.mm; sourceTree = "<group>"; };
 		5A46BE8A1F9AD49A008F1ACB /* OpenCVWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenCVWrapper.h; sourceTree = "<group>"; };
 		5A46BE8B1F9AD93D008F1ACB /* AVCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCapture.swift; sourceTree = "<group>"; };
+		5A46BE8D1F9AE180008F1ACB /* Resource */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resource; sourceTree = "<group>"; };
+		5A46BE8F1F9AE1D0008F1ACB /* TehaiTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TehaiTableViewCell.xib; sourceTree = "<group>"; };
+		5A46BE901F9AE1D0008F1ACB /* TehaiView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TehaiView.xib; sourceTree = "<group>"; };
+		5A46BE931F9AE1F0008F1ACB /* TehaiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TehaiView.swift; sourceTree = "<group>"; };
+		5A46BE951F9AE204008F1ACB /* TehaiTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TehaiTableViewCell.swift; sourceTree = "<group>"; };
+		5A46BE991F9AE51B008F1ACB /* Tile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
 		5AEEBAA91F98994D00E006F3 /* JongHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JongHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AEEBAAC1F98994D00E006F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5AEEBAAE1F98994D00E006F3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -63,17 +75,23 @@
 		5AEEBAAB1F98994D00E006F3 /* JongHelper */ = {
 			isa = PBXGroup;
 			children = (
+				5A46BE8D1F9AE180008F1ACB /* Resource */,
 				5A46BE851F9AD40F008F1ACB /* opencv2.framework */,
-				5AEEBAAC1F98994D00E006F3 /* AppDelegate.swift */,
-				5AEEBAAE1F98994D00E006F3 /* ViewController.swift */,
-				5AEEBAB01F98994D00E006F3 /* Main.storyboard */,
-				5AEEBAB31F98994D00E006F3 /* Assets.xcassets */,
-				5AEEBAB51F98994D00E006F3 /* LaunchScreen.storyboard */,
-				5AEEBAB81F98994D00E006F3 /* Info.plist */,
-				5A46BE881F9AD48A008F1ACB /* OpenCVWrapper.mm */,
 				5A46BE871F9AD48A008F1ACB /* JongHelper-Bridging-Header.h */,
 				5A46BE8A1F9AD49A008F1ACB /* OpenCVWrapper.h */,
+				5A46BE881F9AD48A008F1ACB /* OpenCVWrapper.mm */,
+				5AEEBAB81F98994D00E006F3 /* Info.plist */,
+				5AEEBAAC1F98994D00E006F3 /* AppDelegate.swift */,
 				5A46BE8B1F9AD93D008F1ACB /* AVCapture.swift */,
+				5AEEBAAE1F98994D00E006F3 /* ViewController.swift */,
+				5AEEBAB31F98994D00E006F3 /* Assets.xcassets */,
+				5A46BE8F1F9AE1D0008F1ACB /* TehaiTableViewCell.xib */,
+				5A46BE901F9AE1D0008F1ACB /* TehaiView.xib */,
+				5AEEBAB51F98994D00E006F3 /* LaunchScreen.storyboard */,
+				5AEEBAB01F98994D00E006F3 /* Main.storyboard */,
+				5A46BE931F9AE1F0008F1ACB /* TehaiView.swift */,
+				5A46BE951F9AE204008F1ACB /* TehaiTableViewCell.swift */,
+				5A46BE991F9AE51B008F1ACB /* Tile.swift */,
 			);
 			path = JongHelper;
 			sourceTree = "<group>";
@@ -138,8 +156,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A46BE921F9AE1D1008F1ACB /* TehaiView.xib in Resources */,
+				5A46BE8E1F9AE181008F1ACB /* Resource in Resources */,
 				5AEEBAB71F98994D00E006F3 /* LaunchScreen.storyboard in Resources */,
 				5AEEBAB41F98994D00E006F3 /* Assets.xcassets in Resources */,
+				5A46BE911F9AE1D1008F1ACB /* TehaiTableViewCell.xib in Resources */,
 				5AEEBAB21F98994D00E006F3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -153,8 +174,11 @@
 			files = (
 				5AEEBAAF1F98994D00E006F3 /* ViewController.swift in Sources */,
 				5A46BE8C1F9AD93D008F1ACB /* AVCapture.swift in Sources */,
+				5A46BE9A1F9AE51B008F1ACB /* Tile.swift in Sources */,
+				5A46BE941F9AE1F0008F1ACB /* TehaiView.swift in Sources */,
 				5AEEBAAD1F98994D00E006F3 /* AppDelegate.swift in Sources */,
 				5A46BE891F9AD48A008F1ACB /* OpenCVWrapper.mm in Sources */,
+				5A46BE961F9AE204008F1ACB /* TehaiTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
