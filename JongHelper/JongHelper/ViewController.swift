@@ -61,24 +61,10 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         tehaiView.tableViewBakaze.register(UINib(nibName: "TehaiTableViewCell", bundle:nil), forCellReuseIdentifier:"TehaiCell")
         addSubviewWithAutoLayoutBottom(childView: tehaiView!, parentView: self.view)
         tehaiView.delegate = self
-//        //タップジェスチャー
-//        let tapGesture:UITapGestureRecognizer = UITapGestureRecognizer(
-//            target: self,
-//            action: #selector(ViewController.tapped(_:)))
-//        // デリゲートをセット
-//        tapGesture.delegate = self
-//        self.view.addGestureRecognizer(tapGesture)
         
         setTehaiView(initTehaiArray, animated: false)
-        switchView(true)
+        switchView(false)
     }
-    
-//    @objc func tapped(_ sender: UITapGestureRecognizer){
-//        if sender.state == .ended {
-//            //画面タップ時
-//            avCapture.takePicture()
-//        }
-//    }
     
     func switchView(_ b: Bool) {
         if(b){
@@ -267,6 +253,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         } else {
             print("NOTEN")
         }
+        switchView(x.isTenpai)
         for elem in arr {
             print("\(elem) ", terminator: "")
         }
