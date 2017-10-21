@@ -15,7 +15,6 @@ class Tenpai: Equatable, Hashable {
         return (lhs.toitsuList == rhs.toitsuList) && (lhs.syuntsuList == rhs.syuntsuList) && (lhs.kotsuList == rhs.kotsuList) && (lhs.uki == rhs.uki) && (lhs.wait == rhs.wait)
     }
     
-    
     var toitsuList = [Toitsu]()
     var syuntsuList = [Syuntsu]()
     var kotsuList = [Kotsu]()
@@ -35,8 +34,6 @@ class Tenpai: Equatable, Hashable {
             }
         }
         
-        syuntsuList.sort {$0 < $1}
-        
         self.uki = uki
         
         if(isTanki()) {
@@ -50,8 +47,8 @@ class Tenpai: Equatable, Hashable {
                 wait.append(Tile(rawValue: uki[0].getCode() - 1)!)
             }
         } else if(isRyanmen()) {
-            wait.append(uki[0])
-            wait.append(uki[1])
+            wait.append(Tile(rawValue: uki[0].getCode() - 1)!)
+            wait.append(Tile(rawValue: uki[1].getCode() + 1)!)
         } else if(isSyanpon()) {
             wait.append(uki[0])
         }

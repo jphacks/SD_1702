@@ -22,6 +22,7 @@ class Hand {
     // チートイかどうか
     var isTitoitu = false
     
+    var invalidHand = false
     
     // 作業用変数
     var tmpTiles = [Int]()
@@ -33,12 +34,18 @@ class Hand {
     // 面前手の場合はこちらでイニシャライズ
     init(inputtedTiles: [Tile]) {
         isOpenHand = false
+        
         for tile in inputtedTiles {
-            self.inputtedTiles[tile.getCode()] += 1
+            if (self.inputtedTiles[tile.getCode()] < 4) {
+                self.inputtedTiles[tile.getCode()] += 1
+            } else {
+                invalidHand = true
+            }
         }
-        findMentsu()
+        if (!invalidHand) {
+            getTenpaiCandidate()
+        }
     }
-    
     // 鳴いている場合はその面子をリストで入力
     init(inputtedTiles: [Tile], mentsuList: [Mentsu]) {
         isOpenHand = true
@@ -46,7 +53,7 @@ class Hand {
             self.inputtedTiles[tile.getCode()] += 1
         }
         inputtedMentsuList = mentsuList
-        findMentsu()
+        getTenpaiCandidate()
     }
 
     
@@ -54,21 +61,22 @@ class Hand {
         tmpTiles = inputtedTiles;
     }
     
-    func findMentsu() {
+    func getTenpaiCandidate() {
+        
         //頭の候補を探してストック
         initTmp()
         
         let toitsuList: [Toitsu] = Toitsu.findJantoCandidate(tiles: tmpTiles)
         
-        if (toitsuList.count == 6) {
-            isTitoitu = true
-            isTenpai = true
-        }
+        /*if (toitsuList.count == 6) {
+         isTitoitu = true
+         isTenpai = true
+         }*/
         
         var tenpaiCandidate = [Mentsu]()
-        if (isOpenHand) {
-            tenpaiCandidate = inputtedMentsuList
-        }
+        /*if (isOpenHand) {
+         tenpaiCandidate = inputtedMentsuList
+         }*/
         // 頭確定のメンツ探索
         if (toitsuList.count != 0) {
             
@@ -91,7 +99,7 @@ class Hand {
                         isTenpai = true
                     }
                 }
-            
+                
                 
                 initTmp()
                 tenpaiCandidate.removeAll()
@@ -218,6 +226,7 @@ class Hand {
                 }
             }
         }
+  
     }
     
     func countRemainderTiles() -> Int {
