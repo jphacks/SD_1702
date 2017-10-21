@@ -35,73 +35,15 @@ static const int ANGLE_SEARCH_WIDTH = 3;
 static const int TARGET_WIDTH = 30;
 static const int TARGET_HEIGHT = 42;
 
-static const int PADDING_TOP = 3;
-static const int PADDING_BOTTOM = 3;
-static const int PADDING_LEFT = 3;
-static const int PADDING_RIGHT = 3;
+static const int PADDING_TOP = 5;
+static const int PADDING_BOTTOM = 0;
+static const int PADDING_LEFT = 2;
+static const int PADDING_RIGHT = 2;
 
 cv::Point2f gCornerQuad[4];
 
-static cv::Mat loadMatFromFile(NSString *fileName)
-{
-    NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-    NSString *path = [resourcePath stringByAppendingPathComponent:fileName];
-    const char *pathChars = [path UTF8String];
-    return cv::imread(pathChars);
-}
-
 - (id) init {
     if (self = [super init]) {
-        /*
-        templates.push_back(loadMatFromFile(@"templates/manzu/1m.JPG")); // 1 2m 8m
-        templates.push_back(loadMatFromFile(@"templates/manzu/2m.JPG")); // 3 8m
-        templates.push_back(loadMatFromFile(@"templates/manzu/3m.JPG")); // 1 2m
-        templates.push_back(loadMatFromFile(@"templates/manzu/4m.JPG")); // 4
-        templates.push_back(loadMatFromFile(@"templates/manzu/5m.JPG")); // 3 2m
-        templates.push_back(loadMatFromFile(@"templates/manzu/6m.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/manzu/7m.JPG")); // 3 2m
-        templates.push_back(loadMatFromFile(@"templates/manzu/8m.JPG")); // 1 2m
-        templates.push_back(loadMatFromFile(@"templates/manzu/9m.JPG")); // 1 2m
-        
-        templates.push_back(loadMatFromFile(@"templates/pinzu/1p.JPG")); // 4 2p
-        templates.push_back(loadMatFromFile(@"templates/pinzu/2p.JPG")); // 3 3p
-        templates.push_back(loadMatFromFile(@"templates/pinzu/3p.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/pinzu/4p.JPG")); // 4 3p
-        templates.push_back(loadMatFromFile(@"templates/pinzu/5p.JPG")); // 3 3p
-        templates.push_back(loadMatFromFile(@"templates/pinzu/6p.JPG")); // 4 3p
-        templates.push_back(loadMatFromFile(@"templates/pinzu/7p.JPG")); // 4 9p
-        templates.push_back(loadMatFromFile(@"templates/pinzu/8p.JPG")); // 3 2p
-        templates.push_back(loadMatFromFile(@"templates/pinzu/9p.JPG")); // 5 9p
-        
-        templates.push_back(loadMatFromFile(@"templates/souzu/1s.JPG")); // 2 2p 3p
-        templates.push_back(loadMatFromFile(@"templates/souzu/2s.JPG")); // 4
-        templates.push_back(loadMatFromFile(@"templates/souzu/3s.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/souzu/4s.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/souzu/5s.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/souzu/6s.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/souzu/7s.JPG")); // 2 9s
-        templates.push_back(loadMatFromFile(@"templates/souzu/8s.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/souzu/9s.JPG")); // 5
-        
-        templates.push_back(loadMatFromFile(@"templates/zihai/1z.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/zihai/2z.JPG")); // 4 8s
-        templates.push_back(loadMatFromFile(@"templates/zihai/3z.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/zihai/4z.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/zihai/5z.JPG")); // 1
-        templates.push_back(loadMatFromFile(@"templates/zihai/6z.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/zihai/7z.JPG")); // 5
-        
-        for (cv::Mat temp : templates) {
-            cv::Mat resized_temp;
-            cv::resize(temp,resized_temp , cv::Size(TEMPLATE_WIDTH, TEMPLATE_HEIGHT));
-            std::vector<cv::KeyPoint> keypoints;
-            cv::Mat descripter;
-            AKAZE->detect(resized_temp, keypoints);
-            AKAZE->compute(resized_temp, keypoints, descripter);
-            templatesKeypoints.push_back(keypoints);
-            templatesDescripters.push_back(descripter);
-        }
-         */
     }
     return self;
 }
@@ -155,8 +97,8 @@ static cv::Mat loadMatFromFile(NSString *fileName)
         
         NSMutableArray *feature = [NSMutableArray array];
         
-        for (int y = 0; y < TARGET_WIDTH; ++y) {
-            for (int x = 0; x < TARGET_HEIGHT; ++x) {
+        for (int y = 0; y < TARGET_HEIGHT; ++y) {
+            for (int x = 0; x < TARGET_WIDTH; ++x) {
                 NSInteger val = roi.data[y * roi.step + x * roi.elemSize()];
                 [feature addObject:[NSNumber numberWithInteger:val]];
             }
@@ -168,7 +110,7 @@ static cv::Mat loadMatFromFile(NSString *fileName)
     return features;
 }
 
-- (NSArray *)getTehaiArray:(UIImage *)image
+/*- (NSArray *)getTehaiArray:(UIImage *)image
 {
     cv::Mat mat;
     cv::Mat filtered;
@@ -309,7 +251,7 @@ static cv::Mat loadMatFromFile(NSString *fileName)
         [array addObject:[NSNumber numberWithInt:0]];
     }
     return features;
-}
+}*/
 
 - (UIImage *)filter:(UIImage *)image
 {

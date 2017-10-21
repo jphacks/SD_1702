@@ -25,6 +25,8 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     var jikazeCellIndexPath = IndexPath(row: 0, section: 0)
     var doraCellIndexPath: [IndexPath] = Array(repeating: IndexPath(row: 0, section: 0), count: 4)
     var doraTileArray: [Tile] = [Tile.m1, Tile.null, Tile.null, Tile.null]
+    var bakazeTile = Tile.Ton
+    var jikazeTile = Tile.Ton
     //let initTehaiArray: [Tile] = Array(repeating: Tile.p7, count: 14)
     //let initTehaiArray: [Tile] = [Tile.m2,Tile.m3,Tile.m4,Tile.m2,Tile.m3,Tile.m4,Tile.p2,Tile.p3,Tile.p4,Tile.s3,Tile.s4,Tile.m7,Tile.m7,Tile.Haku]
     var tehaiTileArray = [Tile.m2,Tile.m3,Tile.m4,Tile.m2,Tile.m3,Tile.m4,Tile.p2,Tile.p3,Tile.p4,Tile.s3,Tile.s4,Tile.m7,Tile.m7,Tile.Haku]
@@ -109,7 +111,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     // AVCaptureDelegate
     func photo(image: UIImage){
         //let nsArr = openCVWrapper.getTehaiArray(image)
-        let features = openCVWrapper.getTehaiArray(image)
+        let features = openCVWrapper.getFeatures(image)
         var arr: [Int] = []
         for (index, feature) in features!.enumerated() {
             //print("\(recognizer.recognize(feature: feature as! NSArray)) ", terminator:"")
@@ -181,7 +183,6 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
 
         } else if(tableView.tag >= 1 && tableView.tag <= 14) {
             tehaiCellIndexPath[tableView.tag - 1] = indexPath
-            //tehaiTileArray[tableView.tag - 1] = Tile(rawValue: indexPath.row)!
             let cell = tableView.dequeueReusableCell(withIdentifier: "TehaiCell", for:indexPath) as! TehaiTableViewCell
             cell.haiImage.image = Tile(rawValue: indexPath.row)?.toUIImage()
             return cell
@@ -243,11 +244,12 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         } else if(tv.tag >= 1 && tv.tag <= 14){
             tv.scrollToRow(at: tehaiCellIndexPath[tv.tag - 1], at: UITableViewScrollPosition.middle, animated: true)
             tehaiTileArray[tv.tag - 1] = Tile(rawValue: tehaiCellIndexPath[tv.tag - 1].row)!
-            //tv.scrollToRow(at: IndexPath(row: tehaiTileArray[tv.tag - 1].rawValue, section: 0), at: UITableViewScrollPosition.middle, animated: true)
         } else if(tv.tag == 20) {
             tv.scrollToRow(at: bakazeCellIndexPath, at: UITableViewScrollPosition.middle, animated: true)
+            bakazeTile = Tile(rawValue: bakazeCellIndexPath.row)!
         } else if(tv.tag == 21) {
             tv.scrollToRow(at: jikazeCellIndexPath, at: UITableViewScrollPosition.middle, animated: true)
+            jikazeTile = Tile(rawValue: jikazeCellIndexPath.row)!
         } else if(tv.tag >= 31 && tv.tag <= 34){
             if(tv.tag == 31){
                 tv.scrollToRow(at: doraCellIndexPath[tv.tag - 31], at: UITableViewScrollPosition.middle, animated: true)
@@ -308,9 +310,6 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     }
     
     func calculate(fromTalbe: Bool) {
-        var arr = tehaiTileArray
-        arr.removeLast()
-        let x = Hand(inputtedTiles: arr)
         //ドラのリスト作る
         var dora: [Tile] = []
         var isFirst = true
@@ -322,34 +321,60 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
                 dora.append(Tile(rawValue: doraTileArray[i].rawValue - 1)!)
             }
         }
-        print(dora)
-        let generalsituation = GeneralSituation(isHoutei: false, bakaze: Tile.Ton, dora: dora, honba: 1)
-        let personalsituation = PersonalSituation(isParent: false, isTsumo: false, isIppatsu: false, isReach: false, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: Tile.Nan)
-        
-        if (x.isTenpai) {
-            print("TENPAI")
-            print("tenpai-num: \(x.tenpaiSet.count)")
-            for tenpai in x.tenpaiSet {
-                tenpai.printTenpai()
-                for last in tenpai.uki {
-                    let compmentsu = CompMentsu(tenpai: tenpai, last: last, isOpenHand: x.isOpenHand)
-                    let calculator = Calculator(compMentsu: compmentsu, generalSituation: generalsituation, personalSituation: personalsituation)
-                    calculator.calculateScore()
+        let generalsituation = GeneralSituation(isHoutei: false, bakaze: bakazeTile, dora: dora, honba: 1)
+        let personalsituation = PersonalSituation(isParent: false, isTsumo: false, isIppatsu: false, isReach: false, isDoubleReach:
+            false, isTyankan: false, isRinsyan: false, jikaze: jikazeTile)
+        var matiArr: [Tile] = []
+        var suteArr: [Tile] = []
+        var isTenpai = false
+        for i in 0..<14 {//13個にして聴牌かどうか確認
+            var arr = tehaiTileArray
+            arr.remove(at: i)
+            let x = Hand(inputtedTiles: arr)
+            if (x.isTenpai) {
+                isTenpai = true
+                //print("tenpai-num: \(x.tenpaiSet.count)")
+                for tenpai in x.tenpaiSet {
+                    tenpai.printTenpai()
+                    for hai in tenpai.wait { // 待ち牌ついか
+                        matiArr.append(hai)
+                    }
+                    for hai in tenpai.uki { // 捨て牌追加
+                        suteArr.append(hai)
+                    }
+                    for last in tenpai.uki {
+                        let compmentsu = CompMentsu(tenpai: tenpai, last: last, isOpenHand: x.isOpenHand)
+                        let calculator = Calculator(compMentsu: compmentsu, generalSituation: generalsituation, personalSituation: personalsituation)
+                        calculator.calculateScore()
+                    }
                 }
             }
-        } else {
-            for elem in arr {
-                print("\(elem) ", terminator: "")
-            }
-            print("NOTEN")
-            let syanten = Syanten(hand: arr)
-            if(x.invalidHand) {
-                notenView.syantenLabel.text = "手牌が不正です"
+            if(isTenpai) {
+                //ビューに待ちを表示
+                for (k, elem) in matiArr.enumerated() {
+                    //self.tenpaiView.matiHaiImage[k].image = elem.toUIImage()
+                }
+                //ビューに捨て牌を表示
+                for (k, elem) in suteArr.enumerated() {
+                    //self.tenpaiView.gomiHaiImage[k].image = elem.toUIImage()
+                }
             } else {
-                notenView.syantenLabel.text = String(syanten.getSyantenNum()) + "シャンテン"
+                let syanten = Syanten(hand: arr)
+                if(x.invalidHand) {
+                    notenView.syantenLabel.text = "手牌が不正です"
+                } else {
+                    notenView.syantenLabel.text = String(syanten.getSyantenNum()) + "シャンテン"
+                    for g in syanten.gomi {
+                        suteArr.append(g)
+                    }
+//                    for (k, elem) in suteArr.enumerated() {
+//                        notenView.haiImage[k].image = elem.toUIImage()
+//                    }
+                    
+                }
             }
+            switchView(x.isTenpai)
         }
-        switchView(x.isTenpai)
     }
 
 }

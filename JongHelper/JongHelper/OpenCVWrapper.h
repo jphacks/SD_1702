@@ -13,7 +13,7 @@
 
 @interface OpenCVWrapper: NSObject
 - (NSArray *) getFeatures:(UIImage *)image;
-- (NSArray *) getTehaiArray:(UIImage *)image;
+//- (NSArray *) getTehaiArray:(UIImage *)image;
 - (UIImage *) filter:(UIImage *)image;
 @end
 
