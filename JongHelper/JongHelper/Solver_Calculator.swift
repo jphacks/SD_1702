@@ -368,7 +368,12 @@ class Calculator {
     
     
     func isTyanta() -> Bool{
+        
         let jantoNum = compMentsu.getJanto().identifierTile.getNumber()
+        
+        if (isJuntyan()) {
+            return false
+        }
         
         if (jantoNum != 1 && jantoNum != 9 && jantoNum != 0) {
             return false
