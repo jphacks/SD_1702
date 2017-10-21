@@ -13,6 +13,7 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
     @IBOutlet weak var imageView: UIImageView!
 
     private let avCapture = AVCapture()
+    let openCVWrapper = OpenCVWrapper()
     var tehaiView: TehaiView!
     private var tehaiArray: [Tile] = [Tile.Ton, Tile.Nan, Tile.Sya, Tile.Pe, Tile.Haku, Tile.Hatu, Tile.Tyun, Tile.m1, Tile.m9, Tile.p1, Tile.p9, Tile.s1, Tile.s9, Tile.Haku]
     private let bakazeList = [Tile.Ton, Tile.Nan, Tile.Sya, Tile.Pe, Tile.Haku, Tile.Hatu, Tile.Tyun]
@@ -69,11 +70,16 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
     }
     
     func capture(image: UIImage) {
-        imageView.image = image
+        imageView.image = openCVWrapper.filter(image)
     }
     
-    func photo(image: UIImage) {
-        
+    func photo(image: UIImage){
+        let nsArr = openCVWrapper.getTehaiArray(image)
+        let tehaiIntArr = nsArr as! [Int]
+        if(tehaiIntArr.count == 14){
+            self.tehaiArray = getTehaiListFromInt(tehaiIntArr)
+            setTehaiView(self.tehaiArray, animated: true)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -199,6 +205,22 @@ class ViewController: UIViewController, AVCaptureDelegate, UIGestureRecognizerDe
             let index = IndexPath(row: list[tv.tag - 1].rawValue, section: 0)
             tv.scrollToRow(at: index, at: UITableViewScrollPosition.middle, animated: true)
         }
+    }
+    
+    func getTehaiListFromInt(_ list: [Int]) -> [Tile] {
+        var arr: [Tile] = []
+        for element in list {
+            arr.append(Tile(rawValue: element)!)
+        }
+        return arr
+    }
+    
+    func getTehaiList() -> [Tile] {
+        var tehaiList: [Tile] = []
+        for i in 0..<14 {
+            tehaiList.append(Tile(rawValue: tehaiCellIndexPath[i].row)!)
+        }
+        return tehaiList
     }
 
 }
