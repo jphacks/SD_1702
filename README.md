@@ -1,6 +1,6 @@
 # JongHelper
 
-[![JongHelper]](https://youtu.be/DgwDmwa-Jm0)
+[![JongHelper](https://github.com/jphacks/SD_1702/blob/master/%202017-10-22%2015.18.09.png)](https://youtu.be/DgwDmwa-Jm0)
 
 ## 製品概要
 ### Mahjong X Tech 
