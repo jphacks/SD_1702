@@ -45,6 +45,8 @@ class Calculator {
     ]
     
     var score = 0
+    var fu = 0
+    var han = 0
     
     var normalYakuList = [NormalYaku]()
     var yakumanList = [Yakuman]()
@@ -65,8 +67,8 @@ class Calculator {
         
         // 本当は役満を先に探さなければならないが，役満を未実装のため通常役のみみる
         
-        let fu = calculateFu()
-        let han = calculateHan()
+        fu = calculateFu()
+        han = calculateHan()
         
         print("役: ", terminator:"")
         for yaku in normalYakuList {
