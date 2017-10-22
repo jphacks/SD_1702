@@ -10,8 +10,7 @@ import UIKit
 
 class TenpaiView : UIView {
     
-    @IBOutlet var gomiHaiImage: [UIImageView]!
-    @IBOutlet var matiHaiImage: [UIImageView]!
+    @IBOutlet weak var tableView: UITableView!
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)!

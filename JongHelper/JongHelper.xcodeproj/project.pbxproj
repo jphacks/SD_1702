@@ -33,6 +33,9 @@
 		5AA52CC11F9B51E1006107AB /* Solver_CompMentsu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA52CB61F9B51E1006107AB /* Solver_CompMentsu.swift */; };
 		5AA52CC21F9B51E1006107AB /* Solver_Tenpai.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA52CB71F9B51E1006107AB /* Solver_Tenpai.swift */; };
 		5AA52CC41F9B65AA006107AB /* Solver_Syanten.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA52CC31F9B65AA006107AB /* Solver_Syanten.swift */; };
+		5AA52CC91F9C1D4F006107AB /* TenpaiTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA52CC71F9C1D4F006107AB /* TenpaiTableViewCell.swift */; };
+		5AA52CCA1F9C1D4F006107AB /* TenpaiTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5AA52CC81F9C1D4F006107AB /* TenpaiTableViewCell.xib */; };
+		5AA52CCC1F9C230A006107AB /* TenpaiData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA52CCB1F9C230A006107AB /* TenpaiData.swift */; };
 		5AEEBAAD1F98994D00E006F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEEBAAC1F98994D00E006F3 /* AppDelegate.swift */; };
 		5AEEBAAF1F98994D00E006F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEEBAAE1F98994D00E006F3 /* ViewController.swift */; };
 		5AEEBAB21F98994D00E006F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AEEBAB01F98994D00E006F3 /* Main.storyboard */; };
@@ -71,6 +74,9 @@
 		5AA52CB61F9B51E1006107AB /* Solver_CompMentsu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solver_CompMentsu.swift; sourceTree = "<group>"; };
 		5AA52CB71F9B51E1006107AB /* Solver_Tenpai.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solver_Tenpai.swift; sourceTree = "<group>"; };
 		5AA52CC31F9B65AA006107AB /* Solver_Syanten.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Solver_Syanten.swift; sourceTree = "<group>"; };
+		5AA52CC71F9C1D4F006107AB /* TenpaiTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TenpaiTableViewCell.swift; sourceTree = "<group>"; };
+		5AA52CC81F9C1D4F006107AB /* TenpaiTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TenpaiTableViewCell.xib; sourceTree = "<group>"; };
+		5AA52CCB1F9C230A006107AB /* TenpaiData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TenpaiData.swift; sourceTree = "<group>"; };
 		5AEEBAA91F98994D00E006F3 /* JongHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JongHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AEEBAAC1F98994D00E006F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5AEEBAAE1F98994D00E006F3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -149,6 +155,9 @@
 				5AEEBAB51F98994D00E006F3 /* LaunchScreen.storyboard */,
 				5AEEBAB01F98994D00E006F3 /* Main.storyboard */,
 				6B31C7751F9BE2FE00B612D6 /* Recognizer.swift */,
+				5AA52CC71F9C1D4F006107AB /* TenpaiTableViewCell.swift */,
+				5AA52CC81F9C1D4F006107AB /* TenpaiTableViewCell.xib */,
+				5AA52CCB1F9C230A006107AB /* TenpaiData.swift */,
 			);
 			path = JongHelper;
 			sourceTree = "<group>";
@@ -215,6 +224,7 @@
 			files = (
 				5A46BE921F9AE1D1008F1ACB /* TehaiView.xib in Resources */,
 				5A46BEA61F9B1DB0008F1ACB /* TenpaiView.xib in Resources */,
+				5AA52CCA1F9C1D4F006107AB /* TenpaiTableViewCell.xib in Resources */,
 				5A46BE9C1F9B0221008F1ACB /* templates in Resources */,
 				5A46BE8E1F9AE181008F1ACB /* Resource in Resources */,
 				5A46BEA01F9B139C008F1ACB /* NotenView.xib in Resources */,
@@ -248,7 +258,9 @@
 				5A46BEA81F9B26AB008F1ACB /* TenpaiView.swift in Sources */,
 				5A46BE941F9AE1F0008F1ACB /* TehaiView.swift in Sources */,
 				5AA52CB91F9B51E1006107AB /* Solver_Mentsu.swift in Sources */,
+				5AA52CC91F9C1D4F006107AB /* TenpaiTableViewCell.swift in Sources */,
 				5AA52CBF1F9B51E1006107AB /* Solver_Hand.swift in Sources */,
+				5AA52CCC1F9C230A006107AB /* TenpaiData.swift in Sources */,
 				5AEEBAAD1F98994D00E006F3 /* AppDelegate.swift in Sources */,
 				5AA52CBA1F9B51E1006107AB /* Solver_Kotsu.swift in Sources */,
 				5A46BE891F9AD48A008F1ACB /* OpenCVWrapper.mm in Sources */,
