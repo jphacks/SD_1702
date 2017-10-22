@@ -26,17 +26,18 @@ class TokutenViewController: UIViewController {
      var bakazeTile = Tile.Ton
      var jikazeTile = Tile.Ton
     // var yakuStr = ""
+    var suteTile: Tile!
     var matiTile: Tile!
     
     var isTsumo = false
-    var han = 0
+    var plushan = 0
     
     @IBAction func pushClose(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func stepperValueChanged(_ sender: UIStepper) {
-        han = Int(sender.value)
+        plushan = Int(sender.value)
         calculate()
     }
     
@@ -64,8 +65,9 @@ class TokutenViewController: UIViewController {
         
         var index = 0
         for (k, tile) in tehaiTileArray.enumerated() {
-            if (tile == matiTile){
+            if (tile == suteTile){
                 index = k
+                break
             }
         }
         tehaiTileArray.remove(at: index)
@@ -76,14 +78,14 @@ class TokutenViewController: UIViewController {
         var fu = 0
         var han = 0
         var gs = GeneralSituation(isHoutei: false, bakaze: Tile.Ton, dora: [Tile.s1], honba: 1)
-        var ps = PersonalSituation(isParent: true, isTsumo: false, isIppatsu: false, isReach: false, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: Tile.Ton)
+        var ps = PersonalSituation(isParent: true, isTsumo: isTsumo, isIppatsu: false, isReach: false, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: Tile.Ton)
         
         if (hand.isTenpai) {
             for tenpai in hand.tenpaiSet {
                 for last in tenpai.wait {
                     if last == matiTile {
-                        var tehai = CompMentsu(tenpai: tenpai , last: matiTile, isOpenHand: false)
-                        var calculator = Calculator(compMentsu: tehai, generalSituation: gs, personalSituation: ps)
+                        let tehai = CompMentsu(tenpai: tenpai , last: matiTile, isOpenHand: false)
+                        let calculator = Calculator(compMentsu: tehai, generalSituation: gs, personalSituation: ps)
                         if (calculator.score > score) {
                             score = calculator.score
                             fu = calculator.fu
@@ -93,7 +95,17 @@ class TokutenViewController: UIViewController {
                     }
                 }
             }
+        } else {
+            print("not tenpai")
         }
+        
+        var str = ""
+        for s in normalYakuList {
+            str += s.getName()
+        }
+        yakuTV.text = str
+        huLabel.text = "\(han)飜\(fu)符"
+        tenLabel.text = "\(score)点"
         
         
     }

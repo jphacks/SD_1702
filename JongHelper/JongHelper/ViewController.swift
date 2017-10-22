@@ -287,6 +287,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         vc.bakazeTile = self.bakazeTile
         vc.jikazeTile = self.jikazeTile
         vc.matiTile = tenpaiDatas[agariHaiIndex].matiTiles[0]
+        vc.suteTile = tenpaiDatas[agariHaiIndex].suteTile
     }
     
     //tableview===============================================================
