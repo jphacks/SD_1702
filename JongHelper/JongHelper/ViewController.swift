@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var imageView: UIImageView!
 
@@ -25,11 +25,15 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     var jikazeCellIndexPath = IndexPath(row: 0, section: 0)
     var doraCellIndexPath: [IndexPath] = Array(repeating: IndexPath(row: 0, section: 0), count: 4)
     var doraTileArray: [Tile] = [Tile.m1, Tile.null, Tile.null, Tile.null]
+    var bakazeTile = Tile.Ton
+    var jikazeTile = Tile.Ton
     //let initTehaiArray: [Tile] = Array(repeating: Tile.p7, count: 14)
     //let initTehaiArray: [Tile] = [Tile.m2,Tile.m3,Tile.m4,Tile.m2,Tile.m3,Tile.m4,Tile.p2,Tile.p3,Tile.p4,Tile.s3,Tile.s4,Tile.m7,Tile.m7,Tile.Haku]
     var tehaiTileArray = [Tile.m2,Tile.m3,Tile.m4,Tile.m2,Tile.m3,Tile.m4,Tile.p2,Tile.p3,Tile.p4,Tile.s3,Tile.s4,Tile.m7,Tile.m7,Tile.Haku]
     
-    var isFirstCalc = true
+    var tenpaiDatas: [TenpaiData] = []
+    
+    let recognizer = Recognizer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,11 +43,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         //ノーテン時のビュー
         notenView = UINib(nibName: "NotenView", bundle: nil).instantiate(withOwner: self, options: nil).first as? NotenView
         addSubviewWithAutoLayoutTop(childView: notenView!, parentView: self.view)
-        
-        //テンパイ時のビュー
-        tenpaiView = UINib(nibName: "TenpaiView", bundle: nil).instantiate(withOwner: self, options: nil).first as? TenpaiView
-        addSubviewWithAutoLayoutTop(childView: tenpaiView!, parentView: self.view)
-        
+
         //手牌ビューのレイヤー追加
         tehaiView = UINib(nibName: "TehaiView", bundle: nil).instantiate(withOwner: self, options: nil).first as? TehaiView
         for tv in (tehaiView?.tableViews)! {
@@ -62,32 +62,28 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         tehaiView.tableViewBakaze.delegate = self
         tehaiView.tableViewBakaze.dataSource = self
         tehaiView.tableViewBakaze.register(UINib(nibName: "TehaiTableViewCell", bundle:nil), forCellReuseIdentifier:"TehaiCell")
-        addSubviewWithAutoLayoutBottom(childView: tehaiView!, parentView: self.view)
+        
+        //tehaiView.frame = CGRect(x:0,y:0,width:self.view.frame.size.width, height: 150.0)
+        addSubviewWithAutoLayout(childView: tehaiView!, parentView: self.view)
+        //self.view.addSubview(tehaiView)
         tehaiView.delegate = self
         
         setTehaiView(tehaiTileArray, animated: false)
+        
+        //テンパイ時のビュー
+        tenpaiView = UINib(nibName: "TenpaiView", bundle: nil).instantiate(withOwner: self, options: nil).first as? TenpaiView
+        tenpaiView.frame = CGRect(x:0,y:0,width:self.view.frame.size.width, height: 150.0)
+        addSubviewWithAutoLayoutTop(childView: tenpaiView!, parentView: self.view)
+        tenpaiView.tableView.delegate = self
+        tenpaiView.tableView.dataSource = self
+        tenpaiView.tableView.register(UINib(nibName: "TenpaiTableViewCell", bundle:nil), forCellReuseIdentifier:"TenpaiViewCell")
 
         switchView(false)
-        
-        let tapGesture:UITapGestureRecognizer = UITapGestureRecognizer(
-            target: self,
-            action: #selector(ViewController.tapped(_:)))
-        // デリゲートをセット
-        tapGesture.delegate = self
-        self.view.addGestureRecognizer(tapGesture)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         //setTehaiView(initTehaiArray, animated: false)
-    }
-    
-    @objc func tapped(_ sender: UITapGestureRecognizer){
-        if sender.state == .ended {
-            //print(tehaiCellIndexPath)
-            //print(indexPathToTileArray(tehaiCellIndexPath))
-            //setTehaiView(initTehaiArray, animated: false)
-        }
     }
     
     func switchView(_ b: Bool) {
@@ -101,19 +97,33 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     }
     
     // AVCaptureDelegate
+    var count = 0
     func capture(image: UIImage) {
-        imageView.image = openCVWrapper.filter(image)
+        if (count % 5 == 0) {
+            imageView.image = openCVWrapper.filter(image)
+            count = 0
+        }
+        count += 1
     }
     // AVCaptureDelegate
     func photo(image: UIImage){
-        let nsArr = openCVWrapper.getTehaiArray(image)
-        let tehaiIntArr = nsArr as! [Int]
-        if(tehaiIntArr.count == 14){
+        //let nsArr = openCVWrapper.getTehaiArray(image)
+        let features = openCVWrapper.getFeatures(image)
+        var arr: [Int] = []
+        for (index, feature) in features!.enumerated() {
+            //print("\(recognizer.recognize(feature: feature as! NSArray)) ", terminator:"")
+            arr.append(recognizer.recognize(feature: feature as! NSArray))
+        }
+        
+        //let tehaiIntArr = nsArr as! [Int]
+        if(arr.count == 14){
             //self.tehaiArray = getTehaiListFromInt(tehaiIntArr)
-            let arr = intArrToTile(tehaiIntArr)
-            setTehaiView(arr, animated: true)
+            let arr2 = intArrToTile(arr)
+            tehaiTileArray = arr2
+            setTehaiView(arr2, animated: true)
             self.calculate(fromTalbe: false)
         }
+        
     }
     // TehaiViewDelegate
     func pushCapture() {
@@ -125,22 +135,23 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         // Dispose of any resources that can be recreated.
     }
     
-    // 親viewに対して上半分で表示するためのautolayoutの制約
+    // 親viewに対してめいいっぱい表示するためのautolayoutの制約
+    private func addSubviewWithAutoLayout(childView: UIView, parentView: UIView) {
+        parentView.addSubview(childView)
+        parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .top, relatedBy: .equal, toItem: parentView, attribute: .top, multiplier: 1.0, constant: 0))
+        parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .right, relatedBy: .equal, toItem: parentView, attribute: .right, multiplier: 1.0, constant: 0))
+        parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .bottom, relatedBy: .equal, toItem: parentView, attribute: .bottom, multiplier: 1.0, constant: 0))
+        parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .left, relatedBy: .equal, toItem: parentView, attribute: .left, multiplier: 1.0, constant: 0))
+    }
+    
+    // 親viewに対して下半分で表示するためのautolayoutの制約
     private func addSubviewWithAutoLayoutTop(childView: UIView, parentView: UIView) {
         parentView.addSubview(childView)
         parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .top, relatedBy: .equal, toItem: parentView, attribute: .top, multiplier: 1.0, constant: 0))
         parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .right, relatedBy: .equal, toItem: parentView, attribute: .right, multiplier: 1.0, constant: 0))
-        parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .bottom, relatedBy: .equal, toItem: parentView, attribute: .bottom, multiplier: 1.0, constant: 200))
+        //parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .bottom, relatedBy: .equal, toItem: parentView, attribute: .bottom, multiplier: 1.0, constant: 400))
         parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .left, relatedBy: .equal, toItem: parentView, attribute: .left, multiplier: 1.0, constant: 0))
-    }
-    
-    // 親viewに対して上半分で表示するためのautolayoutの制約
-    private func addSubviewWithAutoLayoutBottom(childView: UIView, parentView: UIView) {
-        parentView.addSubview(childView)
-        parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .top, relatedBy: .equal, toItem: parentView, attribute: .top, multiplier: 1.0, constant: 200))
-        parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .right, relatedBy: .equal, toItem: parentView, attribute: .right, multiplier: 1.0, constant: 0))
-        parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .bottom, relatedBy: .equal, toItem: parentView, attribute: .bottom, multiplier: 1.0, constant: 0))
-        parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .left, relatedBy: .equal, toItem: parentView, attribute: .left, multiplier: 1.0, constant: 0))
+        
     }
     
     
@@ -162,6 +173,8 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
                 return 34
             }
             return 35
+        } else if (tableView.tag == 99) {
+            return tenpaiDatas.count
         }
         return 1
     }
@@ -171,7 +184,6 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
 
         } else if(tableView.tag >= 1 && tableView.tag <= 14) {
             tehaiCellIndexPath[tableView.tag - 1] = indexPath
-            //tehaiTileArray[tableView.tag - 1] = Tile(rawValue: indexPath.row)!
             let cell = tableView.dequeueReusableCell(withIdentifier: "TehaiCell", for:indexPath) as! TehaiTableViewCell
             cell.haiImage.image = Tile(rawValue: indexPath.row)?.toUIImage()
             return cell
@@ -194,6 +206,14 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
                 cell.haiImage.image = Tile(rawValue: indexPath.row - 1)?.toUIImage()
             }
             return cell
+        } else if(tableView.tag == 99) {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TenpaiViewCell", for:indexPath) as! TenpaiTableViewCell
+            cell.suteImageView.image = tenpaiDatas[indexPath.row].suteTile.toUIImage()
+            for i in 0..<min(tenpaiDatas[indexPath.row].matiTiles.count, 3) {
+                cell.matiImageViews[i].image = tenpaiDatas[indexPath.row].matiTiles[i].toUIImage()
+            }
+            cell.score.text = String(tenpaiDatas[indexPath.row].score)
+            return cell
         }
         
         var celll : UITableViewCell!
@@ -206,8 +226,10 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if(tableView.tag == 0){
             return 46
-        } else if(tableView.tag > 0) {
+        } else if(tableView.tag > 0 && tableView.tag < 99) {
             return 45
+        } else if (tableView.tag == 99) {
+            return 80
         }
         return 1
     }
@@ -217,8 +239,10 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     }
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        stopTehaiCell(scrollView)
-        self.calculate(fromTalbe: true)
+        if ((scrollView as! UITableView).tag != 99) {
+            stopTehaiCell(scrollView)
+            self.calculate(fromTalbe: true)
+        }
     }
     
     // 減速開始時
@@ -233,11 +257,12 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         } else if(tv.tag >= 1 && tv.tag <= 14){
             tv.scrollToRow(at: tehaiCellIndexPath[tv.tag - 1], at: UITableViewScrollPosition.middle, animated: true)
             tehaiTileArray[tv.tag - 1] = Tile(rawValue: tehaiCellIndexPath[tv.tag - 1].row)!
-            //tv.scrollToRow(at: IndexPath(row: tehaiTileArray[tv.tag - 1].rawValue, section: 0), at: UITableViewScrollPosition.middle, animated: true)
         } else if(tv.tag == 20) {
             tv.scrollToRow(at: bakazeCellIndexPath, at: UITableViewScrollPosition.middle, animated: true)
+            bakazeTile = Tile(rawValue: bakazeCellIndexPath.row)!
         } else if(tv.tag == 21) {
             tv.scrollToRow(at: jikazeCellIndexPath, at: UITableViewScrollPosition.middle, animated: true)
+            jikazeTile = Tile(rawValue: jikazeCellIndexPath.row)!
         } else if(tv.tag >= 31 && tv.tag <= 34){
             if(tv.tag == 31){
                 tv.scrollToRow(at: doraCellIndexPath[tv.tag - 31], at: UITableViewScrollPosition.middle, animated: true)
@@ -297,10 +322,37 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         return tehaiList
     }
     
+    func mergeTenpaiDatas() {
+        print("mergeTenpaiDatas")
+        var arr: [TenpaiData] = []
+        for elem in tenpaiDatas {
+            if(arr.count != 0){
+                var flag = true
+                for elem2 in arr {
+                    if(compTenpaiData(data1: elem, data2: elem2)) {
+                        flag = false
+                        break
+                    }
+                }
+                if (flag) {
+                    arr.append(elem)
+                }
+            } else {
+                arr.append(elem)
+            }
+        }
+        tenpaiDatas = arr
+    }
+    
+    func compTenpaiData(data1: TenpaiData, data2: TenpaiData) -> Bool {
+        let sameSuteTile = data1.suteTile == data2.suteTile
+        let sameScore = data1.score == data2.score
+        let sameMatiTile = data1.matiTiles[0] == data2.matiTiles[0]
+        let result = sameSuteTile && sameScore && sameMatiTile
+        return ( result )
+    }
+    
     func calculate(fromTalbe: Bool) {
-        var arr = tehaiTileArray
-        arr.removeLast()
-        let x = Hand(inputtedTiles: arr)
         //ドラのリスト作る
         var dora: [Tile] = []
         var isFirst = true
@@ -312,34 +364,77 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
                 dora.append(Tile(rawValue: doraTileArray[i].rawValue - 1)!)
             }
         }
-        print(dora)
-        let generalsituation = GeneralSituation(isHoutei: false, bakaze: Tile.Ton, dora: dora, honba: 1)
-        let personalsituation = PersonalSituation(isParent: false, isTsumo: false, isIppatsu: false, isReach: false, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: Tile.Nan)
+        let generalsituation = GeneralSituation(isHoutei: false, bakaze: bakazeTile, dora: dora, honba: 1)
+        let personalsituation = PersonalSituation(isParent: false, isTsumo: false, isIppatsu: false, isReach: false, isDoubleReach:
+            false, isTyankan: false, isRinsyan: false, jikaze: jikazeTile)
+        var matiArr: Set<Tile> = []
+        var suteArr: Set<Tile> = []
+        var isTenpai = false
+        var invalidHand = false
+        var minSyanten = 99
+        tenpaiDatas = []
         
-        if (x.isTenpai) {
-            print("TENPAI")
-            print("tenpai-num: \(x.tenpaiSet.count)")
-            for tenpai in x.tenpaiSet {
-                tenpai.printTenpai()
-                for last in tenpai.uki {
-                    let compmentsu = CompMentsu(tenpai: tenpai, last: last, isOpenHand: x.isOpenHand)
-                    let calculator = Calculator(compMentsu: compmentsu, generalSituation: generalsituation, personalSituation: personalsituation)
-                    calculator.calculateScore()
-                }
-            }
-        } else {
-            for elem in arr {
-                print("\(elem) ", terminator: "")
-            }
-            print("NOTEN")
-            let syanten = Syanten(hand: arr)
+        var player = Player(hand14: tehaiTileArray)
+        if(player.isAgari) {
+            return
+        }
+        
+        for i in 0..<14 {//13個にして聴牌かどうか確認
+            var arr = tehaiTileArray
+            let matiKouho = arr.remove(at: i)
+            let x = Hand(inputtedTiles: arr)
             if(x.invalidHand) {
-                notenView.syantenLabel.text = "手牌が不正です"
+                invalidHand = true
+            } else if (x.isTenpai) {
+                isTenpai = true
+                //print("tenpai-num: \(x.tenpaiSet.count)")
+                
+                for tenpai in x.tenpaiSet {
+                    //tenpai.printTenpai()
+//                    for hai in tenpai.wait { // 待ち牌ついか
+//                        matiArr.insert(hai)
+//                    }
+//                    for hai in tenpai.uki { // 捨て牌追加
+//                        suteArr.insert(hai)
+//                    }
+                    for last in tenpai.wait {
+                        let compmentsu = CompMentsu(tenpai: tenpai, last: last, isOpenHand: x.isOpenHand)
+                        let calculator = Calculator(compMentsu: compmentsu, generalSituation: generalsituation, personalSituation: personalsituation)
+                        calculator.calculateScore()
+                        let tenpaiData = TenpaiData(sute: matiKouho, mati: [last], score: calculator.score)
+                        tenpaiDatas.append(tenpaiData)
+                    }
+                }
             } else {
-                notenView.syantenLabel.text = String(syanten.getSyantenNum()) + "シャンテン"
+                let syanten = Syanten(hand: arr)
+
+                    minSyanten = min(minSyanten, syanten.getSyantenNum())
+                    
+                    for g in syanten.gomi {
+                        suteArr.insert(g)
+                    }
             }
         }
-        switchView(x.isTenpai)
+        
+        print("まち：\(matiArr.count) すて：\(suteArr.count)")
+        if(invalidHand){
+            notenView.syantenLabel.text = "手牌が不正です"
+            switchView(false)
+        } else {
+            if(isTenpai) {
+                mergeTenpaiDatas()
+                tenpaiView.tableView.reloadData()
+            } else {
+                for (k, elem) in suteArr.enumerated() {
+                    if(k < 3) {
+                        notenView.haiImage[k].image = elem.toUIImage()
+                    }
+                }
+                notenView.syantenLabel.text = String(minSyanten) + "シャンテン"
+            }
+            switchView(isTenpai)
+        }
+        
     }
 
 }

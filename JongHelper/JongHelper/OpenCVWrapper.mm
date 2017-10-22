@@ -31,70 +31,86 @@ static const int ANGLE_SEARCH_CANNY_LOW = 10;
 static const int ANGLE_SEARCH_CANNY_HIGH = 200;
 static const int ANGLE_SEARCH_WIDTH = 3;
 
-static cv::Mat loadMatFromFile(NSString *fileName)
-{
-    NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
-    NSString *path = [resourcePath stringByAppendingPathComponent:fileName];
-    const char *pathChars = [path UTF8String];
-    return cv::imread(pathChars);
-}
+
+static const int TARGET_WIDTH = 30;
+static const int TARGET_HEIGHT = 42;
+
+static const int PADDING_TOP = 5;
+static const int PADDING_BOTTOM = 0;
+static const int PADDING_LEFT = 2;
+static const int PADDING_RIGHT = 2;
+
+cv::Point2f gCornerQuad[4];
 
 - (id) init {
     if (self = [super init]) {
-        
-        templates.push_back(loadMatFromFile(@"templates/manzu/1m.JPG")); // 1 2m 8m
-        templates.push_back(loadMatFromFile(@"templates/manzu/2m.JPG")); // 3 8m
-        templates.push_back(loadMatFromFile(@"templates/manzu/3m.JPG")); // 1 2m
-        templates.push_back(loadMatFromFile(@"templates/manzu/4m.JPG")); // 4
-        templates.push_back(loadMatFromFile(@"templates/manzu/5m.JPG")); // 3 2m
-        templates.push_back(loadMatFromFile(@"templates/manzu/6m.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/manzu/7m.JPG")); // 3 2m
-        templates.push_back(loadMatFromFile(@"templates/manzu/8m.JPG")); // 1 2m
-        templates.push_back(loadMatFromFile(@"templates/manzu/9m.JPG")); // 1 2m
-        
-        templates.push_back(loadMatFromFile(@"templates/pinzu/1p.JPG")); // 4 2p
-        templates.push_back(loadMatFromFile(@"templates/pinzu/2p.JPG")); // 3 3p
-        templates.push_back(loadMatFromFile(@"templates/pinzu/3p.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/pinzu/4p.JPG")); // 4 3p
-        templates.push_back(loadMatFromFile(@"templates/pinzu/5p.JPG")); // 3 3p
-        templates.push_back(loadMatFromFile(@"templates/pinzu/6p.JPG")); // 4 3p
-        templates.push_back(loadMatFromFile(@"templates/pinzu/7p.JPG")); // 4 9p
-        templates.push_back(loadMatFromFile(@"templates/pinzu/8p.JPG")); // 3 2p
-        templates.push_back(loadMatFromFile(@"templates/pinzu/9p.JPG")); // 5 9p
-        
-        templates.push_back(loadMatFromFile(@"templates/souzu/1s.JPG")); // 2 2p 3p
-        templates.push_back(loadMatFromFile(@"templates/souzu/2s.JPG")); // 4
-        templates.push_back(loadMatFromFile(@"templates/souzu/3s.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/souzu/4s.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/souzu/5s.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/souzu/6s.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/souzu/7s.JPG")); // 2 9s
-        templates.push_back(loadMatFromFile(@"templates/souzu/8s.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/souzu/9s.JPG")); // 5
-        
-        templates.push_back(loadMatFromFile(@"templates/zihai/1z.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/zihai/2z.JPG")); // 4 8s
-        templates.push_back(loadMatFromFile(@"templates/zihai/3z.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/zihai/4z.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/zihai/5z.JPG")); // 1
-        templates.push_back(loadMatFromFile(@"templates/zihai/6z.JPG")); // 5
-        templates.push_back(loadMatFromFile(@"templates/zihai/7z.JPG")); // 5
-        
-        for (cv::Mat temp : templates) {
-            cv::Mat resized_temp;
-            cv::resize(temp,resized_temp , cv::Size(TEMPLATE_WIDTH, TEMPLATE_HEIGHT));
-            std::vector<cv::KeyPoint> keypoints;
-            cv::Mat descripter;
-            AKAZE->detect(resized_temp, keypoints);
-            AKAZE->compute(resized_temp, keypoints, descripter);
-            templatesKeypoints.push_back(keypoints);
-            templatesDescripters.push_back(descripter);
-        }
     }
     return self;
 }
 
-- (NSArray*)getTehaiArray:(UIImage *)image
+- (NSArray *)getFeatures:(UIImage *)image
+{
+    cv::Mat mat;
+    UIImageToMat(image, mat);
+    
+    int width = mat.size().width;
+    int height = mat.size().height;
+    
+    // 射影変換
+    
+    cv::Point2f cornerQuadPixel[4];
+    
+    cornerQuadPixel[0] = cv::Point2f(gCornerQuad[0].x * width, gCornerQuad[0].y * height);
+    cornerQuadPixel[1] = cv::Point2f(gCornerQuad[1].x * width, gCornerQuad[1].y * height);
+    cornerQuadPixel[2] = cv::Point2f(gCornerQuad[2].x * width, gCornerQuad[2].y * height);
+    cornerQuadPixel[3] = cv::Point2f(gCornerQuad[3].x * width, gCornerQuad[3].y * height);
+    
+    int persWidth = (TARGET_WIDTH + PADDING_LEFT + PADDING_RIGHT) * 14;
+    int persHeight = TARGET_HEIGHT + PADDING_TOP + PADDING_BOTTOM;
+    
+    cv::Point2f outputQuadPixel[4];
+    
+    outputQuadPixel[0] = cv::Point2f(0, persHeight);
+    outputQuadPixel[1] = cv::Point2f(persWidth, persHeight);
+    outputQuadPixel[2] = cv::Point2f(persWidth, 0);
+    outputQuadPixel[3] = cv::Point2f(0, 0);
+    
+    cv::Mat output(cv::Size(persWidth, persHeight), mat.type());
+    cv::Mat transform = cv::getPerspectiveTransform(cornerQuadPixel, outputQuadPixel);
+    cv::warpPerspective(mat, output, transform, output.size());
+
+    // グレースケール
+    
+    cv::cvtColor(output, output, cv::COLOR_BGRA2GRAY);
+    
+    // 二値化
+    cv::threshold(output, output, 0, 1, cv::THRESH_BINARY_INV | cv::THRESH_OTSU);
+    
+    // 14分割してNSArrayに変換
+    
+    NSMutableArray *features = [NSMutableArray array];
+    
+    for (int i = 0; i < 14; ++i) {
+        int lt = (TARGET_WIDTH + PADDING_LEFT + PADDING_RIGHT) * i;
+        cv::Rect rect(lt + PADDING_LEFT, PADDING_TOP, TARGET_WIDTH, TARGET_HEIGHT);
+        cv::Mat roi(output, rect);
+        
+        NSMutableArray *feature = [NSMutableArray array];
+        
+        for (int y = 0; y < TARGET_HEIGHT; ++y) {
+            for (int x = 0; x < TARGET_WIDTH; ++x) {
+                NSInteger val = roi.data[y * roi.step + x * roi.elemSize()];
+                [feature addObject:[NSNumber numberWithInteger:val]];
+            }
+        }
+        
+        [features addObject:feature];
+    }
+    
+    return features;
+}
+
+/*- (NSArray *)getTehaiArray:(UIImage *)image
 {
     cv::Mat mat;
     cv::Mat filtered;
@@ -152,6 +168,7 @@ static cv::Mat loadMatFromFile(NSString *fileName)
         }
     }
     NSMutableArray *array = [NSMutableArray array];
+    NSMutableArray *features = [NSMutableArray array];
     if (detected) {
         cv::Rect localRect(detectedAreaRect.x, detectedAreaRect.y - center + trimHeight / 2, detectedAreaRect.width, detectedAreaRect.height);
         cv::Mat detectedArea(labels, localRect);
@@ -201,21 +218,40 @@ static cv::Mat loadMatFromFile(NSString *fileName)
         int h = output.size().height;
         const int padding_w = 8;
         const int padding_h = 8;
+        
+        
         for(int i = 0; i < 14; i++){
             cv::Rect rect(i * w + padding_w, padding_h, w - padding_w, h - padding_h);
             cv::Mat roi(output, rect);
-            haiArr[i] = roi;
+            //haiArr[i] = roi;
+            
+            cv::Mat resized_roi(cv::Size(TARGET_WIDTH, TARGET_HEIGHT), roi.type());
+            cv::resize(roi, resized_roi, resized_roi.size());
+            cv::cvtColor(resized_roi, resized_roi, cv::COLOR_BGRA2GRAY);
+            cv::threshold(resized_roi, resized_roi, 0, 1, cv::THRESH_BINARY_INV | cv::THRESH_OTSU);
+            
+            NSMutableArray *feature = [NSMutableArray array];
+            
+            for (int y = 0; y < TARGET_WIDTH; ++y) {
+                for (int x = 0; x < TARGET_HEIGHT; ++x) {
+                    NSInteger val = resized_roi.data[y * resized_roi.step + x * resized_roi.elemSize()];
+                    [feature addObject:[NSNumber numberWithInteger:val]];
+                }
+            }
+            
+            [features addObject:feature];
         }
-        for(int i = 0; i < 14; i++){
-            [array addObject:[NSNumber numberWithInt:[[self class] detectFromMat:haiArr[i]]]];
-        }
+        //for(int i = 0; i < 14; i++){
+        //    [array addObject:[NSNumber numberWithInt:[[self class] detectFromMat:haiArr[i]]]];
+        //}
+        return features;
         
     } else {
         std::cout << "認識失敗" << std::endl;
         [array addObject:[NSNumber numberWithInt:0]];
     }
-    return array;
-}
+    return features;
+}*/
 
 - (UIImage *)filter:(UIImage *)image
 {
@@ -300,6 +336,11 @@ static cv::Mat loadMatFromFile(NSString *fileName)
         cornerQuad[2] = pRight + normal;
         cornerQuad[3] = pLeft + normal;
         
+        gCornerQuad[0] = cv::Point2f(cornerQuad[0].x / width, cornerQuad[0].y / height);
+        gCornerQuad[1] = cv::Point2f(cornerQuad[1].x / width, cornerQuad[1].y / height);
+        gCornerQuad[2] = cv::Point2f(cornerQuad[2].x / width, cornerQuad[2].y / height);
+        gCornerQuad[3] = cv::Point2f(cornerQuad[3].x / width, cornerQuad[3].y / height);
+        
         int outputWidth = TEMPLATE_WIDTH * 14;
         int outputHeight = TEMPLATE_HEIGHT;
         cv::Mat output(outputHeight, outputWidth, mat.type());
@@ -315,15 +356,21 @@ static cv::Mat loadMatFromFile(NSString *fileName)
         
         
         // 輪郭点 をプレビュー
-        cv::circle(mat, pLeft, 10, cv::Scalar(0, 255, 0, 255), -1);
-        cv::circle(mat, pRight, 10, cv::Scalar(0, 255, 0, 255), -1);
-        cv::circle(mat, pLeft + normal, 10, cv::Scalar(0, 255, 0, 255), -1);
-        cv::circle(mat, pRight + normal, 10, cv::Scalar(0, 255, 0, 255), -1);
-        cv::line(mat, pRight, pLeft, cv::Scalar(0, 255, 0, 255), 5);
+        //cv::Point2f delta = (pRight - pLeft) / 14;
+        
+        cv::Scalar linecolor(20, 50, 250, 255);
+        int linewidth = 2;
+        for (int i = 0; i < 15; ++i) {
+            cv::Point bottom = pLeft + delta * i / 14;
+            cv::Point top = bottom + normal;
+            cv::line(mat, bottom, top, linecolor, linewidth);
+        }
+        cv::line(mat, pRight, pLeft, linecolor, linewidth);
+        cv::line(mat, pRight + normal, pLeft + normal, linecolor, linewidth);
         
     }
     
-    cv::rectangle(mat, trimRect, cv::Scalar(0, 0, 255, 255));
+    //cv::rectangle(mat, trimRect, cv::Scalar(0, 0, 255, 255));
     
     //    cv::putText(mat, label, cv::Point(40,80), cv::FONT_HERSHEY_PLAIN, 4.0, cv::Scalar(255,0,0,255), 5);
     //std::cout << std::endl << std::endl;

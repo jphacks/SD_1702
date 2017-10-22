@@ -40,12 +40,11 @@ class Hand {
                 self.inputtedTiles[tile.getCode()] += 1
             } else {
                 invalidHand = true
+                break
             }
         }
         if (!invalidHand) {
             getTenpaiCandidate()
-        } else {
-            print("不正")
         }
     }
     // 鳴いている場合はその面子をリストで入力
@@ -60,7 +59,7 @@ class Hand {
 
     
     func initTmp() {
-        tmpTiles = inputtedTiles;
+        tmpTiles = inputtedTiles
     }
     
     func getTenpaiCandidate() {

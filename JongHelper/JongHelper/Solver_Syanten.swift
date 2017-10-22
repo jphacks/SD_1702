@@ -10,6 +10,7 @@ class Syanten {
     var temp: Int=0        //シャンテン数（計算用）
     var syanten_normal: Int = 0    //シャンテン数（結果用）
     var tmp: [Int] = [Int](repeating: 0, count: 34)
+    var gomi: [Tile] = []
     
     init(hand: [Tile]) {
         
@@ -20,7 +21,7 @@ class Syanten {
     
     // シャンテン数を返す
     func getSyantenNum() -> Int {
-        return min(getKokusiSyantenNum(), getTiitoituSyantenNum(), getNormalSyantenNum())
+        return min(getKokusiSyantenNum(), getTiitoituSyantenNum(), getNormalSyantenNum().syanten_normal)
     }
     
     //国士無双のシャンテン数を返すyo///////////////////////////////////////
@@ -56,7 +57,7 @@ class Syanten {
     }
 
     //普通にシャンテン数考えるyo/////////////////////////////////////
-    func getNormalSyantenNum()->Int{
+    func getNormalSyantenNum()->(syanten_normal:Int,gomi:Array<Tile>){
         mentu = 0
         toitu = 0
         kouho = 0
@@ -68,14 +69,14 @@ class Syanten {
             if(2 <= tmp[i]){
                 toitu += 1
                 tmp[i] -= 2;
-                mentu_cut(i: 1)
+                mentu_cut(i: 0)
                 
                 tmp[i] += 2;
                 toitu-=1
             }
-            mentu_cut(i: 1)   //頭無しと仮定して計算
+            mentu_cut(i: 0)   //頭無しと仮定して計算
         }
-        return syanten_normal;    //最終的な結果
+        return (syanten_normal, gomi);    //最終的な結果
     }
 
 
@@ -90,7 +91,7 @@ class Syanten {
         
         //メンツを抜き終わったのでターツ抜きへ
         if(i > 33){
-            taatu_cut(i: 1)
+            taatu_cut(i: 0)
             return
         }
         
@@ -133,6 +134,12 @@ class Syanten {
             temp = 8 - mentu * 2 - kouho - toitu
             if(temp < syanten_normal){
                 syanten_normal = temp
+                gomi = []
+                for k in 0..<34{
+                    if(tmp[k] == 1) {
+                        gomi.append(Tile(rawValue: k)!)
+                    }
+                }
             }
             return
         }

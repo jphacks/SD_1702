@@ -12,8 +12,8 @@ class Calculator {
         return [isReach, isIppatu, isTumo, isPinhu, isTanyao, isIpeiko, isHaku, isHatu, isTyun, isJikaze, isBakaze, isRinsyan, isTyankan, isHaitei, isHoutei, isDoubleReach, isTyanta, isHonroutou, isSansyokuDoujun, isIttuu, isToiToi, isSansyokuDoukou, isSanankou, isSankantu, isSyousangen, isTitoitu, isRyanpeiko, isJuntyan, isHonitu, isTinitu]
     }
     
-    var yakumanFuncList:[() -> Void] {
-        return[]
+    var yakumanFuncList:[() -> Bool] {
+        return[isSuankou, isSuankouTanki,  isDaisangen, isTuiso,  isSusiHou, isDaisusi, isRyuisou, isTyurenPoutou,  isJunseiTyurenpoutou, isTinroutou, isSukantu, isKokusimusou, isKokusimusou13, isTenhou, isTihou]
     }
     
     var scoreTableParent = [
@@ -58,6 +58,7 @@ class Calculator {
         self.compMentsu = compMentsu
         self.generalSituation = generalSituation
         self.personalSituation = personalSituation
+        calculateScore()
     }
     
     func calculateScore() {
@@ -88,7 +89,7 @@ class Calculator {
         
         if (personalSituation.isParent) {
             if (5 > han) {
-                print(scoreTableParent[fuindex][hanindex])
+                score = scoreTableParent[fuindex][hanindex].0
             } else {
                 let tmpscore : (Int, Int)
                 switch han {
@@ -99,11 +100,11 @@ class Calculator {
                 case 11, 12: tmpscore = (36000, 12000)
                 default: tmpscore = (48000, 16000)
                 }
-                print(tmpscore)
+                score  = tmpscore.0
             }
         } else {
             if (5 > han) {
-                print(scoreTableParent[fuindex][hanindex])
+                score = scoreTableChild[fuindex][hanindex].0
             } else {
                 let tmpscore : (Int, (Int, Int))
                 switch han {
@@ -114,7 +115,7 @@ class Calculator {
                 case 11, 12: tmpscore = (24000, (6000, 12000))
                 default: tmpscore = (32000, (8000, 16000))
                 }
-                print(tmpscore)
+                score = tmpscore.0
             }
         }
     }
@@ -242,7 +243,7 @@ class Calculator {
             if (number == 0 || number == 1 || number == 9) {
                 return false
             }
-        
+            
             if (mentsu is Syuntsu) {
                 let syuntsuNum = mentsu.identifierTile.getNumber()
                 if (syuntsuNum == 2 || syuntsuNum == 8) {
@@ -425,23 +426,21 @@ class Calculator {
         var manzu = false
         var pinzu = false
         var sohzu = false
+        var f1 = false
+        var f2 = false
         
         if (compMentsu.getSyuntsuCount() < 3) {
             return false
         }
         
-        var candidate = Syuntsu()
+        let candidate1 = compMentsu.syuntsuList[0]
+        let candidate2 = compMentsu.syuntsuList[1]
         
         for syuntsu in compMentsu.syuntsuList {
             let syuntsuType = syuntsu.identifierTile.getType()
             let syuntsuNum = syuntsu.identifierTile.getNumber()
             
-            if (candidate.isMentsu == false) {
-                candidate = syuntsu
-                continue
-            }
-            
-            if (candidate.identifierTile.getNumber() == syuntsuNum) {
+            if (candidate1.identifierTile.getNumber() == syuntsuNum) {
                 if (syuntsuType == "MANZU") {
                     manzu = true
                 } else if (syuntsuType == "PINZU") {
@@ -449,20 +448,28 @@ class Calculator {
                 } else if (syuntsuType == "SOHZU") {
                     sohzu = true
                 }
-                
-                
-                if (candidate.identifierTile.getType() == "MANZU") {
-                    manzu = true
-                } else if (candidate.identifierTile.getType() == "PINZU") {
-                    pinzu = true
-                } else if (candidate.identifierTile.getType() == "SOHZU") {
-                    sohzu = true
-                }
-            } else {
-                candidate = syuntsu
             }
         }
-        return manzu && pinzu && sohzu
+        f1 = manzu && pinzu && sohzu
+        
+        manzu = false; pinzu = false; sohzu = false
+        for syuntsu in compMentsu.syuntsuList {
+            let syuntsuType = syuntsu.identifierTile.getType()
+            let syuntsuNum = syuntsu.identifierTile.getNumber()
+            
+            if (candidate2.identifierTile.getNumber() == syuntsuNum) {
+                if (syuntsuType == "MANZU") {
+                    manzu = true
+                } else if (syuntsuType == "PINZU") {
+                    pinzu = true
+                } else if (syuntsuType == "SOHZU") {
+                    sohzu = true
+                }
+            }
+        }
+        f2 = manzu && pinzu && sohzu
+        
+        return f1 || f2
     }
     
     func IttuuSolver(oneTypeSyuntuList: [Syuntsu]) -> Bool {
@@ -524,23 +531,23 @@ class Calculator {
         var manzu = false
         var pinzu = false
         var sohzu = false
+        var f1 = false
+        var f2 = false
         
         if (compMentsu.getKotsuCount() < 3) {
             return false
         }
         
-        var candidate = Kotsu()
+        let candidate1 = compMentsu.syuntsuList[0]
+        let candidate2 = compMentsu.syuntsuList[1]
+        
         
         for kotsu in compMentsu.kotsuList {
             let kotsuType = kotsu.identifierTile.getType()
             let kotsuNum = kotsu.identifierTile.getNumber()
             
-            if (candidate.isMentsu == false) {
-                candidate = kotsu
-                continue
-            }
             
-            if (candidate.identifierTile.getNumber() == kotsuNum) {
+            if (candidate1.identifierTile.getNumber() == kotsuNum) {
                 if (kotsuType == "MANZU") {
                     manzu = true
                 } else if (kotsuType == "PINZU") {
@@ -548,20 +555,29 @@ class Calculator {
                 } else if (kotsuType == "SOHZU") {
                     sohzu = true
                 }
-                
-                
-                if (candidate.identifierTile.getType() == "MANZU") {
-                    manzu = true
-                } else if (candidate.identifierTile.getType() == "PINZU") {
-                    pinzu = true
-                } else if (candidate.identifierTile.getType() == "SOHZU") {
-                    sohzu = true
-                }
-            } else {
-                candidate = kotsu
             }
         }
-        return manzu && pinzu && sohzu
+        
+        f1 = manzu && pinzu && sohzu
+        
+        for kotsu in compMentsu.kotsuList {
+            let kotsuType = kotsu.identifierTile.getType()
+            let kotsuNum = kotsu.identifierTile.getNumber()
+            
+            if (candidate2.identifierTile.getNumber() == kotsuNum) {
+                if (kotsuType == "MANZU") {
+                    manzu = true
+                } else if (kotsuType == "PINZU") {
+                    pinzu = true
+                } else if (kotsuType == "SOHZU") {
+                    sohzu = true
+                }
+            }
+        }
+        
+        f2 = manzu && pinzu && sohzu
+        
+        return f1 || f2
     }
     
     func isSanankou() -> Bool {
@@ -658,6 +674,64 @@ class Calculator {
         return true
     }
     
+    func isSuankou() -> Bool {
+        return false
+    }
     
+    func isSuankouTanki() -> Bool {
+        return false
+    }
+    
+    func isDaisangen() -> Bool {
+        return false
+    }
+    
+    func isTuiso() -> Bool {
+        return false
+    }
+    
+    func isSusiHou() -> Bool {
+        return false
+    }
+    
+    func isDaisusi() -> Bool {
+        return false
+    }
+    
+    func isRyuisou() -> Bool {
+        return false
+    }
+    
+    func isTyurenPoutou() -> Bool {
+        return false
+    }
+    
+    func isJunseiTyurenpoutou() -> Bool {
+        return false
+    }
+    
+    func isTinroutou() -> Bool {
+        return false
+    }
+    
+    func isSukantu() -> Bool {
+        return false
+    }
+    
+    func isKokusimusou() -> Bool {
+        return false
+    }
+    
+    func isKokusimusou13() -> Bool {
+        return false
+    }
+    
+    func isTenhou() -> Bool {
+        return false
+    }
+    
+    func isTihou() -> Bool {
+        return false
+    }
 }
 
