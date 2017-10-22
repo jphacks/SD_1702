@@ -1,5 +1,7 @@
 # JongHelper
 
+[![JongHelper]](https://youtu.be/DgwDmwa-Jm0)
+
 ## 製品概要
 ### Mahjong X Tech 
  JongHelperは初心者支援麻雀ARアプリです。
