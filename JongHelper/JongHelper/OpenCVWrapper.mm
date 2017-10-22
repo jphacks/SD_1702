@@ -358,19 +358,19 @@ cv::Point2f gCornerQuad[4];
         // 輪郭点 をプレビュー
         //cv::Point2f delta = (pRight - pLeft) / 14;
         
-        for (int i = 0; i < 14; ++i) {
-            cv::line(mat, pRight, pLeft, cv::Scalar(0, 255, 0, 255), 5);
+        cv::Scalar linecolor(20, 50, 250, 255);
+        int linewidth = 2;
+        for (int i = 0; i < 15; ++i) {
+            cv::Point bottom = pLeft + delta * i / 14;
+            cv::Point top = bottom + normal;
+            cv::line(mat, bottom, top, linecolor, linewidth);
         }
-        
-        cv::circle(mat, pLeft, 10, cv::Scalar(0, 255, 0, 255), -1);
-        cv::circle(mat, pRight, 10, cv::Scalar(0, 255, 0, 255), -1);
-        cv::circle(mat, pLeft + normal, 10, cv::Scalar(0, 255, 0, 255), -1);
-        cv::circle(mat, pRight + normal, 10, cv::Scalar(0, 255, 0, 255), -1);
-        cv::line(mat, pRight, pLeft, cv::Scalar(0, 255, 0, 255), 5);
+        cv::line(mat, pRight, pLeft, linecolor, linewidth);
+        cv::line(mat, pRight + normal, pLeft + normal, linecolor, linewidth);
         
     }
     
-    cv::rectangle(mat, trimRect, cv::Scalar(0, 0, 255, 255));
+    //cv::rectangle(mat, trimRect, cv::Scalar(0, 0, 255, 255));
     
     //    cv::putText(mat, label, cv::Point(40,80), cv::FONT_HERSHEY_PLAIN, 4.0, cv::Scalar(255,0,0,255), 5);
     //std::cout << std::endl << std::endl;
