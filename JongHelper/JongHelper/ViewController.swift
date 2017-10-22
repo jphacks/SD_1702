@@ -97,8 +97,13 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     }
     
     // AVCaptureDelegate
+    var count = 0
     func capture(image: UIImage) {
-        imageView.image = openCVWrapper.filter(image)
+        if (count % 5 == 0) {
+            imageView.image = openCVWrapper.filter(image)
+            count = 0
+        }
+        count += 1
     }
     // AVCaptureDelegate
     func photo(image: UIImage){
@@ -114,6 +119,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         if(arr.count == 14){
             //self.tehaiArray = getTehaiListFromInt(tehaiIntArr)
             let arr2 = intArrToTile(arr)
+            tehaiTileArray = arr2
             setTehaiView(arr2, animated: true)
             self.calculate(fromTalbe: false)
         }
@@ -316,6 +322,36 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         return tehaiList
     }
     
+    func mergeTenpaiDatas() {
+        print("mergeTenpaiDatas")
+        var arr: [TenpaiData] = []
+        for elem in tenpaiDatas {
+            if(arr.count != 0){
+                var flag = true
+                for elem2 in arr {
+                    if(compTenpaiData(data1: elem, data2: elem2)) {
+                        flag = false
+                        break
+                    }
+                }
+                if (flag) {
+                    arr.append(elem)
+                }
+            } else {
+                arr.append(elem)
+            }
+        }
+        tenpaiDatas = arr
+    }
+    
+    func compTenpaiData(data1: TenpaiData, data2: TenpaiData) -> Bool {
+        let sameSuteTile = data1.suteTile == data2.suteTile
+        let sameScore = data1.score == data2.score
+        let sameMatiTile = data1.matiTiles[0] == data2.matiTiles[0]
+        let result = sameSuteTile && sameScore && sameMatiTile
+        return ( result )
+    }
+    
     func calculate(fromTalbe: Bool) {
         //ドラのリスト作る
         var dora: [Tile] = []
@@ -337,6 +373,12 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         var invalidHand = false
         var minSyanten = 99
         tenpaiDatas = []
+        
+        var player = Player(hand14: tehaiTileArray)
+        if(player.isAgari) {
+            return
+        }
+        
         for i in 0..<14 {//13個にして聴牌かどうか確認
             var arr = tehaiTileArray
             let matiKouho = arr.remove(at: i)
@@ -373,12 +415,14 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
                     }
             }
         }
+        
         print("まち：\(matiArr.count) すて：\(suteArr.count)")
         if(invalidHand){
             notenView.syantenLabel.text = "手牌が不正です"
             switchView(false)
         } else {
             if(isTenpai) {
+                mergeTenpaiDatas()
                 tenpaiView.tableView.reloadData()
             } else {
                 for (k, elem) in suteArr.enumerated() {

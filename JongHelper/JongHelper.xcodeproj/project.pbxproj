@@ -36,6 +36,7 @@
 		5AA52CC91F9C1D4F006107AB /* TenpaiTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA52CC71F9C1D4F006107AB /* TenpaiTableViewCell.swift */; };
 		5AA52CCA1F9C1D4F006107AB /* TenpaiTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5AA52CC81F9C1D4F006107AB /* TenpaiTableViewCell.xib */; };
 		5AA52CCC1F9C230A006107AB /* TenpaiData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA52CCB1F9C230A006107AB /* TenpaiData.swift */; };
+		5AA52CCE1F9C486C006107AB /* Solver_Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA52CCD1F9C486C006107AB /* Solver_Player.swift */; };
 		5AEEBAAD1F98994D00E006F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEEBAAC1F98994D00E006F3 /* AppDelegate.swift */; };
 		5AEEBAAF1F98994D00E006F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEEBAAE1F98994D00E006F3 /* ViewController.swift */; };
 		5AEEBAB21F98994D00E006F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AEEBAB01F98994D00E006F3 /* Main.storyboard */; };
@@ -77,6 +78,7 @@
 		5AA52CC71F9C1D4F006107AB /* TenpaiTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TenpaiTableViewCell.swift; sourceTree = "<group>"; };
 		5AA52CC81F9C1D4F006107AB /* TenpaiTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TenpaiTableViewCell.xib; sourceTree = "<group>"; };
 		5AA52CCB1F9C230A006107AB /* TenpaiData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TenpaiData.swift; sourceTree = "<group>"; };
+		5AA52CCD1F9C486C006107AB /* Solver_Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Solver_Player.swift; sourceTree = "<group>"; };
 		5AEEBAA91F98994D00E006F3 /* JongHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JongHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AEEBAAC1F98994D00E006F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5AEEBAAE1F98994D00E006F3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 		5AEEBAAB1F98994D00E006F3 /* JongHelper */ = {
 			isa = PBXGroup;
 			children = (
+				5AA52CCD1F9C486C006107AB /* Solver_Player.swift */,
 				6B31C7731F9BE2B800B612D6 /* CoreMLHaiClassifier.mlmodel */,
 				5A46BE8D1F9AE180008F1ACB /* Resource */,
 				5A46BE9B1F9B0221008F1ACB /* templates */,
@@ -265,6 +268,7 @@
 				5AA52CBA1F9B51E1006107AB /* Solver_Kotsu.swift in Sources */,
 				5A46BE891F9AD48A008F1ACB /* OpenCVWrapper.mm in Sources */,
 				5A46BE961F9AE204008F1ACB /* TehaiTableViewCell.swift in Sources */,
+				5AA52CCE1F9C486C006107AB /* Solver_Player.swift in Sources */,
 				6B31C7741F9BE2C900B612D6 /* CoreMLHaiClassifier.mlmodel in Sources */,
 				5AA52CC11F9B51E1006107AB /* Solver_CompMentsu.swift in Sources */,
 			);
@@ -406,7 +410,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = PSTZ2PFA8Q;
+				DEVELOPMENT_TEAM = 8X3BYN2T6R;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/JongHelper",
@@ -431,7 +435,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = PSTZ2PFA8Q;
+				DEVELOPMENT_TEAM = 8X3BYN2T6R;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/JongHelper",
