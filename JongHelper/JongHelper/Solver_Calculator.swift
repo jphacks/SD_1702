@@ -538,8 +538,8 @@ class Calculator {
             return false
         }
         
-        let candidate1 = compMentsu.syuntsuList[0]
-        let candidate2 = compMentsu.syuntsuList[1]
+        let candidate1 = compMentsu.kotsuList[0]
+        let candidate2 = compMentsu.kotsuList[1]
         
         
         for kotsu in compMentsu.kotsuList {
