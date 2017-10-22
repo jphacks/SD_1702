@@ -341,7 +341,9 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             var arr = tehaiTileArray
             let matiKouho = arr.remove(at: i)
             let x = Hand(inputtedTiles: arr)
-            if (x.isTenpai) {
+            if(x.invalidHand) {
+                invalidHand = true
+            } else if (x.isTenpai) {
                 isTenpai = true
                 //print("tenpai-num: \(x.tenpaiSet.count)")
                 
@@ -363,34 +365,20 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
                 }
             } else {
                 let syanten = Syanten(hand: arr)
-                if(x.invalidHand) {
-                    invalidHand = true
-                } else {
+
                     minSyanten = min(minSyanten, syanten.getSyantenNum())
                     
                     for g in syanten.gomi {
                         suteArr.insert(g)
                     }
-                }
             }
         }
         print("まち：\(matiArr.count) すて：\(suteArr.count)")
         if(invalidHand){
             notenView.syantenLabel.text = "手牌が不正です"
+            switchView(false)
         } else {
             if(isTenpai) {
-//                //ビューに待ちを表示
-//                for (k, elem) in matiArr.enumerated() {
-//                    if(k < 13){
-//                        self.tenpaiView.matiHaiImage[k].image = elem.toUIImage()
-//                    }
-//                }
-                //ビューに捨て牌を表示
-//                for (k, elem) in suteArr.enumerated() {
-//                    if(k < 13){
-//                        self.tenpaiView.gomiHaiImage[k].image = elem.toUIImage()
-//                    }
-//                }
                 tenpaiView.tableView.reloadData()
             } else {
                 for (k, elem) in suteArr.enumerated() {
@@ -400,8 +388,9 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
                 }
                 notenView.syantenLabel.text = String(minSyanten) + "シャンテン"
             }
+            switchView(isTenpai)
         }
-        switchView(isTenpai)
+        
     }
 
 }
