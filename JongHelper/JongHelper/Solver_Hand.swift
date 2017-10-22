@@ -60,7 +60,7 @@ class Hand {
 
     
     func initTmp() {
-        tmpTiles = inputtedTiles;
+        tmpTiles = inputtedTiles
     }
     
     func getTenpaiCandidate() {
