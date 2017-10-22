@@ -35,6 +35,8 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     
     let recognizer = Recognizer()
     
+    var agariHaiIndex: Int!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -220,9 +222,6 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         return celll
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if(tableView.tag == 0){
             return 46
@@ -271,6 +270,23 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             }
             doraTileArray[tv.tag - 31] = Tile(rawValue: doraCellIndexPath[tv.tag - 31].row)!
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if(tableView.tag == 99) {
+            agariHaiIndex = indexPath.row
+            tableView.deselectRow(at: indexPath, animated: true)
+            performSegue(withIdentifier: "toTokutenView",sender: nil)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        var vc = segue.destination as! TokutenViewController
+        vc.tehaiTileArray = self.tehaiTileArray
+        vc.doraTileArray = self.doraTileArray
+        vc.bakazeTile = self.bakazeTile
+        vc.jikazeTile = self.jikazeTile
+        vc.matiTile = tenpaiDatas[agariHaiIndex].matiTiles[0]
     }
     
     //tableview===============================================================
