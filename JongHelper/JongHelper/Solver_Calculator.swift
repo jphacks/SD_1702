@@ -12,8 +12,8 @@ class Calculator {
         return [isReach, isIppatu, isTumo, isPinhu, isTanyao, isIpeiko, isHaku, isHatu, isTyun, isJikaze, isBakaze, isRinsyan, isTyankan, isHaitei, isHoutei, isDoubleReach, isTyanta, isHonroutou, isSansyokuDoujun, isIttuu, isToiToi, isSansyokuDoukou, isSanankou, isSankantu, isSyousangen, isTitoitu, isRyanpeiko, isJuntyan, isHonitu, isTinitu]
     }
     
-    var yakumanFuncList:[() -> Void] {
-        return[]
+    var yakumanFuncList:[() -> Bool] {
+        return[isSuankou, isSuankouTanki,  isDaisangen, isTuiso,  isSusiHou, isDaisusi, isRyuisou, isTyurenPoutou,  isJunseiTyurenpoutou, isTinroutou, isSukantu, isKokusimusou, isKokusimusou13, isTenhou, isTihou]
     }
     
     var scoreTableParent = [
@@ -58,6 +58,7 @@ class Calculator {
         self.compMentsu = compMentsu
         self.generalSituation = generalSituation
         self.personalSituation = personalSituation
+        calculateScore()
     }
     
     func calculateScore() {
@@ -88,7 +89,7 @@ class Calculator {
         
         if (personalSituation.isParent) {
             if (5 > han) {
-                print(scoreTableParent[fuindex][hanindex])
+                score = scoreTableParent[fuindex][hanindex].0
             } else {
                 let tmpscore : (Int, Int)
                 switch han {
@@ -99,11 +100,11 @@ class Calculator {
                 case 11, 12: tmpscore = (36000, 12000)
                 default: tmpscore = (48000, 16000)
                 }
-                print(tmpscore)
+                score  = tmpscore.0
             }
         } else {
             if (5 > han) {
-                print(scoreTableParent[fuindex][hanindex])
+                score = scoreTableChild[fuindex][hanindex].0
             } else {
                 let tmpscore : (Int, (Int, Int))
                 switch han {
@@ -114,7 +115,7 @@ class Calculator {
                 case 11, 12: tmpscore = (24000, (6000, 12000))
                 default: tmpscore = (32000, (8000, 16000))
                 }
-                print(tmpscore)
+                score = tmpscore.0
             }
         }
     }
@@ -242,7 +243,7 @@ class Calculator {
             if (number == 0 || number == 1 || number == 9) {
                 return false
             }
-        
+            
             if (mentsu is Syuntsu) {
                 let syuntsuNum = mentsu.identifierTile.getNumber()
                 if (syuntsuNum == 2 || syuntsuNum == 8) {
@@ -673,6 +674,64 @@ class Calculator {
         return true
     }
     
+    func isSuankou() -> Bool {
+        return false
+    }
     
+    func isSuankouTanki() -> Bool {
+        return false
+    }
+    
+    func isDaisangen() -> Bool {
+        return false
+    }
+    
+    func isTuiso() -> Bool {
+        return false
+    }
+    
+    func isSusiHou() -> Bool {
+        return false
+    }
+    
+    func isDaisusi() -> Bool {
+        return false
+    }
+    
+    func isRyuisou() -> Bool {
+        return false
+    }
+    
+    func isTyurenPoutou() -> Bool {
+        return false
+    }
+    
+    func isJunseiTyurenpoutou() -> Bool {
+        return false
+    }
+    
+    func isTinroutou() -> Bool {
+        return false
+    }
+    
+    func isSukantu() -> Bool {
+        return false
+    }
+    
+    func isKokusimusou() -> Bool {
+        return false
+    }
+    
+    func isKokusimusou13() -> Bool {
+        return false
+    }
+    
+    func isTenhou() -> Bool {
+        return false
+    }
+    
+    func isTihou() -> Bool {
+        return false
+    }
 }
 
