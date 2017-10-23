@@ -22,19 +22,13 @@ class  CompMentu: Hashable {
     var toituList = [Toitu]()
     var syuntuList = [Syuntu]()
     var kotuList = [Kotu]()
-    var tumo: Tile
+    var tumo = Tile.null
     
     var isTitoitu = false
     
-    var isTanki = false
-    var isKanchan = false
-    var isPenchan = false
-    var isRyanmen = false
-    var isSyanpon = false
+    var isOpenHand = false
     
-    //var isOpenHand = false
-    
-    init(mentuList: [Mentu], tumo: Tile) {
+    init(mentuList: [Mentu], tumo: Tile, isOpenHand: Bool) {
         
         for mentu in mentuList
         {
@@ -48,6 +42,7 @@ class  CompMentu: Hashable {
         }
         hashValue = hashCode()
         self.tumo = tumo
+        self.isOpenHand = isOpenHand
     }
     
     init(tenpai: Tenpai, tumo: Tile, isOpenHand: Bool) {
@@ -77,12 +72,6 @@ class  CompMentu: Hashable {
         } else if (tenpai.isSyanpon()) {
             kotuList.append(Kotu(isOpen: false, identifierTile: tenpai.uki[0]))
         }
-        
-        self.isTanki = tenpai.isTanki()
-        self.isKanchan = tenpai.isKanchan()
-        self.isPenchan = tenpai.isPenchan()
-        self.isRyanmen = tenpai.isRyanmen()
-        self.isSyanpon = tenpai.isSyanpon()
         
         self.isOpenHand = isOpenHand
     }
@@ -114,7 +103,7 @@ class  CompMentu: Hashable {
     func mentuListToIntList() -> [Int] {
         var result = [Int](repeating: 0, count: 34)
         for mentu in getAllMentu() {
-            var code = mentu.identifierTile.getCode()
+            let code = mentu.identifierTile.getCode()
             
             if (mentu is Syuntu) {
                 result[code - 1] += 1
@@ -133,11 +122,66 @@ class  CompMentu: Hashable {
         return lhs.toituList == rhs.toituList && lhs.syuntuList == rhs.syuntuList && lhs.kotuList == rhs.kotuList && lhs.tumo == rhs.tumo
     }
     
+    func isRyanmen() -> Bool {
+        for syuntu in syuntuList {
+            if (syuntu.identifierTile.getType() != tumo.getType()) {
+                continue
+            }
+            
+            let number = syuntu.identifierTile.getNumber()
+            if number == 8 || number == 2 {
+                continue
+            }
+            if number - 1 == tumo.getNumber() || number + 1 == tumo.getNumber() {
+                return true
+            }
+        }
+        return false
+    }
+    
+    
+    func isKanchan() -> Bool {
+        if isRyanmen() {
+            return false
+        }
+        for syuntu in syuntuList {
+            if (syuntu.identifierTile.getType() != tumo.getType()) {
+                continue
+            }
+            
+            if syuntu.identifierTile.getNumber() == tumo.getNumber() {
+                return true
+            }
+        }
+        return false
+    }
+    
+    func isPenchan() -> Bool {
+        if (isRyanmen()) {
+            return false
+        }
+        for syuntu in syuntuList {
+            if (syuntu.identifierTile.getType() != tumo.getType()) {
+                continue
+            }
+            
+            var number = syuntu.identifierTile.getNumber()
+            if number == 8 && tumo.getNumber() == 7 {
+                return true
+            }
+            if number == 2 && tumo.getNumber() == 3 {
+                return true
+            }
+        }
+        return false
+    }
+
+    
     func hashCode() -> Int {
         var result = 0
         var tmp = 0
         
-        resutl += tumo
+        result += tumo.getNumber()
         
         for toitu in toituList {
             tmp += toitu.hashCode()

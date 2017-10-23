@@ -25,9 +25,10 @@ class Hand {
     var tumo = Tile.null
     
     // ----- テンパイ状態に関するプロパティ -----
+    // テンパイ時に返すものは，これを捨ててこれを引いたら，この点数で上がれるよ
     // テンパイしているかどうか
     var isTenpai = false
-    // テンパイ形のリスト tenpai: toituList, syuntuList, kotuList, uki, wait
+    // テンパイ形のセット tenpai: toituList, syuntuList, kotuList, uki, wait
     var tenpaiSet = Set<Tenpai>()
     
     // ---- 状況に関するプロパティ -------
@@ -67,7 +68,7 @@ class Hand {
     
     // 点数, 役のタプルを返す関数
     func getScore() -> (Int, Int, Int, [NormalYaku]) {
-        // 点数 (点数，飜，符）のタプル
+        // 点数 (点数，飜，符）と役のタプル
         var score = (0, 0, 0, [NormalYaku]())
         
         for agari in agariSet {
@@ -82,6 +83,43 @@ class Hand {
         
         return score
     }
+    
+    // テンパイ時に，これを捨ててこれを引いたら，この点数で上がれるよ　を返す
+    func getTenpaiData() -> [TenpaiData] {
+        var result = [TenpaiData]()
+        
+        for tenpai in tenpaiSet {
+            for mati in tenpai.getWait() {
+                var suteTile = tenpai.suteTile
+                let compMentu = CompMentu(tenpai: tenpai, tumo: mati, isOpenHand: false)
+                let calculator = Calculator(compMentu: compMentu ,generalSituation: genSituation, personalSituation: perSituation)
+                
+                let score = calculator.score
+                
+                
+                let matiTiles:Set<Tile> = [mati]
+                if result.count == 0 {
+                    result.append(TenpaiData(sute: tenpai.suteTile, mati: matiTiles, score: score))
+                } else {
+                    var flag = true
+                    
+                    for elem in result {
+                        if elem.suteTile == tenpai.suteTile && elem.score == score {
+                            elem.matiTiles.insert(mati)
+                            flag = false
+                        }
+                    }
+                    
+                    if flag {
+                        result.append(TenpaiData(sute: tenpai.suteTile, mati: matiTiles, score: score))
+                    }
+                }
+            }
+        }
+        
+        return result
+    }
+    
     
     // 鳴いている場合はその面子をリストで入力
     /*init(inputtedTiles: [Tile], mentuList: [Mentu]) {
@@ -147,7 +185,7 @@ class Hand {
                 }
             }
             
-            for uki in tenpai.uki {
+            for uki in tenpai.ukiList {
                 tiles.append(uki)
             }
                 
@@ -161,10 +199,11 @@ class Hand {
                 decidedMentuList.append(contentsOf: serchSyuntuCandidate(start: i, end: 26))
                 decidedMentuList.append(contentsOf: serchSyuntuCandidate(start: 1, end: i))
                 
-                let uki = getRemainderTiles()
-                let tenpai = Tenpai(mentuList: decidedMentuList, uki: uki)
-                if(tenpai.getTenpai()) {
-                    tenpaiSet.insert(tenpai)
+                let ukiTiles = getRemainderTiles()
+                let tmpTenpai = Tenpai(mentuList: decidedMentuList, ukiList: ukiTiles, suteTile: tenpai.suteTile)
+                if(tmpTenpai.isTenpai) {
+                    // 編集必要
+                    tenpaiSet.insert(tmpTenpai)
                 }
             }
         }
@@ -175,14 +214,14 @@ class Hand {
     }
     
     func getRemainderTiles() -> [Tile] {
-        var uki = [Tile]()
+        var ukiList = [Tile]()
         for i in 0 ..< tmpTiles.count {
             while(tmpTiles[i] > 0) {
-                uki.append(Tile(rawValue: i)!)
+                ukiList.append(Tile(rawValue: i)!)
                 tmpTiles[i] -= 1
             }
         }
-        return uki
+        return ukiList
     }
     
     func serchSyuntuCandidate(start: Int, end: Int) -> [Mentu] {
@@ -248,13 +287,17 @@ class Hand {
         var ukiNum = countRemainderTiles()
         if (ukiNum == 0) {
             isAgari = true
-            agariSet.insert(CompMentu(mentuList: mentuCandidate, tumo: tumo))
-        } else if (ukiNum < 3) {
-            let uki = getRemainderTiles()
-            let tenpai = Tenpai(mentuList: mentuCandidate, uki: uki)
-            if(tenpai.getTenpai()) {
-                tenpaiSet.insert(tenpai)
-                isTenpai = true
+            agariSet.insert(CompMentu(mentuList: mentuCandidate, tumo: tumo, isOpenHand: false))
+        } else if (ukiNum < 4) {
+            let ukiList = getRemainderTiles()
+            var arr = ukiList
+            for (i, elem) in ukiList.enumerated() {
+                arr.remove(at: i)
+                let tenpai = Tenpai(mentuList: mentuCandidate, ukiList: arr, suteTile: ukiList[i])
+                if(tenpai.isTenpai) {
+                    tenpaiSet.insert(tenpai)
+                    isTenpai = true
+                }
             }
         }
     }
@@ -266,6 +309,19 @@ class Hand {
         mentuCandidate.append(contentsOf: serchKotuCandidate())
         mentuCandidate.append(contentsOf: serchSyuntuCandidate(start: 1, end: 26))
         
+        let ukiNum = countRemainderTiles()
+        if (ukiNum < 2) {
+            let ukiList = getRemainderTiles()
+            var arr = ukiList
+            for (i, elem) in ukiList.enumerated() {
+                arr.remove(at: i)
+                let tenpai = Tenpai(mentuList: mentuCandidate, ukiList: arr, suteTile: ukiList[i])
+                if(tenpai.isTenpai) {
+                    tenpaiSet.insert(tenpai)
+                    isTenpai = true
+                }
+            }
+        }
     }
     
     func searchPrioritySyuntu(janto: Toitu) {
@@ -282,13 +338,18 @@ class Hand {
         var ukiNum = countRemainderTiles()
         if (ukiNum == 0) {
             isAgari = true
-            agariSet.insert(CompMentu(mentuList: mentuCandidate, tumo: tumo))
-        } else if (ukiNum < 3) {
-            let uki = getRemainderTiles()
-            let tenpai = Tenpai(mentuList: mentuCandidate, uki: uki)
-            if(tenpai.getTenpai()) {
-                tenpaiSet.insert(tenpai)
-                isTenpai = true
+            agariSet.insert(CompMentu(mentuList: mentuCandidate, tumo: tumo, isOpenHand: isOpenHand))
+        } else if (ukiNum < 4) {
+            let ukiList = getRemainderTiles()
+            var arr = ukiList
+            for (i, elem) in ukiList.enumerated() {
+                arr.remove(at: i)
+                let tenpai = Tenpai(mentuList: mentuCandidate, ukiList: arr, suteTile: ukiList[i])
+                
+                if(tenpai.isTenpai) {
+                    tenpaiSet.insert(tenpai)
+                    isTenpai = true
+                }
             }
         }
     }
@@ -302,11 +363,16 @@ class Hand {
         
         let ukiNum = countRemainderTiles()
         if (ukiNum < 2) {
-            let uki = getRemainderTiles()
-            let tenpai = Tenpai(mentuList: mentuCandidate, uki: uki)
-            if(tenpai.getTenpai()) {
-                tenpaiSet.insert(tenpai)
-                isTenpai = true
+            let ukiList = getRemainderTiles()
+            var arr = ukiList
+            for (i, elem) in ukiList.enumerated() {
+                arr.remove(at: i)
+                let tenpai = Tenpai(mentuList: mentuCandidate, ukiList: arr, suteTile: ukiList[i])
+                
+                if(tenpai.isTenpai) {
+                    tenpaiSet.insert(tenpai)
+                    isTenpai = true
+                }
             }
         }
     }

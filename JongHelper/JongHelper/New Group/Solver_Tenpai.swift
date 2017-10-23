@@ -8,6 +8,7 @@
 
 import Foundation
 
+// 14枚
 class Tenpai: Hashable {
     var hashValue = 0
     
@@ -18,10 +19,12 @@ class Tenpai: Hashable {
     var toituList = [Toitu]()
     var syuntuList = [Syuntu]()
     var kotuList = [Kotu]()
-    var uki = [Tile]() // uki[0] < uki[1]
+    var suteTile = Tile.null
+    var ukiList = [Tile]() // uki[0] < uki[1]
     var wait = [Tile]()
+    var isTenpai = false
 
-    init(mentuList: [Mentu], uki: [Tile]) {
+    init(mentuList: [Mentu], ukiList: [Tile], suteTile: Tile) {
         
         for mentu in mentuList
         {
@@ -34,36 +37,29 @@ class Tenpai: Hashable {
             }
         }
         
-        self.uki = uki
+        self.ukiList = ukiList
+        self.suteTile = suteTile
         
         if(isTanki()) {
-            wait.append(uki[0])
+            wait.append(ukiList[0])
         } else if(isKanchan()) {
-            wait.append(Tile(rawValue: uki[0].getCode() + 1)!)
+            wait.append(Tile(rawValue: ukiList[0].getCode() + 1)!)
         } else if(isPenchan()) {
-            if(uki[0].getNumber() == 1) {
-                wait.append(Tile(rawValue: uki[1].getCode() + 1)!)
-            } else if(uki[1].getNumber() == 9) {
-                wait.append(Tile(rawValue: uki[0].getCode() - 1)!)
+            if(ukiList[0].getNumber() == 1) {
+                wait.append(Tile(rawValue: ukiList[1].getCode() + 1)!)
+            } else if(ukiList[1].getNumber() == 9) {
+                wait.append(Tile(rawValue: ukiList[0].getCode() - 1)!)
             }
         } else if(isRyanmen()) {
-            wait.append(Tile(rawValue: uki[0].getCode() - 1)!)
-            wait.append(Tile(rawValue: uki[1].getCode() + 1)!)
+            wait.append(Tile(rawValue: ukiList[0].getCode() - 1)!)
+            wait.append(Tile(rawValue: ukiList[1].getCode() + 1)!)
         } else if(isSyanpon()) {
-            wait.append(uki[0])
+            wait.append(ukiList[0])
         }
         
         hashValue = hashCode()
-        
     }
-    
-    func getTenpai() -> Bool {
-        if(isTanki() || isKanchan() || isPenchan() || isRyanmen() || isSyanpon()) {
-            return true
-        }
-        return false
-    }
-    
+
     func getWait() -> [Tile] {
         return wait
     }
@@ -78,7 +74,7 @@ class Tenpai: Hashable {
         
         
         for syuntu in syuntuList {
-            if(syuntu.identifierTile.getType() == uki[0].getType()) {
+            if(syuntu.identifierTile.getType() == ukiList[0].getType()) {
                 _syuntuList.append(syuntu)
             } else {
                 nokori.append(syuntu)
@@ -88,17 +84,16 @@ class Tenpai: Hashable {
     }
     
     func isTanki() -> Bool {
-        if (uki.count == 1) {
-            //print("isTanki")
+        if (ukiList.count == 1) {
             return true
         }
         return false
     }
     
     func isKanchan() -> Bool {
-        if (uki.count == 2) {
-            if ((uki[0].getType() == uki[1].getType()) && (uki[0].getNumber() + 2 == uki[1].getNumber())) {
-            //print("isKanchan")
+        
+        if (ukiList.count == 2) {
+            if ukiList[0].getType() == ukiList[1].getType() && ukiList[0].getNumber() == ukiList[1].getNumber() + 2 {
                 return true
             }
         }
@@ -106,29 +101,25 @@ class Tenpai: Hashable {
     }
     
     func isPenchan() -> Bool {
-        if (uki.count == 2) {
-            if (uki[0].getType() == uki[1].getType()) {
-                if (uki[0].getNumber() == 1 && uki[1].getNumber() == 2) {
-                    //print("\(uki[0])\(uki[1])")
-                    //print("isPenchan")
+        if (ukiList.count == 2) {
+            if (ukiList[0].getType() == ukiList[1].getType()) {
+                if (ukiList[0].getNumber() == 1 && ukiList[1].getNumber() == 2) {
                     return true
-                } else if (uki[0].getNumber() == 8 && uki[1].getNumber() == 9) {
-                    //print("\(uki[0])\(uki[1])")
-                    //print("isPenchan")
+                } else if (ukiList[0].getNumber() == 8 && ukiList[1].getNumber() == 9) {
                     return true
                 }
             }
         }
+            
         return false
     }
     
     func isRyanmen() -> Bool {
-        if (uki.count == 2) {
-            if (uki[0].getType() == uki[0].getType()) {
-                if (uki[0].getNumber() != 1 || uki[1].getNumber() != 9) {
-                    if (uki[0].getNumber() + 1 == uki[1].getNumber()) {
+        if (ukiList.count == 2) {
+            if (ukiList[0].getType() == ukiList[1].getType()) {
+                if (ukiList[0].getNumber() != 1 || ukiList[1].getNumber() != 9) {
+                    if (ukiList[0].getNumber() == ukiList[1].getNumber() + 1) {
                         return true
-                        //print("isRyanmen")
                     }
                 }
             }
@@ -137,12 +128,10 @@ class Tenpai: Hashable {
     }
     
     func isSyanpon() -> Bool {
-        if (uki.count == 2) {
-            if (uki[0].getCode() == uki[1].getCode()) {
-                //print("isSyanpon")
+        if (ukiList.count == 2) {
+            if (ukiList[0].getCode() == ukiList[1].getCode()) {
                 return true
             }
-            
         }
         return false
     }
@@ -163,7 +152,7 @@ class Tenpai: Hashable {
             let t = toitu.identifierTile
             print("\(t)\(t)\t", terminator:"")
         }
-        for uki in uki {
+        for uki in ukiList {
             print("\(uki)", terminator:"")
         }
         print("   ", terminator:"")
@@ -177,7 +166,7 @@ class Tenpai: Hashable {
         var result = 0
         var tmp = 0
         
-        for x in uki {
+        for x in ukiList {
             result += x.getCode()
         }
         
