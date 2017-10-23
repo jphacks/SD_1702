@@ -1,0 +1,315 @@
+//
+//  Hand.swift
+//  
+//
+//  Created by oike toshiyuki on 2017/10/17.
+//
+
+//
+import Foundation
+
+// 手牌 14枚
+class Hand {
+    
+    // 面前手かどうか
+    var isOpenHand = false
+    
+    // ----- 上がり状態に関するプロパティ -----
+    // 上がれるかどうか
+    var isAgari = false
+    // 上がりの形のセット　これをcalculator に投げることで得点を得ることができる
+    var agariSet = Set<CompMentu>()
+    // チートイかどうか
+    var isTitoitu = false
+    // いま積もった牌 点数計算に必要
+    var tumo = Tile.null
+    
+    // ----- テンパイ状態に関するプロパティ -----
+    // テンパイしているかどうか
+    var isTenpai = false
+    // テンパイ形のリスト tenpai: toituList, syuntuList, kotuList, uki, wait
+    var tenpaiSet = Set<Tenpai>()
+    
+    // ---- 状況に関するプロパティ -------
+    var genSituation = GeneralSituation()
+    var perSituation = PersonalSituation()
+    
+    
+    // 不正な手かどうか
+    var invalidHand = false
+    
+    // 作業用変数
+    var tmpTiles = [Int]()
+    // 入力された各牌の数の配列
+    var inputtedTiles = [Int](repeating: 0, count: 34)
+    // 入力された面子リスト
+    var inputteFuroList = [Mentu]()
+    
+    // 面前手の場合はこっちでイニシャライズ
+    init(inputtedTiles: [Tile], tumo: Tile, genSituation: GeneralSituation, perSituation: PersonalSituation) {
+        isOpenHand = false
+        
+        for tile in inputtedTiles {
+            if (self.inputtedTiles[tile.getCode()] < 4) {
+                self.inputtedTiles[tile.getCode()] += 1
+            } else {
+                invalidHand = true
+                break
+            }
+        }
+        if (!invalidHand) {
+            getCompMentuSet()
+        }
+        self.tumo = tumo
+        self.genSituation = genSituation
+        self.perSituation = perSituation
+    }
+    
+    // 点数, 役のタプルを返す関数
+    func getScore() -> (Int, Int, Int, [NormalYaku]) {
+        // 点数 (点数，飜，符）のタプル
+        var score = (0, 0, 0, [NormalYaku]())
+        
+        for agari in agariSet {
+            let calculator = Calculator(compMentu: agari, generalSituation: genSituation, personalSituation: perSituation)
+            if(score.0 < calculator.score) {
+                score.0 = calculator.score
+                score.1 = calculator.han
+                score.2 = calculator.fu
+                score.3 = calculator.normalYakuList
+            }
+        }
+        
+        return score
+    }
+    
+    // 鳴いている場合はその面子をリストで入力
+    /*init(inputtedTiles: [Tile], mentuList: [Mentu]) {
+        isOpenHand = true
+        for tile in inputtedTiles {
+            self.inputtedTiles[tile.getCode()] += 1
+        }
+        inputtedMentuList = mentuList
+        getCompMentuSet()
+    }*/
+
+    // 作業用配列の初期化用関数
+    func initTmp() {
+        tmpTiles = inputtedTiles
+    }
+    
+    func getCompMentuSet() {
+        
+        
+        initTmp()
+        
+        //頭の候補を探してストック
+        let toituList: [Toitu] = Toitu.findJantoCandidate(tiles: tmpTiles)
+        
+        // 七対子に対する処理
+        if (toituList.count == 7) {
+            isAgari = true
+            var titoi = [Toitu]()
+            titoi.append(contentsOf: toituList)
+            // 上がりの形に追加
+        } else if (toituList.count == 6) {
+            isTenpai = true
+            // テンパイ形に追加
+        }
+        
+        // 副露している場合は副露している面子をあらかじめ追加しておく
+        //if (isOpenHand) {
+        //    mentuCandidate = inputtedMentuList
+        //}
+        
+        // 頭確定のメンツ探索
+        if (toituList.count != 0) {
+            for toitu in toituList {
+                searchPriorityKotu(janto: toitu)
+                searchPrioritySyuntu(janto: toitu)
+            }
+        }
+        // 頭なしのメンツ探索
+        searchPriorityKotu()
+        searchPrioritySyuntu()
+        
+        //多面チャンを探していく (浮き牌の数によって余りを何個許容するか変わることに注意)
+        for tenpai in tenpaiSet {
+            let tmp = tenpai.getSyuntuList() //浮き牌と同じ順子を取ってくる
+            let oneTypeSyuntuList = tmp.0 // 浮き牌と同じタイプの順子のリスト
+            var decidedMentuList = tmp.1 // 残った部分のリスト
+            var tiles = [Tile]()
+            for syuntu in oneTypeSyuntuList {
+                if (!syuntu.isOpen) { //鳴いている面子は絡めないようにする
+                    tiles.append(syuntu.identifierTile)
+                    tiles.append(Tile(rawValue: syuntu.identifierTile.getCode() - 1)!)
+                    tiles.append(Tile(rawValue: syuntu.identifierTile.getCode() + 1)!)
+                }
+            }
+            
+            for uki in tenpai.uki {
+                tiles.append(uki)
+            }
+                
+            tmpTiles = encodeTiles(tiles: tiles)
+            let _tmpTiles = tmpTiles
+            
+            for i in 1 ..< 26 {
+                tmpTiles = _tmpTiles
+                decidedMentuList = tmp.1
+                
+                decidedMentuList.append(contentsOf: serchSyuntuCandidate(start: i, end: 26))
+                decidedMentuList.append(contentsOf: serchSyuntuCandidate(start: 1, end: i))
+                
+                let uki = getRemainderTiles()
+                let tenpai = Tenpai(mentuList: decidedMentuList, uki: uki)
+                if(tenpai.getTenpai()) {
+                    tenpaiSet.insert(tenpai)
+                }
+            }
+        }
+    }
+    
+    func countRemainderTiles() -> Int {
+        return tmpTiles.reduce(0) {(num1: Int, num2: Int) -> Int in num1 + num2 }
+    }
+    
+    func getRemainderTiles() -> [Tile] {
+        var uki = [Tile]()
+        for i in 0 ..< tmpTiles.count {
+            while(tmpTiles[i] > 0) {
+                uki.append(Tile(rawValue: i)!)
+                tmpTiles[i] -= 1
+            }
+        }
+        return uki
+    }
+    
+    func serchSyuntuCandidate(start: Int, end: Int) -> [Mentu] {
+        var resultList = [Mentu]()
+        
+        for i in start ..< end {
+            while tmpTiles[i - 1] > 0 && tmpTiles[i] > 0 && tmpTiles[i + 1] > 0 {
+                let syuntu = Syuntu(
+                    isOpen: false,
+                    tile1: Tile(rawValue: i - 1)!,
+                    tile2: Tile(rawValue: i)!,
+                    tile3: Tile(rawValue: i + 1)!
+                )
+                
+                if (syuntu.isMentu) {
+                    resultList.append(syuntu)
+                    tmpTiles[i - 1] -= 1
+                    tmpTiles[i] -= 1
+                    tmpTiles[i + 1] -= 1
+                } else {
+                    break
+                }
+            }
+        }
+        
+        return resultList
+    }
+    
+    func serchKotuCandidate() -> [Mentu] {
+        var resultList = [Mentu]()
+        
+        for i in 0 ..< tmpTiles.count {
+            if (tmpTiles[i] >=  3) {
+                resultList.append(Kotu(isOpen: false, identifierTile: Tile(rawValue: i)!))
+                tmpTiles[i] -= 3
+            }
+        }
+        
+        return resultList
+    }
+    
+    func encodeTiles(tiles :[Tile]) -> [Int] {
+        var resultList = [Int](repeating: 0, count: 34)
+        
+        for tile in tiles {
+            resultList[tile.getCode()] += 1
+        }
+        
+        return resultList
+    }
+    
+    func searchPriorityKotu(janto: Toitu) {
+        initTmp()
+        
+        var mentuCandidate = [Mentu]()
+        
+        tmpTiles[janto.identifierTile.getCode()] -= 2
+        mentuCandidate.append(janto)
+        
+        mentuCandidate.append(contentsOf: serchKotuCandidate())
+        mentuCandidate.append(contentsOf: serchSyuntuCandidate(start: 1, end: 26))
+        
+        var ukiNum = countRemainderTiles()
+        if (ukiNum == 0) {
+            isAgari = true
+            agariSet.insert(CompMentu(mentuList: mentuCandidate, tumo: tumo))
+        } else if (ukiNum < 3) {
+            let uki = getRemainderTiles()
+            let tenpai = Tenpai(mentuList: mentuCandidate, uki: uki)
+            if(tenpai.getTenpai()) {
+                tenpaiSet.insert(tenpai)
+                isTenpai = true
+            }
+        }
+    }
+    
+    func searchPriorityKotu()  {
+        
+        var mentuCandidate = [Mentu]()
+        
+        mentuCandidate.append(contentsOf: serchKotuCandidate())
+        mentuCandidate.append(contentsOf: serchSyuntuCandidate(start: 1, end: 26))
+        
+    }
+    
+    func searchPrioritySyuntu(janto: Toitu) {
+        initTmp()
+        
+        var mentuCandidate = [Mentu]()
+        
+        tmpTiles[janto.identifierTile.getCode()] -= 2
+        mentuCandidate.append(janto)
+        
+        mentuCandidate.append(contentsOf: serchSyuntuCandidate(start: 1, end: 26))
+        mentuCandidate.append(contentsOf: serchKotuCandidate())
+        
+        var ukiNum = countRemainderTiles()
+        if (ukiNum == 0) {
+            isAgari = true
+            agariSet.insert(CompMentu(mentuList: mentuCandidate, tumo: tumo))
+        } else if (ukiNum < 3) {
+            let uki = getRemainderTiles()
+            let tenpai = Tenpai(mentuList: mentuCandidate, uki: uki)
+            if(tenpai.getTenpai()) {
+                tenpaiSet.insert(tenpai)
+                isTenpai = true
+            }
+        }
+    }
+    
+    func searchPrioritySyuntu() {
+        
+        var mentuCandidate = [Mentu]()
+        
+        mentuCandidate.append(contentsOf: serchSyuntuCandidate(start: 1, end: 26))
+        mentuCandidate.append(contentsOf: serchKotuCandidate())
+        
+        let ukiNum = countRemainderTiles()
+        if (ukiNum < 2) {
+            let uki = getRemainderTiles()
+            let tenpai = Tenpai(mentuList: mentuCandidate, uki: uki)
+            if(tenpai.getTenpai()) {
+                tenpaiSet.insert(tenpai)
+                isTenpai = true
+            }
+        }
+    }
+}
+
+

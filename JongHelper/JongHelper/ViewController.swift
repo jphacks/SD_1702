@@ -382,7 +382,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             }
         }
         let generalsituation = GeneralSituation(isHoutei: false, bakaze: bakazeTile, dora: dora, honba: 1)
-        let personalsituation = PersonalSituation(isParent: false, isTsumo: false, isIppatsu: false, isReach: false, isDoubleReach:
+        let personalsituation = PersonalSituation(isParent: false, isTsumo: false, isIppatu: false, isReach: false, isDoubleReach:
             false, isTyankan: false, isRinsyan: false, jikaze: jikazeTile)
         var matiArr: Set<Tile> = []
         var suteArr: Set<Tile> = []

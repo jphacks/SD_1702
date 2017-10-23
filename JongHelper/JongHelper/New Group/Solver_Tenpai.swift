@@ -8,29 +8,29 @@
 
 import Foundation
 
-class Tenpai: Equatable, Hashable {
+class Tenpai: Hashable {
     var hashValue = 0
     
     static func ==(lhs: Tenpai, rhs: Tenpai) -> Bool {
-        return (lhs.toitsuList == rhs.toitsuList) && (lhs.syuntsuList == rhs.syuntsuList) && (lhs.kotsuList == rhs.kotsuList) && (lhs.uki == rhs.uki) && (lhs.wait == rhs.wait)
+        return (lhs.toituList == rhs.toituList) && (lhs.syuntuList == rhs.syuntuList) && (lhs.kotuList == rhs.kotuList) && (lhs.uki == rhs.uki) && (lhs.wait == rhs.wait)
     }
     
-    var toitsuList = [Toitsu]()
-    var syuntsuList = [Syuntsu]()
-    var kotsuList = [Kotsu]()
+    var toituList = [Toitu]()
+    var syuntuList = [Syuntu]()
+    var kotuList = [Kotu]()
     var uki = [Tile]() // uki[0] < uki[1]
     var wait = [Tile]()
 
-    init(mentsuList: [Mentsu], uki: [Tile]) {
+    init(mentuList: [Mentu], uki: [Tile]) {
         
-        for mentsu in mentsuList
+        for mentu in mentuList
         {
-            if (mentsu is Toitsu) {
-                toitsuList.append(mentsu as! Toitsu)
-            } else if(mentsu is Syuntsu) {
-                syuntsuList.append(mentsu as! Syuntsu)
-            } else if(mentsu is Kotsu) {
-                kotsuList.append(mentsu as! Kotsu)
+            if (mentu is Toitu) {
+                toituList.append(mentu as! Toitu)
+            } else if(mentu is Syuntu) {
+                syuntuList.append(mentu as! Syuntu)
+            } else if(mentu is Kotu) {
+                kotuList.append(mentu as! Kotu)
             }
         }
         
@@ -69,22 +69,22 @@ class Tenpai: Equatable, Hashable {
     }
     
     // 浮き牌と同じtypeの順子を取ってくる，とった順子の残りも返す
-    func getSyuntsuList() -> ([Syuntsu], [Mentsu]) {
-        var _syuntsuList = [Syuntsu]()
-        var nokori = [Mentsu]()
+    func getSyuntuList() -> ([Syuntu], [Mentu]) {
+        var _syuntuList = [Syuntu]()
+        var nokori = [Mentu]()
         
-        nokori.append(contentsOf: toitsuList as [Mentsu])
-        nokori.append(contentsOf: kotsuList as [Mentsu])
+        nokori.append(contentsOf: toituList as [Mentu])
+        nokori.append(contentsOf: kotuList as [Mentu])
         
         
-        for syuntsu in syuntsuList {
-            if(syuntsu.identifierTile.getType() == uki[0].getType()) {
-                _syuntsuList.append(syuntsu)
+        for syuntu in syuntuList {
+            if(syuntu.identifierTile.getType() == uki[0].getType()) {
+                _syuntuList.append(syuntu)
             } else {
-                nokori.append(syuntsu)
+                nokori.append(syuntu)
             }
         }
-        return (_syuntsuList, nokori)
+        return (_syuntuList, nokori)
     }
     
     func isTanki() -> Bool {
@@ -149,18 +149,18 @@ class Tenpai: Equatable, Hashable {
     
     func printTenpai() {
         
-        for kotsu in kotsuList {
-            let t = kotsu.identifierTile
+        for kotu in kotuList {
+            let t = kotu.identifierTile
             print("\(t)\(t)\(t)\t", terminator:"")
         }
-        for syuntsu in syuntsuList {
-            let t2 = syuntsu.identifierTile
+        for syuntu in syuntuList {
+            let t2 = syuntu.identifierTile
             let t1 = Tile(rawValue: t2.getCode() - 1)!
             let t3 = Tile(rawValue: t2.getCode() + 1)!
             print("\(t1)\(t2)\(t3)\t", terminator:"")
         }
-        for toitsu in toitsuList {
-            let t = toitsu.identifierTile
+        for toitu in toituList {
+            let t = toitu.identifierTile
             print("\(t)\(t)\t", terminator:"")
         }
         for uki in uki {
@@ -181,21 +181,21 @@ class Tenpai: Equatable, Hashable {
             result += x.getCode()
         }
         
-        for toitsu in toitsuList {
-            tmp += toitsu.hashCode()
+        for toitu in toituList {
+            tmp += toitu.hashCode()
         }
         
         result = 31 * result + tmp;
         
-        for shuntsu in syuntsuList {
-            tmp += shuntsu.hashCode()
+        for shuntu in syuntuList {
+            tmp += shuntu.hashCode()
         }
         
         result = 31 * result + tmp;
         
         tmp = 0
-        for kotsu in kotsuList {
-            tmp += kotsu.hashCode()
+        for kotu in kotuList {
+            tmp += kotu.hashCode()
         }
         
         return 31 * result + tmp;

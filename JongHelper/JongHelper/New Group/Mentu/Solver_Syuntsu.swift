@@ -1,5 +1,5 @@
 //
-//  Syuntsu.swift
+//  Syuntu.swift
 //  
 //
 //  Created by oike toshiyuki on 2017/10/17.
@@ -7,33 +7,33 @@
 
 import Foundation
 
-class Syuntsu: Mentsu, Equatable, Comparable {
-    static func <(lhs: Syuntsu, rhs: Syuntsu) -> Bool {
+class Syuntu: Mentu, Equatable, Comparable {
+    static func <(lhs: Syuntu, rhs: Syuntu) -> Bool {
         if Int(lhs.identifierTile.rawValue) < Int(rhs.identifierTile.rawValue) {
             return true
         }
         return false
     }
     
-    static func ==(lhs: Syuntsu, rhs: Syuntsu) -> Bool {
-        return (lhs.isOpen == rhs.isOpen) && (lhs.isMentsu == rhs.isMentsu) && (lhs.identifierTile == rhs.identifierTile)
+    static func ==(lhs: Syuntu, rhs: Syuntu) -> Bool {
+        return (lhs.isOpen == rhs.isOpen) && (lhs.isMentu == rhs.isMentu) && (lhs.identifierTile == rhs.identifierTile)
     }
     
     var isOpen = false
-    var isMentsu = false
+    var isMentu = false
     //順子はどっかしら決めて持っとく
     var identifierTile: Tile
     
     init() {
         self.identifierTile = Tile.null
         self.isOpen = false
-        self.isMentsu = false
+        self.isMentu = false
     }
     
     init(isOpen: Bool, identifierTile: Tile) {
         self.isOpen = isOpen
         self.identifierTile = identifierTile
-        self.isMentsu = true
+        self.isMentu = true
     }
     
     init(isOpen: Bool, tile1: Tile, tile2: Tile, tile3: Tile) {
@@ -52,8 +52,8 @@ class Syuntsu: Mentsu, Equatable, Comparable {
             _tile2 = tile3
             _tile3 = tile2
         }
-        self.isMentsu = Syuntsu.check(tile1: _tile1, tile2: _tile2, tile3: _tile3)
-        if (self.isMentsu) {
+        self.isMentu = Syuntu.check(tile1: _tile1, tile2: _tile2, tile3: _tile3)
+        if (self.isMentu) {
             identifierTile = tile2
         } else {
             identifierTile = Tile(rawValue: -1)!
@@ -81,7 +81,7 @@ class Syuntsu: Mentsu, Equatable, Comparable {
     
     func hashCode() -> Int {
         var result: Int = identifierTile.getCode() != -1 ? identifierTile.hashValue : 0
-        result = 31 * result + (isMentsu ? 1 : 0)
+        result = 31 * result + (isMentu ? 1 : 0)
         result = 31 * result + (isOpen ? 1 : 0)
         return result
     }

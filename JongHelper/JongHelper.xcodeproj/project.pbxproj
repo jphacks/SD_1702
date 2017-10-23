@@ -36,7 +36,6 @@
 		5AA52CC91F9C1D4F006107AB /* TenpaiTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA52CC71F9C1D4F006107AB /* TenpaiTableViewCell.swift */; };
 		5AA52CCA1F9C1D4F006107AB /* TenpaiTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5AA52CC81F9C1D4F006107AB /* TenpaiTableViewCell.xib */; };
 		5AA52CCC1F9C230A006107AB /* TenpaiData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA52CCB1F9C230A006107AB /* TenpaiData.swift */; };
-		5AA52CCE1F9C486C006107AB /* Solver_Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA52CCD1F9C486C006107AB /* Solver_Player.swift */; };
 		5AA52CD01F9C5101006107AB /* TokutenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA52CCF1F9C5101006107AB /* TokutenViewController.swift */; };
 		5AEEBAAD1F98994D00E006F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEEBAAC1F98994D00E006F3 /* AppDelegate.swift */; };
 		5AEEBAAF1F98994D00E006F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEEBAAE1F98994D00E006F3 /* ViewController.swift */; };
@@ -79,7 +78,6 @@
 		5AA52CC71F9C1D4F006107AB /* TenpaiTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TenpaiTableViewCell.swift; sourceTree = "<group>"; };
 		5AA52CC81F9C1D4F006107AB /* TenpaiTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TenpaiTableViewCell.xib; sourceTree = "<group>"; };
 		5AA52CCB1F9C230A006107AB /* TenpaiData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TenpaiData.swift; sourceTree = "<group>"; };
-		5AA52CCD1F9C486C006107AB /* Solver_Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Solver_Player.swift; sourceTree = "<group>"; };
 		5AA52CCF1F9C5101006107AB /* TokutenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokutenViewController.swift; sourceTree = "<group>"; };
 		5AEEBAA91F98994D00E006F3 /* JongHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JongHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AEEBAAC1F98994D00E006F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -135,19 +133,7 @@
 				5A46BE8B1F9AD93D008F1ACB /* AVCapture.swift */,
 				5A46BEA11F9B13BB008F1ACB /* NotenView.swift */,
 				6B31C7751F9BE2FE00B612D6 /* Recognizer.swift */,
-				5AA52CB31F9B51E0006107AB /* Solver_Calculator.swift */,
-				5AA52CB61F9B51E1006107AB /* Solver_CompMentsu.swift */,
-				5AA52CB51F9B51E1006107AB /* Solver_GeneralSituation.swift */,
-				5AA52CB41F9B51E0006107AB /* Solver_Hand.swift */,
-				5AA52CAF1F9B51DF006107AB /* Solver_Kotsu.swift */,
-				5AA52CAE1F9B51DF006107AB /* Solver_Mentsu.swift */,
-				5AA52CB01F9B51E0006107AB /* Solver_PersonalSituation.swift */,
-				5AA52CCD1F9C486C006107AB /* Solver_Player.swift */,
-				5AA52CC31F9B65AA006107AB /* Solver_Syanten.swift */,
-				5AA52CB21F9B51E0006107AB /* Solver_Syuntsu.swift */,
-				5AA52CB71F9B51E1006107AB /* Solver_Tenpai.swift */,
-				5AA52CAD1F9B51DF006107AB /* Solver_Toitsu.swift */,
-				5AA52CB11F9B51E0006107AB /* Solver_Yaku.swift */,
+				9975A4151F9CFB7D00968D2F /* Solver */,
 				5A46BE951F9AE204008F1ACB /* TehaiTableViewCell.swift */,
 				5A46BE931F9AE1F0008F1ACB /* TehaiView.swift */,
 				5AA52CCB1F9C230A006107AB /* TenpaiData.swift */,
@@ -166,6 +152,34 @@
 				5AA52CCF1F9C5101006107AB /* TokutenViewController.swift */,
 			);
 			path = JongHelper;
+			sourceTree = "<group>";
+		};
+		9975A4151F9CFB7D00968D2F /* Solver */ = {
+			isa = PBXGroup;
+			children = (
+				9975A4171F9CFC5800968D2F /* Mentu */,
+				5AA52CB31F9B51E0006107AB /* Solver_Calculator.swift */,
+				5AA52CB51F9B51E1006107AB /* Solver_GeneralSituation.swift */,
+				5AA52CB41F9B51E0006107AB /* Solver_Hand.swift */,
+				5AA52CB61F9B51E1006107AB /* Solver_CompMentsu.swift */,
+				5AA52CB01F9B51E0006107AB /* Solver_PersonalSituation.swift */,
+				5AA52CC31F9B65AA006107AB /* Solver_Syanten.swift */,
+				5AA52CB71F9B51E1006107AB /* Solver_Tenpai.swift */,
+				5AA52CB11F9B51E0006107AB /* Solver_Yaku.swift */,
+			);
+			name = Solver;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
+		9975A4171F9CFC5800968D2F /* Mentu */ = {
+			isa = PBXGroup;
+			children = (
+				5AA52CB21F9B51E0006107AB /* Solver_Syuntsu.swift */,
+				5AA52CAD1F9B51DF006107AB /* Solver_Toitsu.swift */,
+				5AA52CAF1F9B51DF006107AB /* Solver_Kotsu.swift */,
+				5AA52CAE1F9B51DF006107AB /* Solver_Mentsu.swift */,
+			);
+			path = Mentu;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -272,7 +286,6 @@
 				5AA52CBA1F9B51E1006107AB /* Solver_Kotsu.swift in Sources */,
 				5A46BE891F9AD48A008F1ACB /* OpenCVWrapper.mm in Sources */,
 				5A46BE961F9AE204008F1ACB /* TehaiTableViewCell.swift in Sources */,
-				5AA52CCE1F9C486C006107AB /* Solver_Player.swift in Sources */,
 				6B31C7741F9BE2C900B612D6 /* CoreMLHaiClassifier.mlmodel in Sources */,
 				5AA52CC11F9B51E1006107AB /* Solver_CompMentsu.swift in Sources */,
 			);
