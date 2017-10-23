@@ -54,23 +54,23 @@ class  CompMentu: Hashable {
         
         if (tenpai.isTanki()) {
             // 頭まち
-            toituList.append(Toitu(identifierTile: tenpai.uki[0]))
+            toituList.append(Toitu(identifierTile: tenpai.ukiList[0]))
         } else if (tenpai.isKanchan()) {
-            syuntuList.append(Syuntu(isOpen: false, identifierTile: Tile(rawValue:tenpai.uki[0].getCode() + 1)!))
+            syuntuList.append(Syuntu(isOpen: false, identifierTile: Tile(rawValue:tenpai.ukiList[0].getCode() + 1)!))
         } else if (tenpai.isPenchan()) {
-            if(tenpai.uki[0].getNumber() == 1) {
-                syuntuList.append(Syuntu(isOpen: false, identifierTile: Tile(rawValue: tenpai.uki[1].getCode() + 1)!))
-            } else if(tenpai.uki[1].getNumber() == 9) {
-                syuntuList.append(Syuntu(isOpen: false, identifierTile: Tile(rawValue: tenpai.uki[0].getCode() - 1)!))
+            if(tenpai.ukiList[0].getNumber() == 1) {
+                syuntuList.append(Syuntu(isOpen: false, identifierTile: Tile(rawValue: tenpai.ukiList[1].getCode() + 1)!))
+            } else if(tenpai.ukiList[1].getNumber() == 9) {
+                syuntuList.append(Syuntu(isOpen: false, identifierTile: Tile(rawValue: tenpai.ukiList[0].getCode() - 1)!))
             }
         } else if (tenpai.isRyanmen()) {
-            if(tenpai.uki[0].getNumber() > tumo.getNumber()) {
-                syuntuList.append(Syuntu(isOpen: false, identifierTile: tenpai.uki[0]))
+            if(tenpai.ukiList[0].getNumber() > tumo.getNumber()) {
+                syuntuList.append(Syuntu(isOpen: false, identifierTile: tenpai.ukiList[0]))
             } else {
-                syuntuList.append(Syuntu(isOpen: false, identifierTile: tenpai.uki[1]))
+                syuntuList.append(Syuntu(isOpen: false, identifierTile: tenpai.ukiList[1]))
             }
         } else if (tenpai.isSyanpon()) {
-            kotuList.append(Kotu(isOpen: false, identifierTile: tenpai.uki[0]))
+            kotuList.append(Kotu(isOpen: false, identifierTile: tenpai.ukiList[0]))
         }
         
         self.isOpenHand = isOpenHand
@@ -120,6 +120,10 @@ class  CompMentu: Hashable {
     
     static func ==(lhs: CompMentu, rhs: CompMentu) -> Bool {
         return lhs.toituList == rhs.toituList && lhs.syuntuList == rhs.syuntuList && lhs.kotuList == rhs.kotuList && lhs.tumo == rhs.tumo
+    }
+    
+    func isTanki() -> Bool {
+        return getJanto().identifierTile == tumo
     }
     
     func isRyanmen() -> Bool {

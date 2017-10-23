@@ -29,7 +29,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     var jikazeTile = Tile.Ton
     //let initTehaiArray: [Tile] = Array(repeating: Tile.p7, count: 14)
     //let initTehaiArray: [Tile] = [Tile.m2,Tile.m3,Tile.m4,Tile.m2,Tile.m3,Tile.m4,Tile.p2,Tile.p3,Tile.p4,Tile.s3,Tile.s4,Tile.m7,Tile.m7,Tile.Haku]
-    var tehaiTileArray = [Tile.m2,Tile.m3,Tile.m4,Tile.m2,Tile.m3,Tile.m4,Tile.p2,Tile.p3,Tile.p4,Tile.s3,Tile.s4,Tile.m7,Tile.m7,Tile.Haku]
+    var tehaiTileArray = [Tile.p2,Tile.p3,Tile.p3,Tile.p3,Tile.p5,Tile.p6,Tile.p6,Tile.p7,Tile.p7,Tile.p8,Tile.p8,Tile.p9,Tile.p9,Tile.p9]
     
     var tenpaiDatas: [TenpaiData] = []
     
@@ -212,7 +212,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             let cell = tableView.dequeueReusableCell(withIdentifier: "TenpaiViewCell", for:indexPath) as! TenpaiTableViewCell
             cell.suteImageView.image = tenpaiDatas[indexPath.row].suteTile.toUIImage()
             for i in 0..<min(tenpaiDatas[indexPath.row].matiTiles.count, 3) {
-                cell.matiImageViews[i].image = tenpaiDatas[indexPath.row].matiTiles[i].toUIImage()
+                cell.matiImageViews[i].image = Array(tenpaiDatas[indexPath.row].matiTiles)[i].toUIImage()
             }
             cell.score.text = String(tenpaiDatas[indexPath.row].score)
             return cell
@@ -286,7 +286,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         vc.doraTileArray = self.doraTileArray
         vc.bakazeTile = self.bakazeTile
         vc.jikazeTile = self.jikazeTile
-        vc.matiTile = tenpaiDatas[agariHaiIndex].matiTiles[0]
+        vc.matiTile = Array(tenpaiDatas[agariHaiIndex].matiTiles)[0]
         vc.suteTile = tenpaiDatas[agariHaiIndex].suteTile
     }
     
@@ -364,7 +364,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     func compTenpaiData(data1: TenpaiData, data2: TenpaiData) -> Bool {
         let sameSuteTile = data1.suteTile == data2.suteTile
         let sameScore = data1.score == data2.score
-        let sameMatiTile = data1.matiTiles[0] == data2.matiTiles[0]
+        let sameMatiTile = Array(data1.matiTiles)[0] == Array(data2.matiTiles)[0]
         let result = sameSuteTile && sameScore && sameMatiTile
         return ( result )
     }
@@ -381,65 +381,27 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
                 dora.append(Tile(rawValue: doraTileArray[i].rawValue - 1)!)
             }
         }
-        let generalsituation = GeneralSituation(isHoutei: false, bakaze: bakazeTile, dora: dora, honba: 1)
-        let personalsituation = PersonalSituation(isParent: false, isTsumo: false, isIppatu: false, isReach: false, isDoubleReach:
-            false, isTyankan: false, isRinsyan: false, jikaze: jikazeTile)
+        
+        let gs = GeneralSituation(isHoutei: false, bakaze: Tile.Ton, dora: [Tile.s1], honba: 1)
+        let ps = PersonalSituation(isParent: true, isTsumo: false, isIppatu: false, isReach: false, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: Tile.Ton)
         var matiArr: Set<Tile> = []
         var suteArr: Set<Tile> = []
-        var isTenpai = false
-        var invalidHand = false
         var minSyanten = 99
         tenpaiDatas = []
         
-        var player = Player(hand14: tehaiTileArray)
-        if(player.isAgari) {
+        let hand = Hand(inputtedTiles: tehaiTileArray, tumo: tehaiTileArray[0], genSituation: gs, perSituation: ps)
+        if(hand.isAgari) {
             return
         }
         
-        for i in 0..<14 {//13個にして聴牌かどうか確認
-            var arr = tehaiTileArray
-            let matiKouho = arr.remove(at: i)
-            let x = Hand(inputtedTiles: arr)
-            if(x.invalidHand) {
-                invalidHand = true
-            } else if (x.isTenpai) {
-                isTenpai = true
-                //print("tenpai-num: \(x.tenpaiSet.count)")
-                
-                for tenpai in x.tenpaiSet {
-                    //tenpai.printTenpai()
-//                    for hai in tenpai.wait { // 待ち牌ついか
-//                        matiArr.insert(hai)
-//                    }
-//                    for hai in tenpai.uki { // 捨て牌追加
-//                        suteArr.insert(hai)
-//                    }
-                    for last in tenpai.wait {
-                        let compmentsu = CompMentsu(tenpai: tenpai, last: last, isOpenHand: x.isOpenHand)
-                        let calculator = Calculator(compMentsu: compmentsu, generalSituation: generalsituation, personalSituation: personalsituation)
-                        calculator.calculateScore()
-                        let tenpaiData = TenpaiData(sute: matiKouho, mati: [last], score: calculator.score)
-                        tenpaiDatas.append(tenpaiData)
-                    }
-                }
-            } else {
-                let syanten = Syanten(hand: arr)
-
-                    minSyanten = min(minSyanten, syanten.getSyantenNum())
-                    
-                    for g in syanten.gomi {
-                        suteArr.insert(g)
-                    }
-            }
-        }
+        tenpaiDatas = hand.getTenpaiData()
         
         print("まち：\(matiArr.count) すて：\(suteArr.count)")
-        if(invalidHand){
+        if(hand.invalidHand){
             notenView.syantenLabel.text = "手牌が不正です"
             switchView(false)
         } else {
-            if(isTenpai) {
-                mergeTenpaiDatas()
+            if(hand.isTenpai) {
                 tenpaiView.tableView.reloadData()
             } else {
                 for (k, elem) in suteArr.enumerated() {
@@ -449,7 +411,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
                 }
                 notenView.syantenLabel.text = String(minSyanten) + "シャンテン"
             }
-            switchView(isTenpai)
+            switchView(hand.isTenpai)
         }
         
     }

@@ -290,8 +290,8 @@ class Hand {
             agariSet.insert(CompMentu(mentuList: mentuCandidate, tumo: tumo, isOpenHand: false))
         } else if (ukiNum < 4) {
             let ukiList = getRemainderTiles()
-            var arr = ukiList
             for (i, elem) in ukiList.enumerated() {
+                var arr = ukiList
                 arr.remove(at: i)
                 let tenpai = Tenpai(mentuList: mentuCandidate, ukiList: arr, suteTile: ukiList[i])
                 if(tenpai.isTenpai) {
@@ -303,6 +303,7 @@ class Hand {
     }
     
     func searchPriorityKotu()  {
+        initTmp()
         
         var mentuCandidate = [Mentu]()
         
@@ -341,8 +342,8 @@ class Hand {
             agariSet.insert(CompMentu(mentuList: mentuCandidate, tumo: tumo, isOpenHand: isOpenHand))
         } else if (ukiNum < 4) {
             let ukiList = getRemainderTiles()
-            var arr = ukiList
             for (i, elem) in ukiList.enumerated() {
+                var arr = ukiList
                 arr.remove(at: i)
                 let tenpai = Tenpai(mentuList: mentuCandidate, ukiList: arr, suteTile: ukiList[i])
                 
@@ -355,6 +356,7 @@ class Hand {
     }
     
     func searchPrioritySyuntu() {
+        initTmp()
         
         var mentuCandidate = [Mentu]()
         

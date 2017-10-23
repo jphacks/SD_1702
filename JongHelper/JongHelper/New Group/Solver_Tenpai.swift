@@ -13,7 +13,7 @@ class Tenpai: Hashable {
     var hashValue = 0
     
     static func ==(lhs: Tenpai, rhs: Tenpai) -> Bool {
-        return (lhs.toituList == rhs.toituList) && (lhs.syuntuList == rhs.syuntuList) && (lhs.kotuList == rhs.kotuList) && (lhs.uki == rhs.uki) && (lhs.wait == rhs.wait)
+        return (lhs.toituList == rhs.toituList) && (lhs.syuntuList == rhs.syuntuList) && (lhs.kotuList == rhs.kotuList) && (lhs.ukiList == rhs.ukiList) && (lhs.wait == rhs.wait)
     }
     
     var toituList = [Toitu]()
@@ -40,21 +40,27 @@ class Tenpai: Hashable {
         self.ukiList = ukiList
         self.suteTile = suteTile
         
+        
         if(isTanki()) {
             wait.append(ukiList[0])
+            isTenpai = true
         } else if(isKanchan()) {
             wait.append(Tile(rawValue: ukiList[0].getCode() + 1)!)
+            isTenpai = true
         } else if(isPenchan()) {
             if(ukiList[0].getNumber() == 1) {
                 wait.append(Tile(rawValue: ukiList[1].getCode() + 1)!)
             } else if(ukiList[1].getNumber() == 9) {
                 wait.append(Tile(rawValue: ukiList[0].getCode() - 1)!)
             }
+            isTenpai = true
         } else if(isRyanmen()) {
             wait.append(Tile(rawValue: ukiList[0].getCode() - 1)!)
             wait.append(Tile(rawValue: ukiList[1].getCode() + 1)!)
+            isTenpai = true
         } else if(isSyanpon()) {
             wait.append(ukiList[0])
+            isTenpai = true
         }
         
         hashValue = hashCode()
@@ -93,7 +99,7 @@ class Tenpai: Hashable {
     func isKanchan() -> Bool {
         
         if (ukiList.count == 2) {
-            if ukiList[0].getType() == ukiList[1].getType() && ukiList[0].getNumber() == ukiList[1].getNumber() + 2 {
+            if ukiList[0].getType() == ukiList[1].getType() && ukiList[0].getNumber() + 2 == ukiList[1].getNumber() {
                 return true
             }
         }
@@ -118,7 +124,7 @@ class Tenpai: Hashable {
         if (ukiList.count == 2) {
             if (ukiList[0].getType() == ukiList[1].getType()) {
                 if (ukiList[0].getNumber() != 1 || ukiList[1].getNumber() != 9) {
-                    if (ukiList[0].getNumber() == ukiList[1].getNumber() + 1) {
+                    if (ukiList[0].getNumber()  + 1 == ukiList[1].getNumber()) {
                         return true
                     }
                 }

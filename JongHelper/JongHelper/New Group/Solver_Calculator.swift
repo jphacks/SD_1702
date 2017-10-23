@@ -172,7 +172,7 @@ class Calculator {
     }
     
     func calculateFuByWait() -> Int {
-        if (compMentu.isTanki || compMentu.isKanchan || compMentu.isPenchan) {
+        if (compMentu.isTanki() || compMentu.isKanchan() || compMentu.isPenchan()) {
             return 2
         }
         return 0
@@ -233,7 +233,7 @@ class Calculator {
             return false
         }
         
-        if (!compMentu.isRyanmen) {
+        if (!compMentu.isRyanmen()) {
             return false
         }
         return true
@@ -257,41 +257,24 @@ class Calculator {
         return true
     }
     
-    func peikoCount() -> Int {
-        var peiko = 0
-        var stock1 = Syuntu()
-        var stock2 = Syuntu()
+   
+    func isIpeiko() -> Bool {
+        
+        var arr = [Int](repeating:0, count:26)
         
         for syuntu in compMentu.syuntuList {
-            
-            if (syuntu.isOpen) {
-                return 0
-            }
-            
-            if (!stock1.isMentu) {
-                stock1 = syuntu
-                continue
-            }
-            
-            if (stock1 == syuntu && peiko == 0) {
-                peiko = 1
-                continue
-            }
-            
-            if (!stock2.isMentu) {
-                stock2 = syuntu
-                continue
-            }
-            
-            if (stock2 == syuntu) {
-                peiko = 2
+            arr[syuntu.identifierTile.getCode()] += 1
+        }
+        var count = 0
+        for i in 1 ..< 26 {
+            if arr[i] > 1 {
+                count += 1
             }
         }
-        return peiko
-    }
-    
-    func isIpeiko() -> Bool {
-        return peikoCount() == 1
+        if count == 1 {
+            return true
+        }
+        return false
     }
     
     func isHaku() -> Bool {
@@ -625,7 +608,21 @@ class Calculator {
     }
     
     func isRyanpeiko() -> Bool {
-        return peikoCount() == 2
+        var arr = [Int](repeating:0, count:26)
+        
+        for syuntu in compMentu.syuntuList {
+            arr[syuntu.identifierTile.getCode()] += 1
+        }
+        var count = 0
+        for i in 1 ..< 26 {
+            if arr[i] > 1 {
+                count += 1
+            }
+        }
+        if count == 2 {
+            return true
+        }
+        return false
     }
     
     func isJuntyan() -> Bool {

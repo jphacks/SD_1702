@@ -50,6 +50,14 @@ class TokutenViewController: UIViewController {
         super.viewDidLoad()
         
         for (k, elem) in tehaiTileArray.enumerated() {
+            if (elem == suteTile) {
+                tehaiTileArray.remove(at: k)
+                break
+            }
+        }
+        tehaiTileArray.append(matiTile)
+        
+        for (k, elem) in tehaiTileArray.enumerated() {
             tileImage[k].image = elem.toUIImage()
         }
         for (k, elem) in doraTileArray.enumerated() {
@@ -63,49 +71,20 @@ class TokutenViewController: UIViewController {
     func calculate() {
         var normalYakuList = [NormalYaku]()
         
-        var index = 0
-        for (k, tile) in tehaiTileArray.enumerated() {
-            if (tile == suteTile){
-                index = k
-                break
-            }
-        }
-        tehaiTileArray.remove(at: index)
-        
-        var hand = Hand(inputtedTiles: tehaiTileArray)
-        
-        var score = 0
-        var fu = 0
-        var han = 0
         var gs = GeneralSituation(isHoutei: false, bakaze: Tile.Ton, dora: [Tile.s1], honba: 1)
-        var ps = PersonalSituation(isParent: true, isTsumo: isTsumo, isIppatsu: false, isReach: false, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: Tile.Ton)
-        
-        if (hand.isTenpai) {
-            for tenpai in hand.tenpaiSet {
-                for last in tenpai.wait {
-                    if last == matiTile {
-                        let tehai = CompMentsu(tenpai: tenpai , last: matiTile, isOpenHand: false)
-                        let calculator = Calculator(compMentsu: tehai, generalSituation: gs, personalSituation: ps)
-                        if (calculator.score > score) {
-                            score = calculator.score
-                            fu = calculator.fu
-                            han = calculator.han
-                            normalYakuList = calculator.normalYakuList
-                        }
-                    }
-                }
-            }
-        } else {
-            print("not tenpai")
-        }
+        var ps = PersonalSituation(isParent: true, isTsumo: isTsumo, isIppatu: false, isReach: false, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: Tile.Ton)
+    
+
+        var hand = Hand(inputtedTiles: tehaiTileArray, tumo: matiTile, genSituation:gs, perSituation: ps)
+        var score = hand.getScore()
         
         var str = ""
-        for s in normalYakuList {
+        for s in score.3 {
             str += s.getName()
         }
         yakuTV.text = str
-        huLabel.text = "\(han)飜\(fu)符"
-        tenLabel.text = "\(score)点"
+        huLabel.text = "\(score.1)飜\(score.2)符"
+        tenLabel.text = "\(score.0)点"
         
         
     }
