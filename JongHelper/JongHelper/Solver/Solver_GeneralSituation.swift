@@ -14,6 +14,13 @@ class GeneralSituation {
     var dora: [Tile]
     var honba: Int
     
+    init() {
+        self.isHoutei = false
+        self.bakaze = Tile.null
+        self.dora = [Tile.null]
+        self.honba = -1
+    }
+    
     init(isHoutei: Bool, bakaze: Tile, dora: [Tile], honba: Int) {
         self.isHoutei = isHoutei
         self.bakaze = bakaze

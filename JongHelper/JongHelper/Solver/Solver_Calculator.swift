@@ -51,13 +51,13 @@ class Calculator {
     var normalYakuList = [NormalYaku]()
     var yakumanList = [Yakuman]()
     
-    var compMentsu: CompMentsu
+    var compMentu: CompMentu
     
     var generalSituation: GeneralSituation
     var personalSituation: PersonalSituation
     
-    init(compMentsu: CompMentsu, generalSituation: GeneralSituation, personalSituation: PersonalSituation) {
-        self.compMentsu = compMentsu
+    init(compMentu: CompMentu, generalSituation: GeneralSituation, personalSituation: PersonalSituation) {
+        self.compMentu = compMentu
         self.generalSituation = generalSituation
         self.personalSituation = personalSituation
         calculateScore()
@@ -138,8 +138,8 @@ class Calculator {
         tmpFu += calculateFuByAgari()
         tmpFu += calculateFuByWait()
         
-        for mentsu in compMentsu.getAllMentsu() {
-            tmpFu += mentsu.getFu();
+        for mentu in compMentu.getAllMentu() {
+            tmpFu += mentu.getFu();
         }
         
         let fu = ceil(Float(tmpFu) / 10.0)
@@ -147,7 +147,7 @@ class Calculator {
     }
     
     func calculateFuByJanto() -> Int {
-        let janto = compMentsu.getJanto().identifierTile
+        let janto = compMentu.getJanto().identifierTile
         var tmp = 0
         if (janto == generalSituation.bakaze) {
             tmp += 2
@@ -165,14 +165,14 @@ class Calculator {
         if (personalSituation.isTsumo) {
             return 2
         }
-        if (!compMentsu.isOpenHand) {
+        if (!compMentu.isOpenHand) {
             return 10
         }
         return 0
     }
     
     func calculateFuByWait() -> Int {
-        if (compMentsu.isTanki || compMentsu.isKanchan || compMentsu.isPenchan) {
+        if (compMentu.isTanki() || compMentu.isKanchan() || compMentu.isPenchan()) {
             return 2
         }
         return 0
@@ -195,10 +195,12 @@ class Calculator {
     
     func calculateHanByDora() -> Int {
         var dora = 0
-        var tmphand = compMentsu.mentsuListToIntList()
+        var tmphand = compMentu.mentuListToIntList()
         
         for tileDora in generalSituation.dora {
-            dora += tmphand[tileDora.getCode()]
+            if tileDora != Tile.null {
+                dora += tmphand[tileDora.getCode()]
+            }
         }
         for _ in 0 ..< dora {
             normalYakuList.append(NormalYaku.Dora)
@@ -213,7 +215,7 @@ class Calculator {
         return false
     }
     func isIppatu() -> Bool {
-        if (personalSituation.isIppatsu) {
+        if (personalSituation.isIppatu) {
             return true
         }
         return false
@@ -225,30 +227,30 @@ class Calculator {
         return false
     }
     func isPinhu() -> Bool {
-        if compMentsu.getSyuntsuCount() < 4 {
+        if compMentu.getSyuntuCount() < 4 {
             return false
         }
-        let janto = compMentsu.getJanto().identifierTile
+        let janto = compMentu.getJanto().identifierTile
         if janto.getType() == "SANGEN" {
             return false
         }
         
-        if (!compMentsu.isRyanmen) {
+        if (!compMentu.isRyanmen()) {
             return false
         }
         return true
     }
     
     func isTanyao() -> Bool {
-        for mentsu in compMentsu.getAllMentsu() {
-            let number = mentsu.identifierTile.getNumber()
+        for mentu in compMentu.getAllMentu() {
+            let number = mentu.identifierTile.getNumber()
             if (number == 0 || number == 1 || number == 9) {
                 return false
             }
             
-            if (mentsu is Syuntsu) {
-                let syuntsuNum = mentsu.identifierTile.getNumber()
-                if (syuntsuNum == 2 || syuntsuNum == 8) {
+            if (mentu is Syuntu) {
+                let syuntuNum = mentu.identifierTile.getNumber()
+                if (syuntuNum == 2 || syuntuNum == 8) {
                     return false
                 }
             }
@@ -257,46 +259,29 @@ class Calculator {
         return true
     }
     
-    func peikoCount() -> Int {
-        var peiko = 0
-        var stock1 = Syuntsu()
-        var stock2 = Syuntsu()
+   
+    func isIpeiko() -> Bool {
         
-        for syuntsu in compMentsu.syuntsuList {
-            
-            if (syuntsu.isOpen) {
-                return 0
-            }
-            
-            if (!stock1.isMentsu) {
-                stock1 = syuntsu
-                continue
-            }
-            
-            if (stock1 == syuntsu && peiko == 0) {
-                peiko = 1
-                continue
-            }
-            
-            if (!stock2.isMentsu) {
-                stock2 = syuntsu
-                continue
-            }
-            
-            if (stock2 == syuntsu) {
-                peiko = 2
+        var arr = [Int](repeating:0, count:26)
+        
+        for syuntu in compMentu.syuntuList {
+            arr[syuntu.identifierTile.getCode()] += 1
+        }
+        var count = 0
+        for i in 1 ..< 26 {
+            if arr[i] > 1 {
+                count += 1
             }
         }
-        return peiko
-    }
-    
-    func isIpeiko() -> Bool {
-        return peikoCount() == 1
+        if count == 1 {
+            return true
+        }
+        return false
     }
     
     func isHaku() -> Bool {
-        for kotsu in compMentsu.kotsuList {
-            if (kotsu.identifierTile == Tile.Haku) {
+        for kotu in compMentu.kotuList {
+            if (kotu.identifierTile == Tile.Haku) {
                 return true
             }
         }
@@ -304,8 +289,8 @@ class Calculator {
     }
     
     func isHatu() -> Bool {
-        for kotsu in compMentsu.kotsuList {
-            if (kotsu.identifierTile == Tile.Hatu) {
+        for kotu in compMentu.kotuList {
+            if (kotu.identifierTile == Tile.Hatu) {
                 return true
             }
         }
@@ -313,8 +298,8 @@ class Calculator {
     }
     
     func isTyun() -> Bool {
-        for kotsu in compMentsu.kotsuList {
-            if (kotsu.identifierTile == Tile.Tyun) {
+        for kotu in compMentu.kotuList {
+            if (kotu.identifierTile == Tile.Tyun) {
                 return true
             }
         }
@@ -322,16 +307,16 @@ class Calculator {
     }
     
     func isJikaze() -> Bool {
-        for kotsu in compMentsu.kotsuList {
-            if (kotsu.identifierTile == personalSituation.jikaze) {
+        for kotu in compMentu.kotuList {
+            if (kotu.identifierTile == personalSituation.jikaze) {
                 return true
             }
         }
         return false
     }
     func isBakaze() -> Bool {
-        for kotsu in compMentsu.kotsuList {
-            if (kotsu.identifierTile == generalSituation.bakaze) {
+        for kotu in compMentu.kotuList {
+            if (kotu.identifierTile == generalSituation.bakaze) {
                 return true
             }
         }
@@ -372,7 +357,7 @@ class Calculator {
     
     func isTyanta() -> Bool{
         
-        let jantoNum = compMentsu.getJanto().identifierTile.getNumber()
+        let jantoNum = compMentu.getJanto().identifierTile.getNumber()
         
         if (isJuntyan()) {
             return false
@@ -382,20 +367,20 @@ class Calculator {
             return false
         }
         
-        if (compMentsu.getSyuntsuCount() == 0) {
+        if (compMentu.getSyuntuCount() == 0) {
             return false
         }
         
-        for syuntsu in compMentsu.syuntsuList {
-            let syuntsuNum = syuntsu.identifierTile.getNumber()
-            if (syuntsuNum != 2 && syuntsuNum != 8) {
+        for syuntu in compMentu.syuntuList {
+            let syuntuNum = syuntu.identifierTile.getNumber()
+            if (syuntuNum != 2 && syuntuNum != 8) {
                 return false
             }
         }
         
-        for kotsu in compMentsu.kotsuList {
-            let kotsuNum = kotsu.identifierTile.getNumber()
-            if (kotsuNum != 1 && kotsuNum != 9 && kotsuNum != 0) {
+        for kotu in compMentu.kotuList {
+            let kotuNum = kotu.identifierTile.getNumber()
+            if (kotuNum != 1 && kotuNum != 9 && kotuNum != 0) {
                 return false
             }
         }
@@ -404,18 +389,18 @@ class Calculator {
     }
     
     func isHonroutou() -> Bool {
-        if (compMentsu.syuntsuList.count > 0) {
+        if (compMentu.syuntuList.count > 0) {
             return false
         }
-        for toitsu in compMentsu.toitsuList {
-            let num = toitsu.identifierTile.getNumber()
+        for toitu in compMentu.toituList {
+            let num = toitu.identifierTile.getNumber()
             if (1 < num && num < 9) {
                 return false
             }
         }
         
-        for kotsu in compMentsu.kotsuList {
-            let num = kotsu.identifierTile.getNumber()
+        for kotu in compMentu.kotuList {
+            let num = kotu.identifierTile.getNumber()
             if (1 < num && num < 9) {
                 return false
             }
@@ -431,23 +416,23 @@ class Calculator {
         var f1 = false
         var f2 = false
         
-        if (compMentsu.getSyuntsuCount() < 3) {
+        if (compMentu.getSyuntuCount() < 3) {
             return false
         }
         
-        let candidate1 = compMentsu.syuntsuList[0]
-        let candidate2 = compMentsu.syuntsuList[1]
+        let candidate1 = compMentu.syuntuList[0]
+        let candidate2 = compMentu.syuntuList[1]
         
-        for syuntsu in compMentsu.syuntsuList {
-            let syuntsuType = syuntsu.identifierTile.getType()
-            let syuntsuNum = syuntsu.identifierTile.getNumber()
+        for syuntu in compMentu.syuntuList {
+            let syuntuType = syuntu.identifierTile.getType()
+            let syuntuNum = syuntu.identifierTile.getNumber()
             
-            if (candidate1.identifierTile.getNumber() == syuntsuNum) {
-                if (syuntsuType == "MANZU") {
+            if (candidate1.identifierTile.getNumber() == syuntuNum) {
+                if (syuntuType == "MANZU") {
                     manzu = true
-                } else if (syuntsuType == "PINZU") {
+                } else if (syuntuType == "PINZU") {
                     pinzu = true
-                } else if (syuntsuType == "SOHZU") {
+                } else if (syuntuType == "SOHZU") {
                     sohzu = true
                 }
             }
@@ -455,16 +440,16 @@ class Calculator {
         f1 = manzu && pinzu && sohzu
         
         manzu = false; pinzu = false; sohzu = false
-        for syuntsu in compMentsu.syuntsuList {
-            let syuntsuType = syuntsu.identifierTile.getType()
-            let syuntsuNum = syuntsu.identifierTile.getNumber()
+        for syuntu in compMentu.syuntuList {
+            let syuntuType = syuntu.identifierTile.getType()
+            let syuntuNum = syuntu.identifierTile.getNumber()
             
-            if (candidate2.identifierTile.getNumber() == syuntsuNum) {
-                if (syuntsuType == "MANZU") {
+            if (candidate2.identifierTile.getNumber() == syuntuNum) {
+                if (syuntuType == "MANZU") {
                     manzu = true
-                } else if (syuntsuType == "PINZU") {
+                } else if (syuntuType == "PINZU") {
                     pinzu = true
-                } else if (syuntsuType == "SOHZU") {
+                } else if (syuntuType == "SOHZU") {
                     sohzu = true
                 }
             }
@@ -474,13 +459,13 @@ class Calculator {
         return f1 || f2
     }
     
-    func IttuuSolver(oneTypeSyuntuList: [Syuntsu]) -> Bool {
+    func IttuuSolver(oneTypeSyuntuList: [Syuntu]) -> Bool {
         var number2 = false
         var number5 = false
         var number8 = false
         
-        for syuntsu in oneTypeSyuntuList {
-            let num = syuntsu.identifierTile.getNumber()
+        for syuntu in oneTypeSyuntuList {
+            let num = syuntu.identifierTile.getNumber()
             if (num == 2) {
                 number2 = true
             } else if (num == 5) {
@@ -494,22 +479,22 @@ class Calculator {
     }
     
     func isIttuu() -> Bool {
-        if (compMentsu.getSyuntsuCount() < 3) {
+        if (compMentu.getSyuntuCount() < 3) {
             return false
         }
         
-        var manzu = [Syuntsu]()
-        var pinzu = [Syuntsu]()
-        var sohzu = [Syuntsu]()
+        var manzu = [Syuntu]()
+        var pinzu = [Syuntu]()
+        var sohzu = [Syuntu]()
         
-        for syuntsu in compMentsu.syuntsuList {
-            let type = syuntsu.identifierTile.getType()
+        for syuntu in compMentu.syuntuList {
+            let type = syuntu.identifierTile.getType()
             if (type == "MANZU") {
-                manzu.append(syuntsu)
+                manzu.append(syuntu)
             } else if (type == "PINZU") {
-                pinzu.append(syuntsu)
+                pinzu.append(syuntu)
             } else if (type == "SOHZU") {
-                sohzu.append(syuntsu)
+                sohzu.append(syuntu)
             }
         }
         
@@ -525,7 +510,7 @@ class Calculator {
     
     // 先に役満の判定を行って仕舞えば，これだけですむ
     func isToiToi() -> Bool {
-        return compMentsu.getKotsuCount() == 4
+        return compMentu.getKotuCount() == 4
     }
     
     // 現状の実装だとそーとしておかないとダメそう
@@ -536,25 +521,25 @@ class Calculator {
         var f1 = false
         var f2 = false
         
-        if (compMentsu.getKotsuCount() < 3) {
+        if (compMentu.getKotuCount() < 3) {
             return false
         }
         
-        let candidate1 = compMentsu.kotsuList[0]
-        let candidate2 = compMentsu.kotsuList[1]
+        let candidate1 = compMentu.kotuList[0]
+        let candidate2 = compMentu.kotuList[1]
         
         
-        for kotsu in compMentsu.kotsuList {
-            let kotsuType = kotsu.identifierTile.getType()
-            let kotsuNum = kotsu.identifierTile.getNumber()
+        for kotu in compMentu.kotuList {
+            let kotuType = kotu.identifierTile.getType()
+            let kotuNum = kotu.identifierTile.getNumber()
             
             
-            if (candidate1.identifierTile.getNumber() == kotsuNum) {
-                if (kotsuType == "MANZU") {
+            if (candidate1.identifierTile.getNumber() == kotuNum) {
+                if (kotuType == "MANZU") {
                     manzu = true
-                } else if (kotsuType == "PINZU") {
+                } else if (kotuType == "PINZU") {
                     pinzu = true
-                } else if (kotsuType == "SOHZU") {
+                } else if (kotuType == "SOHZU") {
                     sohzu = true
                 }
             }
@@ -562,16 +547,16 @@ class Calculator {
         
         f1 = manzu && pinzu && sohzu
         
-        for kotsu in compMentsu.kotsuList {
-            let kotsuType = kotsu.identifierTile.getType()
-            let kotsuNum = kotsu.identifierTile.getNumber()
+        for kotu in compMentu.kotuList {
+            let kotuType = kotu.identifierTile.getType()
+            let kotuNum = kotu.identifierTile.getNumber()
             
-            if (candidate2.identifierTile.getNumber() == kotsuNum) {
-                if (kotsuType == "MANZU") {
+            if (candidate2.identifierTile.getNumber() == kotuNum) {
+                if (kotuType == "MANZU") {
                     manzu = true
-                } else if (kotsuType == "PINZU") {
+                } else if (kotuType == "PINZU") {
                     pinzu = true
-                } else if (kotsuType == "SOHZU") {
+                } else if (kotuType == "SOHZU") {
                     sohzu = true
                 }
             }
@@ -583,13 +568,13 @@ class Calculator {
     }
     
     func isSanankou() -> Bool {
-        if (compMentsu.getKotsuCount() < 3) {
+        if (compMentu.getKotuCount() < 3) {
             return false
         }
         
         var ankouCount = 0
-        for kotsu in compMentsu.kotsuList {
-            if (!kotsu.isOpen) {
+        for kotu in compMentu.kotuList {
+            if (!kotu.isOpen) {
                 ankouCount += 1
             }
         }
@@ -602,13 +587,13 @@ class Calculator {
     }
     
     func isSyousangen() -> Bool {
-        if (compMentsu.getJanto().identifierTile.getType() != "SANGEN") {
+        if (compMentu.getJanto().identifierTile.getType() != "SANGEN") {
             return false;
         }
         
         var count = 0
-        for kotsu in compMentsu.kotsuList {
-            if (kotsu.identifierTile.getType() == "SANGEN") {
+        for kotu in compMentu.kotuList {
+            if (kotu.identifierTile.getType() == "SANGEN") {
                 count += 1
             }
             if (count == 2) {
@@ -625,19 +610,33 @@ class Calculator {
     }
     
     func isRyanpeiko() -> Bool {
-        return peikoCount() == 2
+        var arr = [Int](repeating:0, count:26)
+        
+        for syuntu in compMentu.syuntuList {
+            arr[syuntu.identifierTile.getCode()] += 1
+        }
+        var count = 0
+        for i in 1 ..< 26 {
+            if arr[i] > 1 {
+                count += 1
+            }
+        }
+        if count == 2 {
+            return true
+        }
+        return false
     }
     
     func isJuntyan() -> Bool {
-        for syuntsu in compMentsu.syuntsuList {
-            let num = syuntsu.identifierTile.getNumber()
+        for syuntu in compMentu.syuntuList {
+            let num = syuntu.identifierTile.getNumber()
             if (num != 2 && num != 8) {
                 return false
             }
         }
         
-        for kotsu in compMentsu.kotsuList {
-            let num = kotsu.identifierTile.getNumber()
+        for kotu in compMentu.kotuList {
+            let num = kotu.identifierTile.getNumber()
             if (num != 1 && num != 9) {
                 return false
             }
@@ -650,12 +649,12 @@ class Calculator {
         var hasJihai = false
         var type = ""
         
-        for mentsu in compMentsu.getAllMentsu() {
-            if (mentsu.identifierTile.getNumber() == 0) {
+        for mentu in compMentu.getAllMentu() {
+            if (mentu.identifierTile.getNumber() == 0) {
                 hasJihai = true
             } else if (type.isEmpty) {
-                type = mentsu.identifierTile.getType()
-            } else if (type != mentsu.identifierTile.getType()) {
+                type = mentu.identifierTile.getType()
+            } else if (type != mentu.identifierTile.getType()) {
                 return false
             }
         }
@@ -664,11 +663,11 @@ class Calculator {
     
     func isTinitu() -> Bool {
         
-        let allMentsu = compMentsu.getAllMentsu()
-        let type = allMentsu[0].identifierTile.getType()
+        let allMentu = compMentu.getAllMentu()
+        let type = allMentu[0].identifierTile.getType()
         
-        for mentsu in allMentsu {
-            if(type != mentsu.identifierTile.getType()) {
+        for mentu in allMentu {
+            if(type != mentu.identifierTile.getType()) {
                 return false
             }
         }
