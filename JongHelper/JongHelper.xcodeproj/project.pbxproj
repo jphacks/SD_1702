@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A3A0D811F9F2EA8007004CC /* TokutenView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A3A0D801F9F2EA7007004CC /* TokutenView.storyboard */; };
 		5A46BE861F9AD40F008F1ACB /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A46BE851F9AD40F008F1ACB /* opencv2.framework */; };
 		5A46BE891F9AD48A008F1ACB /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A46BE881F9AD48A008F1ACB /* OpenCVWrapper.mm */; };
 		5A46BE8C1F9AD93D008F1ACB /* AVCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A46BE8B1F9AD93D008F1ACB /* AVCapture.swift */; };
@@ -47,6 +48,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5A3A0D801F9F2EA7007004CC /* TokutenView.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TokutenView.storyboard; sourceTree = "<group>"; };
 		5A46BE851F9AD40F008F1ACB /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		5A46BE871F9AD48A008F1ACB /* JongHelper-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JongHelper-Bridging-Header.h"; sourceTree = "<group>"; };
 		5A46BE881F9AD48A008F1ACB /* OpenCVWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCVWrapper.mm; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				5AEEBAB51F98994D00E006F3 /* LaunchScreen.storyboard */,
 				5AEEBAB01F98994D00E006F3 /* Main.storyboard */,
 				5AA52CCF1F9C5101006107AB /* TokutenViewController.swift */,
+				5A3A0D801F9F2EA7007004CC /* TokutenView.storyboard */,
 			);
 			path = JongHelper;
 			sourceTree = "<group>";
@@ -242,6 +245,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A46BE921F9AE1D1008F1ACB /* TehaiView.xib in Resources */,
+				5A3A0D811F9F2EA8007004CC /* TokutenView.storyboard in Resources */,
 				5A46BEA61F9B1DB0008F1ACB /* TenpaiView.xib in Resources */,
 				5AA52CCA1F9C1D4F006107AB /* TenpaiTableViewCell.xib in Resources */,
 				5A46BE9C1F9B0221008F1ACB /* templates in Resources */,
@@ -426,7 +430,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YVZ4CXCS3W;
+				DEVELOPMENT_TEAM = 8X3BYN2T6R;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/JongHelper",
@@ -451,7 +455,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YVZ4CXCS3W;
+				DEVELOPMENT_TEAM = 8X3BYN2T6R;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/JongHelper",
