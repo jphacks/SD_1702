@@ -56,19 +56,19 @@ class Calculator {
     var generalSituation: GeneralSituation
     var personalSituation: PersonalSituation
     
-    init(compMentu: CompMentu, generalSituation: GeneralSituation, personalSituation: PersonalSituation) {
+    init(compMentu: CompMentu, generalSituation: GeneralSituation, personalSituation: PersonalSituation, addHan: Int) {
         self.compMentu = compMentu
         self.generalSituation = generalSituation
         self.personalSituation = personalSituation
-        calculateScore()
+        calculateScore(addHan: addHan)
     }
     
-    func calculateScore() {
+    func calculateScore(addHan: Int) {
         
         // 本当は役満を先に探さなければならないが，役満を未実装のため通常役のみみる
         
         fu = calculateFu()
-        han = calculateHan()
+        han = calculateHan() + addHan
         
         print("役: ", terminator:"")
         for yaku in normalYakuList {
@@ -77,15 +77,20 @@ class Calculator {
         print(han)
         print("符: \(fu)", terminator:"")
         
-        let hanindex = han == 0 ? 0 : han - 1
-        var fuindex: Int
-        if (fu == 25) {
-            fuindex = 1
-        } else if (fu % 10 == 0){
-            fuindex = fu / 10 - 2
+        var hanindex: Int
+        if han == 0 {
+            score = 0
+            return
         } else {
+            hanindex =  han - 1
+        }
+        var fuindex: Int
+        if (fu == 20) {
             fuindex = 0
-            print("fu:error")
+        } else if (fu == 25){
+            fuindex = 1
+        } else {
+            fuindex = fu / 10 - 1
         }
         
         

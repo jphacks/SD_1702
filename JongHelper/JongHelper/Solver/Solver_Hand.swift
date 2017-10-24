@@ -35,7 +35,8 @@ class Hand {
     var genSituation = GeneralSituation()
     var perSituation = PersonalSituation()
     
-    
+    // ----- ノーテン状態に関するプロパティ -----
+    var syantenNum = 99
     
     // 不正な手かどうか
     var invalidHand = false
@@ -68,12 +69,12 @@ class Hand {
     }
     
     // 点数, 役のタプルを返す関数
-    func getScore() -> (Int, Int, Int, [NormalYaku]) {
+    func getScore(addHan: Int) -> (Int, Int, Int, [NormalYaku]) {
         // 点数 (点数，飜，符）と役のタプル
         var score = (0, 0, 0, [NormalYaku]())
         
         for agari in agariSet {
-            let calculator = Calculator(compMentu: agari, generalSituation: genSituation, personalSituation: perSituation)
+            let calculator = Calculator(compMentu: agari, generalSituation: genSituation, personalSituation: perSituation, addHan: addHan)
             if(score.0 < calculator.score) {
                 score.0 = calculator.score
                 score.1 = calculator.han
@@ -93,26 +94,36 @@ class Hand {
             for mati in tenpai.getWait() {
                 var suteTile = tenpai.suteTile
                 let compMentu = CompMentu(tenpai: tenpai, tumo: mati, isOpenHand: false)
-                let calculator = Calculator(compMentu: compMentu ,generalSituation: genSituation, personalSituation: perSituation)
+                let calculator = Calculator(compMentu: compMentu ,generalSituation: genSituation, personalSituation: perSituation, addHan: 0)
                 
                 let score = calculator.score
                 
-                
-                let matiTiles:Set<Tile> = [mati]
                 if result.count == 0 {
-                    result.append(TenpaiData(sute: tenpai.suteTile, mati: matiTiles, score: score))
+                    result.append(TenpaiData(sute: tenpai.suteTile, mati: [(mati, score)]))
                 } else {
-                    var flag = true
+                    var flag1 = true
                     
-                    for elem in result {
-                        if elem.suteTile == tenpai.suteTile && elem.score == score {
-                            elem.matiTiles.insert(mati)
-                            flag = false
+                    for (i, elem) in result.enumerated() {
+                        if elem.suteTile == tenpai.suteTile {
+                            var flag2 = true
+                            
+                            for (j, matiTile) in elem.matiTiles.enumerated() {
+                                if matiTile.0 == mati && matiTile.1 < score {
+                                    result[i].matiTiles[j] = (mati, score)
+                                    flag2 = false
+                                    break
+                                }
+                            }
+                            
+                            if flag2 {
+                                result[i].matiTiles.append((mati, score))
+                            }
+                            flag1 = false
                         }
                     }
                     
-                    if flag {
-                        result.append(TenpaiData(sute: tenpai.suteTile, mati: matiTiles, score: score))
+                    if flag1 {
+                        result.append(TenpaiData(sute: tenpai.suteTile, mati: [(mati, score)]))
                     }
                 }
             }
@@ -121,17 +132,6 @@ class Hand {
         return result
     }
     
-    
-    // 鳴いている場合はその面子をリストで入力
-    /*init(inputtedTiles: [Tile], mentuList: [Mentu]) {
-        isOpenHand = true
-        for tile in inputtedTiles {
-            self.inputtedTiles[tile.getCode()] += 1
-        }
-        inputtedMentuList = mentuList
-        getCompMentuSet()
-    }*/
-
     // 作業用配列の初期化用関数
     func initTmp() {
         tmpTiles = inputtedTiles
