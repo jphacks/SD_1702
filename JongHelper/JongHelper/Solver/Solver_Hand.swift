@@ -36,6 +36,7 @@ class Hand {
     var perSituation = PersonalSituation()
     
     
+    
     // 不正な手かどうか
     var invalidHand = false
     
@@ -83,7 +84,7 @@ class Hand {
         
         return score
     }
-    
+
     // テンパイ時に，これを捨ててこれを引いたら，この点数で上がれるよ　を返す
     func getTenpaiData() -> [TenpaiData] {
         var result = [TenpaiData]()

@@ -29,8 +29,8 @@ class PersonalSituation {
         self.jikaze = Tile.null
     }
     
-    init(isParent: Bool, isTsumo: Bool, isIppatu: Bool, isReach: Bool, isDoubleReach: Bool, isTyankan: Bool, isRinsyan: Bool, jikaze: Tile) {
-        self.isParent = isParent
+    init(isTsumo: Bool, isIppatu: Bool, isReach: Bool, isDoubleReach: Bool, isTyankan: Bool, isRinsyan: Bool, jikaze: Tile) {
+        self.isParent = (jikaze == Tile.Ton)
         self.isTsumo = isTsumo
         self.isIppatu = isIppatu
         self.isReach = isReach

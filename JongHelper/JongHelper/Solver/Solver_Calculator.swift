@@ -198,7 +198,9 @@ class Calculator {
         var tmphand = compMentu.mentuListToIntList()
         
         for tileDora in generalSituation.dora {
-            dora += tmphand[tileDora.getCode()]
+            if tileDora != Tile.null {
+                dora += tmphand[tileDora.getCode()]
+            }
         }
         for _ in 0 ..< dora {
             normalYakuList.append(NormalYaku.Dora)

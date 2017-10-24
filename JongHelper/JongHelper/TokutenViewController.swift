@@ -71,8 +71,8 @@ class TokutenViewController: UIViewController {
     func calculate() {
         var normalYakuList = [NormalYaku]()
         
-        var gs = GeneralSituation(isHoutei: false, bakaze: Tile.Ton, dora: [Tile.s1], honba: 1)
-        var ps = PersonalSituation(isParent: true, isTsumo: isTsumo, isIppatu: false, isReach: false, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: Tile.Ton)
+        var gs = GeneralSituation(isHoutei: false, bakaze: bakazeTile, dora: doraTileArray, honba: 1)
+        var ps = PersonalSituation(isTsumo: isTsumo, isIppatu: false, isReach: false, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: jikazeTile)
     
 
         var hand = Hand(inputtedTiles: tehaiTileArray, tumo: matiTile, genSituation:gs, perSituation: ps)

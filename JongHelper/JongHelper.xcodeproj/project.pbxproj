@@ -167,8 +167,7 @@
 				5AA52CB71F9B51E1006107AB /* Solver_Tenpai.swift */,
 				5AA52CB11F9B51E0006107AB /* Solver_Yaku.swift */,
 			);
-			name = Solver;
-			path = "New Group";
+			path = Solver;
 			sourceTree = "<group>";
 		};
 		9975A4171F9CFC5800968D2F /* Mentu */ = {

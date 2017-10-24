@@ -382,8 +382,8 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             }
         }
         
-        let gs = GeneralSituation(isHoutei: false, bakaze: Tile.Ton, dora: [Tile.s1], honba: 1)
-        let ps = PersonalSituation(isParent: true, isTsumo: false, isIppatu: false, isReach: false, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: Tile.Ton)
+        let gs = GeneralSituation(isHoutei: false, bakaze: bakazeTile, dora: dora, honba: 1)
+        let ps = PersonalSituation(isTsumo: false, isIppatu: false, isReach: false, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: jikazeTile)
         var matiArr: Set<Tile> = []
         var suteArr: Set<Tile> = []
         var minSyanten = 99
@@ -395,6 +395,20 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         }
         
         tenpaiDatas = hand.getTenpaiData()
+        
+        if !hand.isTenpai {
+            for i in 0 ..< 14 {
+                var arr = tehaiTileArray
+                arr.remove(at: i)
+                
+                let syanten = Syanten(hand: arr)
+                let tmpSyanten = syanten.getNormalSyantenNum()
+                if (minSyanten > tmpSyanten.0) {
+                    minSyanten = tmpSyanten.0
+                    suteArr = Set(tmpSyanten.1)
+                }
+            }
+        }
         
         print("まち：\(matiArr.count) すて：\(suteArr.count)")
         if(hand.invalidHand){
