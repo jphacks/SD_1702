@@ -102,7 +102,7 @@ class Syanten {
             mentu_cut(i: j)
             
             tmp[j] += 3;
-            mentu -= 3;
+            mentu -= 1;
         }
         //シュンツ
         if(j != 7 && j != 8 && j != 16 && j != 17 && j < 25){

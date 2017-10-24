@@ -163,6 +163,11 @@ class Hand {
         // 頭確定のメンツ探索
         if (toituList.count != 0) {
             for toitu in toituList {
+                
+                if toitu.identifierTile == Tile.p3 {
+                    print("toitu:p3")
+                }
+                
                 searchPriorityKotu(janto: toitu)
                 searchPrioritySyuntu(janto: toitu)
             }
@@ -188,6 +193,7 @@ class Hand {
             for uki in tenpai.ukiList {
                 tiles.append(uki)
             }
+            tiles.append(tenpai.suteTile)
                 
             tmpTiles = encodeTiles(tiles: tiles)
             let _tmpTiles = tmpTiles
@@ -199,11 +205,17 @@ class Hand {
                 decidedMentuList.append(contentsOf: serchSyuntuCandidate(start: i, end: 26))
                 decidedMentuList.append(contentsOf: serchSyuntuCandidate(start: 1, end: i))
                 
-                let ukiTiles = getRemainderTiles()
-                let tmpTenpai = Tenpai(mentuList: decidedMentuList, ukiList: ukiTiles, suteTile: tenpai.suteTile)
-                if(tmpTenpai.isTenpai) {
-                    // 編集必要
-                    tenpaiSet.insert(tmpTenpai)
+                
+                let ukiList = getRemainderTiles()
+                if ukiList.count < 4 {
+                    for (i, elem) in ukiList.enumerated() {
+                        var arr = ukiList
+                        arr.remove(at: i)
+                        let tenpai = Tenpai(mentuList: decidedMentuList, ukiList: arr, suteTile: ukiList[i])
+                        if(tenpai.isTenpai) {
+                            tenpaiSet.insert(tenpai)
+                        }
+                    }
                 }
             }
         }
@@ -223,6 +235,8 @@ class Hand {
         }
         return ukiList
     }
+    
+
     
     func serchSyuntuCandidate(start: Int, end: Int) -> [Mentu] {
         var resultList = [Mentu]()
@@ -284,7 +298,9 @@ class Hand {
         mentuCandidate.append(contentsOf: serchKotuCandidate())
         mentuCandidate.append(contentsOf: serchSyuntuCandidate(start: 1, end: 26))
         
+        
         var ukiNum = countRemainderTiles()
+        
         if (ukiNum == 0) {
             isAgari = true
             agariSet.insert(CompMentu(mentuList: mentuCandidate, tumo: tumo, isOpenHand: false))
