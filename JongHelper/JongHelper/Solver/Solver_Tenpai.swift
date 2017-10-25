@@ -100,7 +100,6 @@ class Tenpai: Hashable {
         
         if (ukiList.count == 2) {
             if ukiList[0].getType() == ukiList[1].getType() && ukiList[0].getNumber() + 2 == ukiList[1].getNumber() {
-                print("かんちゃん：\(ukiList[0]), \(ukiList[1])")
                 return true
             }
         }
