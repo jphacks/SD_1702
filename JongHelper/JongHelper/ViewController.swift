@@ -80,7 +80,9 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         addSubviewWithAutoLayoutTop(childView: tenpaiView!, parentView: self.view)
         tenpaiView.tableView.delegate = self
         tenpaiView.tableView.dataSource = self
+        tenpaiView.tableView.allowsSelection = false
         tenpaiView.tableView.register(UINib(nibName: "TenpaiTableViewCell", bundle:nil), forCellReuseIdentifier:"TenpaiViewCell")
+        
         
         //ノーテン時のビュー
         notenView = UINib(nibName: "NotenView", bundle: nil).instantiate(withOwner: self, options: nil).first as? NotenView
@@ -100,7 +102,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     func switchView(_ b: Bool) {
         if(isCaptureMode) {
             isCaptureMode = false
-            avCapture.stopRunning()
+            //avCapture.stopRunning()
         }
         if(b){
             notenView.isHidden = true
@@ -145,12 +147,12 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         if (isCaptureMode) {
             avCapture.takePicture()
             isCaptureMode = false
-            avCapture.stopRunning()
+            //avCapture.stopRunning()
             //ビューをノーマルモードへ
             
         } else {
             isCaptureMode = true
-            avCapture.startRunning()
+            //avCapture.startRunning()
             //ビューをカメラモードへ
             tenpaiView.isHidden = true
             notenView.isHidden = true
@@ -163,7 +165,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     func pushCaptureClose() {
         switchView(isTenpai)
         isCaptureMode = false
-        avCapture.stopRunning()
+        //avCapture.stopRunning()
     }
 
     override func didReceiveMemoryWarning() {
@@ -258,6 +260,14 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
                 cell.tumoScores[k].isHidden = false
                 cell.ronScores[k].isHidden = false
                 
+                //imageViewをボタン化
+                cell.matiImageViews[k].isUserInteractionEnabled = true
+                let gesture = AgariTapGestureRecognizer(target: self, action: #selector(ViewController.matiImageViewTapped(_:)))
+                gesture.row = indexPath.row
+                gesture.index = k
+                cell.matiImageViews[k].addGestureRecognizer(gesture)
+                
+                
             }
             
 //            for i in 0..<min(tenpaiDatas[indexPath.row].matiTiles.count, 3) {
@@ -336,12 +346,20 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         vc.doraTileArray = self.doraTileArray
         vc.bakazeTile = self.bakazeTile
         vc.jikazeTile = self.jikazeTile
-        
-        //vc.matiTile = tenpaiDatas[agariHaiIndex].matiTiles
-        vc.suteTile = tenpaiDatas[agariHaiIndex].suteTile
+
+        let agariSender = sender as! AgariTapGestureRecognizer
+        vc.matiTile = tenpaiDatas[agariSender.row!].matiTiles[agariSender.index!].tile
+        vc.suteTile = tenpaiDatas[agariSender.row!].suteTile
     }
     
     //tableview===============================================================
+    
+    // 画像がタップされたら呼ばれる
+    @objc func matiImageViewTapped(_ sender: AgariTapGestureRecognizer) {
+        //print("タップ\(sender.row),\(sender.index)")
+        performSegue(withIdentifier: "toTokutenView",sender: sender)
+        
+    }
     
     func indexPathToTileArray(_ indexPaths: [IndexPath]) -> [Tile] {
         var tiles: [Tile] = []
@@ -389,37 +407,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         }
         return tehaiList
     }
-    
-//    func mergeTenpaiDatas() {
-//        print("mergeTenpaiDatas")
-//        var arr: [TenpaiData] = []
-//        for elem in tenpaiDatas {
-//            if(arr.count != 0){
-//                var flag = true
-//                for elem2 in arr {
-//                    if(compTenpaiData(data1: elem, data2: elem2)) {
-//                        flag = false
-//                        break
-//                    }
-//                }
-//                if (flag) {
-//                    arr.append(elem)
-//                }
-//            } else {
-//                arr.append(elem)
-//            }
-//        }
-//        tenpaiDatas = arr
-//    }
-//
-//    func compTenpaiData(data1: TenpaiData, data2: TenpaiData) -> Bool {
-//        let sameSuteTile = data1.suteTile == data2.suteTile
-//        let sameScore = data1.score == data2.score
-//        let sameMatiTile = Array(data1.matiTiles)[0] == Array(data2.matiTiles)[0]
-//        let result = sameSuteTile && sameScore && sameMatiTile
-//        return ( result )
-//    }
-    
+
     func calculate() {
         //ドラのリスト作る
         var dora: [Tile] = []

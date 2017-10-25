@@ -14,12 +14,10 @@ class TokutenViewController: UIViewController {
     @IBOutlet var doraImage: [UIImageView]!
     @IBOutlet weak var jikazemage: UIImageView!
     @IBOutlet weak var bakazemage: UIImageView!
-    @IBOutlet weak var tumoSW: UISwitch!
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var hanLabel: UILabel!
-    @IBOutlet weak var hanStepper: UIStepper!
-    @IBOutlet weak var yakuTV: UITextView!
-    @IBOutlet weak var huLabel: UILabel!
-    @IBOutlet weak var tenLabel: UILabel!
+    @IBOutlet weak var plusHanLabel: UILabel!
+    @IBOutlet weak var scoreLabel: UILabel!
     
      var tehaiTileArray: [Tile] = []
      var doraTileArray: [Tile] = [Tile.m1, Tile.null, Tile.null, Tile.null]
@@ -36,15 +34,18 @@ class TokutenViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func stepperValueChanged(_ sender: UIStepper) {
-        plushan = Int(sender.value)
-        calculate()
+    @IBAction func switchTumo(_ sender: UISegmentedControl) {
     }
     
-    @IBAction func toggleSwitch(_ sender: UISwitch) {
-        isTsumo = sender.isOn
-        calculate()
+    @IBAction func switchReach(_ sender: UISegmentedControl) {
     }
+    
+    @IBAction func pushMinus(_ sender: UIButton) {
+    }
+    
+    @IBAction func pushPlus(_ sender: UIButton) {
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,7 +66,7 @@ class TokutenViewController: UIViewController {
         }
         jikazemage.image = jikazeTile.toUIImage()
         bakazemage.image = bakazeTile.toUIImage()
-        calculate()
+        //calculate()
     }
     
     func calculate() {
@@ -82,9 +83,9 @@ class TokutenViewController: UIViewController {
         for s in score.3 {
             str += s.getName()
         }
-        yakuTV.text = str
-        huLabel.text = "\(score.1)飜\(score.2)符"
-        tenLabel.text = "\(score.0)点"
+        //yakuTV.text = str
+        //huLabel.text = "\(score.1)飜\(score.2)符"
+        //tenLabel.text = "\(score.0)点"
         
         
     }
