@@ -16,7 +16,7 @@ class Calculator {
         return[isSuankou, isSuankouTanki,  isDaisangen, isTuiso,  isSusiHou, isDaisusi, isRyuisou, isTyurenPoutou,  isJunseiTyurenpoutou, isTinroutou, isSukantu, isKokusimusou, isKokusimusou13, isTenhou, isTihou]
     }
     
-    var scoreTableParent = [
+    /*var scoreTableParent = [
         [(0, 0), (0, 700), (0, 1300), (0, 2600)], //20符
         [(0, 0), (2400, 0), (4800, 1600), (9600, 3200)], //25符
         [(1500, 500), (2900, 1000), (5800, 2000), (11600, 3900)],
@@ -42,11 +42,35 @@ class Calculator {
         [(2900, (800, 1500)), (5800, (1500, 2900)), (8000, (2000, 4000)), (8000, (2000, 4000))],
         [(3200, (800, 1600)), (6400, (1600, 3200)), (8000, (2000, 4000)), (8000, (2000, 4000))],
         [(3600, (900, 1800)), (7100, (1800, 3600)), (8000, (2000, 4000)), (8000, (2000, 4000))]
+    ]*/
+    
+    var scoreTableParent = [
+        [(0, 0), (0, 2100), (0, 3900), (0, 7800)], //20符
+        [(0, 0), (2400, 0), (4800, 4800), (9600, 9600)], //25符
+        [(1500, 1500), (2900, 3000), (5800, 6000), (11600, 11700)],
+        [(2000, 2100), (3900, 3900), (7700, 7800), (12000, 12000)],
+        [(2400, 2400), (4800, 4800), (9600, 9600), (12000, 12000)],
+        [(2900, 3000), (5800, 6000), (11600, 11700), (12000, 12000)],
+        [(3400, 3600), (6800, 6900), (12000, 12000), (12000, 12000)],
+        [(3900, 3900), (7700, 7800), (12000, 12000), (12000, 12000)],
+        [(4400, 4500), (8700, 8700), (12000, 12000), (12000, 12000)],
+        [(4800, 4800), (9600, 9600), (12000, 12000), (12000, 12000)],
+        [(5300, 5400), (10600, 10800), (12000, 12000), (12000, 12000)]
     ]
     
-    var score = 0
-    var fu = 0
-    var han = 0
+    var scoreTableChild = [
+        [(0, 0), (0, 1500), (0, 2400), (0, 5200)], //20符
+        [(0, 0), (1600, 0), (3200, 3200), (6400, 6400)], //25符
+        [(1000, 1100), (2000, 2000), (3900, 4000), (7700, 7900)],
+        [(1300, 1500), (2600, 2700), (5200, 5200), (8000, 8000)],
+        [(1600, 1600), (3200, 3200), (6400, 6400), (8000, 8000)],
+        [(2000, 2400), (3900, 4000), (7700, 7900), (8000, 8000)],
+        [(2300, 2400), (4500, 4900), (8000, 8000), (8000, 8000)],
+        [(2600, 2700), (5200, 5200), (8000, 8000), (8000, 8000)],
+        [(2900, 3100), (5800, 5900), (8000, 8000), (8000, 8000)],
+        [(3200, 3200), (6400, 6400), (8000, 8000), (8000, 8000)],
+        [(3600, 3600), (7100, 7200), (8000, 8000), (8000, 8000)]
+    ]
     
     var normalYakuList = [NormalYaku]()
     var yakumanList = [Yakuman]()
@@ -56,19 +80,19 @@ class Calculator {
     var generalSituation: GeneralSituation
     var personalSituation: PersonalSituation
     
-    init(compMentu: CompMentu, generalSituation: GeneralSituation, personalSituation: PersonalSituation, addHan: Int) {
+    init(compMentu: CompMentu, generalSituation: GeneralSituation, personalSituation: PersonalSituation) {
         self.compMentu = compMentu
         self.generalSituation = generalSituation
         self.personalSituation = personalSituation
-        calculateScore(addHan: addHan)
     }
     
-    func calculateScore(addHan: Int) {
+    // 返り値 ((ロン，ツモ），符，飜)
+    func calculateScore(addHan: Int) -> (score: (ron: Int, tumo: Int), fu: Int, han: Int){
         
         // 本当は役満を先に探さなければならないが，役満を未実装のため通常役のみみる
         
-        fu = calculateFu()
-        han = calculateHan() + addHan
+        let fu = calculateFu()
+        let han = calculateHan() + addHan
         
         print("役: ", terminator:"")
         for yaku in normalYakuList {
@@ -79,8 +103,7 @@ class Calculator {
         
         var hanindex: Int
         if han == 0 {
-            score = 0
-            return
+            return ((0, 0), 0, 0)
         } else {
             hanindex =  han - 1
         }
@@ -96,7 +119,7 @@ class Calculator {
         
         if (personalSituation.isParent) {
             if (5 > han) {
-                score = scoreTableParent[fuindex][hanindex].0
+                return (scoreTableParent[fuindex][hanindex], fu, han)
             } else {
                 let tmpscore : (Int, Int)
                 switch han {
@@ -107,22 +130,22 @@ class Calculator {
                 case 11, 12: tmpscore = (36000, 12000)
                 default: tmpscore = (48000, 16000)
                 }
-                score  = tmpscore.0
+                return (tmpscore, fu, han)
             }
         } else {
             if (5 > han) {
-                score = scoreTableChild[fuindex][hanindex].0
+                return (scoreTableParent[fuindex][hanindex], fu, han)
             } else {
-                let tmpscore : (Int, (Int, Int))
+                let tmpscore : (Int, Int)
                 switch han {
-                case 0: tmpscore = (0, (0, 0))
-                case 5: tmpscore = (8000, (2000, 4000))
-                case 6, 7: tmpscore = (12000, (3000, 6000))
-                case 8, 9: tmpscore = (16000, (4000, 8000))
-                case 11, 12: tmpscore = (24000, (6000, 12000))
-                default: tmpscore = (32000, (8000, 16000))
+                case 0: tmpscore = (0, 0)
+                case 5: tmpscore = (8000, 8000)
+                case 6, 7: tmpscore = (12000, 12000)
+                case 8, 9: tmpscore = (16000, 16000)
+                case 11, 12: tmpscore = (24000, 24000)
+                default: tmpscore = (32000, 32000)
                 }
-                score = tmpscore.0
+                return (tmpscore, fu, han)
             }
         }
     }

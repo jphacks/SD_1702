@@ -69,17 +69,18 @@ class Hand {
     }
     
     // 点数, 役のタプルを返す関数
-    func getScore(addHan: Int) -> (Int, Int, Int, [NormalYaku]) {
+    func getScore(addHan: Int) -> ((Int, Int), Int, Int, [NormalYaku]) {
         // 点数 (点数，飜，符）と役のタプル
-        var score = (0, 0, 0, [NormalYaku]())
+        var score = (score: (0, 0), fu: 0, han: 0, yakuList: [NormalYaku]())
         
         for agari in agariSet {
-            let calculator = Calculator(compMentu: agari, generalSituation: genSituation, personalSituation: perSituation, addHan: addHan)
-            if(score.0 < calculator.score) {
-                score.0 = calculator.score
-                score.1 = calculator.han
-                score.2 = calculator.fu
-                score.3 = calculator.normalYakuList
+            let calculator = Calculator(compMentu: agari, generalSituation: genSituation, personalSituation: perSituation)
+            let calcScore = calculator.calculateScore(addHan: addHan)
+            if(score.score.0 < calcScore.score.ron) {
+                score.score = calcScore.score
+                score.fu = calcScore.fu
+                score.han = calcScore.han
+                score.yakuList = calculator.normalYakuList
             }
         }
         
@@ -92,14 +93,14 @@ class Hand {
         
         for tenpai in tenpaiSet {
             for mati in tenpai.getWait() {
-                var suteTile = tenpai.suteTile
                 let compMentu = CompMentu(tenpai: tenpai, tumo: mati, isOpenHand: false)
-                let calculator = Calculator(compMentu: compMentu ,generalSituation: genSituation, personalSituation: perSituation, addHan: 0)
+                let calculator = Calculator(compMentu: compMentu ,generalSituation: genSituation, personalSituation: perSituation)
                 
-                let score = calculator.score
+                let ronScore = calculator.calculateScore(addHan: 0)
+                let tumoScore = calculator.calculateScore(addHan: 1)
                 
                 if result.count == 0 {
-                    result.append(TenpaiData(sute: tenpai.suteTile, mati: [(mati, score)]))
+                    result.append(TenpaiData(sute: tenpai.suteTile, mati: [(mati, ronScore.score.ron, tumoScore.score.tumo)]))
                 } else {
                     var flag1 = true
                     
@@ -108,22 +109,22 @@ class Hand {
                             var flag2 = true
                             
                             for (j, matiTile) in elem.matiTiles.enumerated() {
-                                if matiTile.0 == mati && matiTile.1 < score {
-                                    result[i].matiTiles[j] = (mati, score)
+                                if matiTile.tile == mati && matiTile.ron < ronScore.score.ron {
+                                    result[i].matiTiles[j] = (mati, ronScore.score.ron, tumoScore.score.tumo)
                                     flag2 = false
                                     break
                                 }
                             }
                             
                             if flag2 {
-                                result[i].matiTiles.append((mati, score))
+                                result[i].matiTiles.append((mati, ronScore.score.ron, tumoScore.score.tumo))
                             }
                             flag1 = false
                         }
                     }
                     
                     if flag1 {
-                        result.append(TenpaiData(sute: tenpai.suteTile, mati: [(mati, score)]))
+                        result.append(TenpaiData(sute: tenpai.suteTile, mati: [(mati, ronScore.score.ron, tumoScore.score.tumo)]))
                     }
                 }
             }
@@ -176,6 +177,8 @@ class Hand {
         // 頭なしのメンツ探索
         searchPriorityKotu()
         searchPrioritySyuntu()
+        
+        
         
         //多面チャンを探していく (浮き牌の数によって余りを何個許容するか変わることに注意)
         for tenpai in tenpaiSet {
@@ -314,6 +317,8 @@ class Hand {
                 if(tenpai.isTenpai) {
                     tenpaiSet.insert(tenpai)
                     isTenpai = true
+                } else {
+                    
                 }
             }
         }

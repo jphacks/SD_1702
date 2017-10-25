@@ -8,9 +8,9 @@
 
 class TenpaiData {
     var suteTile: Tile!
-    var matiTiles: [(Tile, Int)]!
+    var matiTiles: [(tile: Tile, ron: Int, tumo: Int)]!
     
-    init(sute: Tile!, mati: [(Tile, Int)]!) {
+    init(sute: Tile!, mati: [(Tile, Int, Int)]!) {
         self.suteTile = sute
         self.matiTiles = mati
     }
