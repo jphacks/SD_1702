@@ -53,7 +53,7 @@ class  CompMentu: Hashable {
         kotuList = tenpai.kotuList
         
         if (tenpai.isTanki()) {
-            // 頭まち
+            // 頭まち & チートイ待ち
             toituList.append(Toitu(identifierTile: tenpai.ukiList[0]))
         } else if (tenpai.isKanchan()) {
             syuntuList.append(Syuntu(isOpen: false, identifierTile: Tile(rawValue:tenpai.ukiList[0].getCode() + 1)!))
