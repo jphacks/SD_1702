@@ -37,15 +37,15 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     
     var agariHaiIndex: Int!
     
+    var isCaptureMode = true
+    
+    var isTenpai = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         avCapture.delegate = self
         
-        //ノーテン時のビュー
-        notenView = UINib(nibName: "NotenView", bundle: nil).instantiate(withOwner: self, options: nil).first as? NotenView
-        addSubviewWithAutoLayoutTop(childView: notenView!, parentView: self.view)
-
         //手牌ビューのレイヤー追加
         tehaiView = UINib(nibName: "TehaiView", bundle: nil).instantiate(withOwner: self, options: nil).first as? TehaiView
         for tv in (tehaiView?.tableViews)! {
@@ -53,7 +53,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             tv.dataSource = self
             tv.register(UINib(nibName: "TehaiTableViewCell", bundle:nil), forCellReuseIdentifier:"TehaiCell")
         }
-        for tv in (tehaiView?.tableViewDora)! {
+        /*for tv in (tehaiView?.tableViewDora)! {
             tv.delegate = self
             tv.dataSource = self
             tv.register(UINib(nibName: "TehaiTableViewCell", bundle:nil), forCellReuseIdentifier:"TehaiCell")
@@ -64,6 +64,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         tehaiView.tableViewBakaze.delegate = self
         tehaiView.tableViewBakaze.dataSource = self
         tehaiView.tableViewBakaze.register(UINib(nibName: "TehaiTableViewCell", bundle:nil), forCellReuseIdentifier:"TehaiCell")
+         */
         
         //tehaiView.frame = CGRect(x:0,y:0,width:self.view.frame.size.width, height: 150.0)
         addSubviewWithAutoLayout(childView: tehaiView!, parentView: self.view)
@@ -72,15 +73,23 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         
         setTehaiView(tehaiTileArray, animated: false)
         
+        
         //テンパイ時のビュー
         tenpaiView = UINib(nibName: "TenpaiView", bundle: nil).instantiate(withOwner: self, options: nil).first as? TenpaiView
-        tenpaiView.frame = CGRect(x:0,y:0,width:self.view.frame.size.width, height: 150.0)
+        tenpaiView.frame = CGRect(x:0,y:0,width:self.view.frame.size.width, height: self.view.frame.height - 120.0)
         addSubviewWithAutoLayoutTop(childView: tenpaiView!, parentView: self.view)
         tenpaiView.tableView.delegate = self
         tenpaiView.tableView.dataSource = self
         tenpaiView.tableView.register(UINib(nibName: "TenpaiTableViewCell", bundle:nil), forCellReuseIdentifier:"TenpaiViewCell")
-
-        switchView(false)
+        
+        //ノーテン時のビュー
+        notenView = UINib(nibName: "NotenView", bundle: nil).instantiate(withOwner: self, options: nil).first as? NotenView
+        notenView.frame = CGRect(x:0,y:0,width:self.view.frame.size.width, height: self.view.frame.height - 120.0)
+        addSubviewWithAutoLayoutTop(childView: notenView!, parentView: self.view)
+        
+        calculate()
+        tenpaiView.isHidden = true
+        notenView.isHidden = true
     }
     
     override func viewDidLayoutSubviews() {
@@ -89,6 +98,10 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     }
     
     func switchView(_ b: Bool) {
+        if(isCaptureMode) {
+            isCaptureMode = false
+            avCapture.stopRunning()
+        }
         if(b){
             notenView.isHidden = true
             tenpaiView.isHidden = false
@@ -123,13 +136,34 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             let arr2 = intArrToTile(arr)
             tehaiTileArray = arr2
             setTehaiView(arr2, animated: true)
-            self.calculate(fromTalbe: false)
+            self.calculate()
         }
         
     }
     // TehaiViewDelegate
     func pushCapture() {
-        avCapture.takePicture()
+        if (isCaptureMode) {
+            avCapture.takePicture()
+            isCaptureMode = false
+            avCapture.stopRunning()
+            //ビューをノーマルモードへ
+            
+        } else {
+            isCaptureMode = true
+            avCapture.startRunning()
+            //ビューをカメラモードへ
+            tenpaiView.isHidden = true
+            notenView.isHidden = true
+        }
+        
+    }
+    func pushSetting() {
+        
+    }
+    func pushCaptureClose() {
+        switchView(isTenpai)
+        isCaptureMode = false
+        avCapture.stopRunning()
     }
 
     override func didReceiveMemoryWarning() {
@@ -155,8 +189,6 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .left, relatedBy: .equal, toItem: parentView, attribute: .left, multiplier: 1.0, constant: 0))
         
     }
-    
-    
     
     //tableview===============================================================
     // tag: 0->役リスト 1~14->手牌 20->場風 21->自風 31~34->ドラ
@@ -214,7 +246,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             for i in 0..<min(tenpaiDatas[indexPath.row].matiTiles.count, 3) {
                 cell.matiImageViews[i].image = Array(tenpaiDatas[indexPath.row].matiTiles)[i].toUIImage()
             }
-            cell.score.text = String(tenpaiDatas[indexPath.row].score)
+            //cell.score.text = String(tenpaiDatas[indexPath.row].score)
             return cell
         }
         
@@ -240,7 +272,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if ((scrollView as! UITableView).tag != 99) {
             stopTehaiCell(scrollView)
-            self.calculate(fromTalbe: true)
+            self.calculate()
         }
     }
     
@@ -369,7 +401,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         return ( result )
     }
     
-    func calculate(fromTalbe: Bool) {
+    func calculate() {
         //ドラのリスト作る
         var dora: [Tile] = []
         var isFirst = true
@@ -414,10 +446,13 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         if(hand.invalidHand){
             notenView.syantenLabel.text = "手牌が不正です"
             switchView(false)
+            self.isTenpai = false
         } else {
             if(hand.isTenpai) {
+                self.isTenpai = true
                 tenpaiView.tableView.reloadData()
             } else {
+                self.isTenpai = false
                 for (k, elem) in suteArr.enumerated() {
                     if(k < 3) {
                         notenView.haiImage[k].image = elem.toUIImage()

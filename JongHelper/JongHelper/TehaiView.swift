@@ -10,6 +10,8 @@ import UIKit
 
 protocol TehaiViewDelegate {
     func pushCapture()
+    func pushCaptureClose()
+    func pushSetting()
 }
 
 
@@ -24,6 +26,14 @@ class TehaiView: UIView {
     
     @IBAction func pushCapture(_ sender: UIButton) {
         delegate?.pushCapture()
+    }
+    
+    @IBAction func pushCaptureClose(_ sender: UIButton) {
+        delegate?.pushCaptureClose()
+    }
+    
+    @IBAction func pushSetting(_ sender: UIButton) {
+        delegate?.pushSetting()
     }
     
     required init?(coder aDecoder: NSCoder) {

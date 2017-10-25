@@ -1,20 +1,18 @@
 //
-//  TenpaiTableViewCell.swift
+//  YakuTableViewCell.swift
 //  JongHelper
 //
-//  Created by Satoshi Kobayashi on 2017/10/22.
+//  Created by Satoshi Kobayashi on 2017/10/25.
 //  Copyright © 2017年 tomato. All rights reserved.
 //
 
 import UIKit
 
-class TenpaiTableViewCell: UITableViewCell {
-
-    @IBOutlet weak var suteImageView: UIImageView!
-    @IBOutlet var matiImageViews: [UIImageView]!
-    @IBOutlet var tumoScores: [UILabel]!
-    @IBOutlet var ronScores: [UILabel]!
+class YakuTableViewCell: UITableViewCell {
     
+    @IBOutlet weak var yakuLabel: UILabel!
+    @IBOutlet weak var hanLabel: UILabel!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

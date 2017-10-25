@@ -16,11 +16,8 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" tag="99" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" sectionIndexMinimumDisplayRowCount="99" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="c4I-Ps-qct">
-                    <rect key="frame" x="0.0" y="0.0" width="667" height="150"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="150" id="mov-hG-rkb"/>
-                    </constraints>
+                    <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
+                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </tableView>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -28,6 +25,7 @@
                 <constraint firstItem="c4I-Ps-qct" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="26p-vh-9PU"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="c4I-Ps-qct" secondAttribute="trailing" id="WoP-zY-PN4"/>
                 <constraint firstItem="c4I-Ps-qct" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="ihQ-mL-3gi"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="c4I-Ps-qct" secondAttribute="bottom" id="n6h-Fb-zNN"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
