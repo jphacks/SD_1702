@@ -202,8 +202,8 @@
                                             <constraint firstAttribute="height" constant="27" id="vVr-i8-Amj"/>
                                         </constraints>
                                         <segments>
-                                            <segment title="ツモ"/>
                                             <segment title="ロン"/>
+                                            <segment title="ツモ"/>
                                         </segments>
                                         <color key="tintColor" red="0.90588235289999997" green="0.29803921570000003" blue="0.23529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
@@ -217,8 +217,8 @@
                                             <constraint firstAttribute="width" constant="180" id="nKs-IA-xV5"/>
                                         </constraints>
                                         <segments>
-                                            <segment title="リーチ"/>
                                             <segment title="ダマ"/>
+                                            <segment title="リーチ"/>
                                         </segments>
                                         <color key="tintColor" red="0.90588235289999997" green="0.29803921570000003" blue="0.23529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
@@ -228,7 +228,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="puo-UZ-WkO">
                                         <rect key="frame" x="8" y="94" width="335" height="40"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10飜" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Quw-IQ-ArS">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0飜" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Quw-IQ-ArS">
                                                 <rect key="frame" x="127" y="0.0" width="80" height="40"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="80" id="VYQ-hr-u3I"/>
