@@ -124,11 +124,11 @@ class Calculator {
                 let tmpscore : (Int, Int)
                 switch han {
                 case 0: tmpscore = (0, 0)
-                case 5: tmpscore = (12000, 4000)
-                case 6, 7: tmpscore = (18000, 6000)
-                case 8, 9, 10: tmpscore = (24000, 8000)
-                case 11, 12: tmpscore = (36000, 12000)
-                default: tmpscore = (48000, 16000)
+                case 5: tmpscore = (12000, 12000)
+                case 6, 7: tmpscore = (18000, 18000)
+                case 8, 9, 10: tmpscore = (24000, 24000)
+                case 11, 12: tmpscore = (36000, 36000)
+                default: tmpscore = (48000, 48000)
                 }
                 return (tmpscore, fu, han)
             }

@@ -69,29 +69,29 @@ class Hand {
     }
     
     // 点数, 役のタプルを返す関数
-    func getScore(addHan: Int) -> ((Int, Int), Int, Int, [NormalYaku]) {
+    func getScore(addHan: Int) -> (score: (ron: Int, tumo: Int), fu: Int, han:  Int, [NormalYaku]) {
         // 点数 (点数，飜，符）と役のタプル
-        var score = (score: (0, 0), fu: 0, han: 0, yakuList: [NormalYaku]())
+        var result = (score: (ron: 0, tumo: 0), fu: 0, han: 0, yakuList: [NormalYaku]())
         
         for agari in agariSet {
             let calculator = Calculator(compMentu: agari, generalSituation: genSituation, personalSituation: perSituation)
             let calcScore = calculator.calculateScore(addHan: addHan)
-            if(score.score.0 < calcScore.score.ron) {
-                score.score = calcScore.score
-                score.fu = calcScore.fu
-                score.han = calcScore.han
-                score.yakuList = calculator.normalYakuList
+            if(result.score.ron < calcScore.score.ron) {
+                result.score = calcScore.score
+                result.fu = calcScore.fu
+                result.han = calcScore.han
+                result.yakuList = calculator.normalYakuList
             }
         }
         
-        return score
+        return result
     }
-
+    
     // テンパイ時に，これを捨ててこれを引いたら，この点数で上がれるよ　を返す
     func getTenpaiData() -> [TenpaiData] {
         var result = [TenpaiData]()
         
-        for tenpai in tenpaiSet {
+        for tenpai in tenpaiSet { // テンパイ形の候補の中でループ
             for mati in tenpai.getWait() {
                 let compMentu = CompMentu(tenpai: tenpai, tumo: mati, isOpenHand: false)
                 let calculator = Calculator(compMentu: compMentu ,generalSituation: genSituation, personalSituation: perSituation)
@@ -109,8 +109,10 @@ class Hand {
                             var flag2 = true
                             
                             for (j, matiTile) in elem.matiTiles.enumerated() {
-                                if matiTile.tile == mati && matiTile.ron < ronScore.score.ron {
-                                    result[i].matiTiles[j] = (mati, ronScore.score.ron, tumoScore.score.tumo)
+                                if matiTile.tile == mati {
+                                    if matiTile.ron < ronScore.score.ron {
+                                        result[i].matiTiles[j] = (mati, ronScore.score.ron, tumoScore.score.tumo)
+                                    }
                                     flag2 = false
                                     break
                                 }
