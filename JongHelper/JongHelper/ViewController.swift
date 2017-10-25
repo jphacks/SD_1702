@@ -243,9 +243,27 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         } else if(tableView.tag == 99) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "TenpaiViewCell", for:indexPath) as! TenpaiTableViewCell
             cell.suteImageView.image = tenpaiDatas[indexPath.row].suteTile.toUIImage()
-            for i in 0..<min(tenpaiDatas[indexPath.row].matiTiles.count, 3) {
-                cell.matiImageViews[i].image = Array(tenpaiDatas[indexPath.row].matiTiles)[i].toUIImage()
+            
+            for i in 0..<cell.matiImageViews.count {
+                cell.matiImageViews[i].isHidden = true
+                cell.tumoScores[i].isHidden = true
+                cell.ronScores[i].isHidden = true
             }
+            
+            for (k, elem) in tenpaiDatas[indexPath.row].matiTiles.enumerated() {
+                cell.matiImageViews[k].image = elem.tile.toUIImage()
+                cell.tumoScores[k].text = String(elem.tumo)
+                cell.ronScores[k].text = String(elem.ron)
+                cell.matiImageViews[k].isHidden = false
+                cell.tumoScores[k].isHidden = false
+                cell.ronScores[k].isHidden = false
+                
+            }
+            
+//            for i in 0..<min(tenpaiDatas[indexPath.row].matiTiles.count, 3) {
+//                //cell.matiImageViews[i].image = Array(tenpaiDatas[indexPath.row].matiTiles)[i].toUIImage()
+//            }
+            
             //cell.score.text = String(tenpaiDatas[indexPath.row].score)
             return cell
         }
@@ -260,7 +278,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         } else if(tableView.tag > 0 && tableView.tag < 99) {
             return 45
         } else if (tableView.tag == 99) {
-            return 80
+            return 120
         }
         return 1
     }
@@ -318,7 +336,8 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         vc.doraTileArray = self.doraTileArray
         vc.bakazeTile = self.bakazeTile
         vc.jikazeTile = self.jikazeTile
-        vc.matiTile = Array(tenpaiDatas[agariHaiIndex].matiTiles)[0]
+        
+        //vc.matiTile = tenpaiDatas[agariHaiIndex].matiTiles
         vc.suteTile = tenpaiDatas[agariHaiIndex].suteTile
     }
     
@@ -371,35 +390,35 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         return tehaiList
     }
     
-    func mergeTenpaiDatas() {
-        print("mergeTenpaiDatas")
-        var arr: [TenpaiData] = []
-        for elem in tenpaiDatas {
-            if(arr.count != 0){
-                var flag = true
-                for elem2 in arr {
-                    if(compTenpaiData(data1: elem, data2: elem2)) {
-                        flag = false
-                        break
-                    }
-                }
-                if (flag) {
-                    arr.append(elem)
-                }
-            } else {
-                arr.append(elem)
-            }
-        }
-        tenpaiDatas = arr
-    }
-    
-    func compTenpaiData(data1: TenpaiData, data2: TenpaiData) -> Bool {
-        let sameSuteTile = data1.suteTile == data2.suteTile
-        let sameScore = data1.score == data2.score
-        let sameMatiTile = Array(data1.matiTiles)[0] == Array(data2.matiTiles)[0]
-        let result = sameSuteTile && sameScore && sameMatiTile
-        return ( result )
-    }
+//    func mergeTenpaiDatas() {
+//        print("mergeTenpaiDatas")
+//        var arr: [TenpaiData] = []
+//        for elem in tenpaiDatas {
+//            if(arr.count != 0){
+//                var flag = true
+//                for elem2 in arr {
+//                    if(compTenpaiData(data1: elem, data2: elem2)) {
+//                        flag = false
+//                        break
+//                    }
+//                }
+//                if (flag) {
+//                    arr.append(elem)
+//                }
+//            } else {
+//                arr.append(elem)
+//            }
+//        }
+//        tenpaiDatas = arr
+//    }
+//
+//    func compTenpaiData(data1: TenpaiData, data2: TenpaiData) -> Bool {
+//        let sameSuteTile = data1.suteTile == data2.suteTile
+//        let sameScore = data1.score == data2.score
+//        let sameMatiTile = Array(data1.matiTiles)[0] == Array(data2.matiTiles)[0]
+//        let result = sameSuteTile && sameScore && sameMatiTile
+//        return ( result )
+//    }
     
     func calculate() {
         //ドラのリスト作る
