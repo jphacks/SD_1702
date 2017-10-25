@@ -76,7 +76,7 @@ class TokutenViewController: UIViewController {
     
 
         let hand = Hand(inputtedTiles: tehaiTileArray, tumo: matiTile, genSituation:gs, perSituation: ps)
-        let score = hand.getScore()
+        let score = hand.getScore(addHan: 0)
         
         var str = ""
         for s in score.3 {

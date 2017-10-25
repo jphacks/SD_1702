@@ -66,6 +66,14 @@ class AVCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptu
         session.startRunning()
     }
     
+    func stopRunning(){
+        session.stopRunning()
+    }
+    
+    func startRunning() {
+        session.startRunning()
+    }
+    
     func takePicture(){
         let photoSettings = AVCapturePhotoSettings()
         photoSettings.flashMode = .auto
@@ -76,9 +84,10 @@ class AVCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptu
     
     func photoOutput(_ output: AVCapturePhotoOutput,
                      didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        
         let imageData = photo.fileDataRepresentation()
-        let photo = UIImage(data: imageData!)
-        delegate?.photo(image: photo!)
+        let photoo = UIImage(data: imageData!)
+        delegate?.photo(image: photoo!)
     }
     
     func captureOutput(_ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
