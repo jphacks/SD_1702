@@ -69,7 +69,7 @@ class Hand {
     }
     
     // 点数, 役のタプルを返す関数
-    func getScore(addHan: Int) -> (score: (ron: Int, tumo: Int), fu: Int, han:  Int, [NormalYaku]) {
+    func getScore(addHan: Int) -> (score: (ron: Int, tumo: Int), fu: Int, han:  Int, yakuList: [NormalYaku]) {
         // 点数 (点数，飜，符）と役のタプル
         var result = (score: (ron: 0, tumo: 0), fu: 0, han: 0, yakuList: [NormalYaku]())
         
@@ -151,12 +151,34 @@ class Hand {
         // 七対子に対する処理
         if (toituList.count == 7) {
             isAgari = true
-            var titoi = [Toitu]()
-            titoi.append(contentsOf: toituList)
+            isTitoitu = true
+            
+            let compMentu = CompMentu(mentuList: toituList, tumo: tumo, isOpenHand: false)
+            agariSet.insert(compMentu)
             // 上がりの形に追加
         } else if (toituList.count == 6) {
-            isTenpai = true
-            // テンパイ形に追加
+            initTmp()
+            var ukiTile1: Tile! = nil
+            var ukiTile2: Tile! = nil
+            
+            for index in 0 ..< tmpTiles.count{
+                if tmpTiles[index] == 1 {
+                    isTenpai = true
+                    // テンパイ形に追加
+                    if ukiTile1 == nil {
+                        ukiTile1 = Tile(rawValue: index)
+                    } else {
+                        ukiTile2 = Tile(rawValue: index)
+                    }
+                }
+            }
+            
+            if ukiTile1 != nil && ukiTile2 != nil {
+                var tenpai = Tenpai(mentuList: toituList, ukiList: [ukiTile1], suteTile: ukiTile2)
+                tenpaiSet.insert(tenpai)
+                tenpai = Tenpai(mentuList: toituList, ukiList: [ukiTile2], suteTile: ukiTile1)
+                tenpaiSet.insert(tenpai)
+            }
         }
         
         // 副露している場合は副露している面子をあらかじめ追加しておく
@@ -319,8 +341,6 @@ class Hand {
                 if(tenpai.isTenpai) {
                     tenpaiSet.insert(tenpai)
                     isTenpai = true
-                } else {
-                    
                 }
             }
         }

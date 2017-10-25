@@ -634,6 +634,10 @@ class Calculator {
     
     // 特別な処理が必要なためあとで実装する
     func isTitoitu() -> Bool{
+        if compMentu.getToituCount() == 7 {
+            return true
+        }
+        
         return false
     }
     
