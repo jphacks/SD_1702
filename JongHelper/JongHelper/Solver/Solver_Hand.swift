@@ -94,10 +94,16 @@ class Hand {
         for tenpai in tenpaiSet { // テンパイ形の候補の中でループ
             for mati in tenpai.getWait() {
                 let compMentu = CompMentu(tenpai: tenpai, tumo: mati, isOpenHand: false)
-                let calculator = Calculator(compMentu: compMentu ,generalSituation: genSituation, personalSituation: perSituation)
                 
+                var calculator = Calculator(compMentu: compMentu ,generalSituation: genSituation, personalSituation: perSituation)
                 let ronScore = calculator.calculateScore(addHan: 0)
-                let tumoScore = calculator.calculateScore(addHan: 1)
+                
+                
+                perSituation.isTsumo = true
+                calculator = Calculator(compMentu: compMentu ,generalSituation: genSituation, personalSituation: perSituation)
+                let tumoScore = calculator.calculateScore(addHan: 0)
+                
+                perSituation.isTsumo = false
                 
                 if result.count == 0 {
                     result.append(TenpaiData(sute: tenpai.suteTile, mati: [(mati, ronScore.score.ron, tumoScore.score.tumo)]))
