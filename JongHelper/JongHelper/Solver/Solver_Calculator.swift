@@ -104,8 +104,8 @@ class Calculator {
 //        }
         
         
-        let fu = calculateFu()
         let han = calculateHan() + addHan
+        let fu = calculateFu()
         
         print("役: ", terminator:"")
         for yaku in normalYakuList {
@@ -225,7 +225,7 @@ class Calculator {
     }
     
     func calculateFuByWait() -> Int {
-        if (compMentu.isTanki() || compMentu.isKanchan() || compMentu.isPenchan()) {
+        if ((compMentu.isTanki() || compMentu.isKanchan() || compMentu.isPenchan()) && !isPinhu()) {
             return 2
         }
         return 0

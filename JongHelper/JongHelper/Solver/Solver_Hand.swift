@@ -76,12 +76,13 @@ class Hand {
     // 点数, 役のタプルを返す関数
     func getScore(addHan: Int) -> (score: (ron: Int, tumo: Int), fu: Int, han:  Int, yakuList: [NormalYaku]) {
         // 点数 (点数，飜，符）と役のタプル
-        var result = (score: (ron: 0, tumo: 0), fu: 0, han: 0, yakuList: [NormalYaku]())
+        var result = (score: (ron: -1, tumo: -1), fu: -1, han: -1, yakuList: [NormalYaku]())
         
         for agari in agariSet {
             let calculator = Calculator(compMentu: agari, generalSituation: genSituation, personalSituation: perSituation)
             let calcScore = calculator.calculateScore(addHan: addHan)
-            if(result.score.ron < calcScore.score.ron) {
+
+            if result.score.ron <= calcScore.score.ron {
                 result.score = calcScore.score
                 result.fu = calcScore.fu
                 result.han = calcScore.han
