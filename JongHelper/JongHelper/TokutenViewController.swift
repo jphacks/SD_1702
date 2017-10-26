@@ -31,7 +31,7 @@ class TokutenViewController: UIViewController, UITableViewDelegate, UITableViewD
     var isReach = false
     var plushan = 0
     
-    var yakuList: [NormalYaku] = []
+    var yakuList: [Yaku] = []
     
     @IBAction func pushClose(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
@@ -90,7 +90,7 @@ class TokutenViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func calculate() {
-        let normalYakuList = [NormalYaku]()
+        let normalYakuList = [Yaku]()
         
         let gs = GeneralSituation(isHoutei: false, bakaze: bakazeTile, dora: doraTileArray, honba: 1)
         let ps = PersonalSituation(isTsumo: isTsumo, isIppatu: false, isReach: isReach, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: jikazeTile)

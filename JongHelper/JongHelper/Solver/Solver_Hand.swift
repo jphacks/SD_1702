@@ -74,9 +74,9 @@ class Hand {
     }
     
     // 点数, 役のタプルを返す関数
-    func getScore(addHan: Int) -> (score: (ron: Int, tumo: Int), fu: Int, han:  Int, yakuList: [NormalYaku]) {
+    func getScore(addHan: Int) -> (score: (ron: Int, tumo: Int), fu: Int, han:  Int, yakuList: [Yaku]) {
         // 点数 (点数，飜，符）と役のタプル
-        var result = (score: (ron: -1, tumo: -1), fu: -1, han: -1, yakuList: [NormalYaku]())
+        var result = (score: (ron: -1, tumo: -1), fu: -1, han: -1, yakuList: [Yaku]())
         
         for agari in agariSet {
             let calculator = Calculator(compMentu: agari, generalSituation: genSituation, personalSituation: perSituation)
@@ -86,7 +86,7 @@ class Hand {
                 result.score = calcScore.score
                 result.fu = calcScore.fu
                 result.han = calcScore.han
-                result.yakuList = calculator.normalYakuList
+                result.yakuList = calculator.yakuList
             }
         }
         
