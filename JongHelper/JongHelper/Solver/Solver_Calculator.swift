@@ -686,6 +686,9 @@ class Calculator {
     }
     
     func isJuntyan() -> Bool {
+        
+        if (isTitoitu()) { return false }
+        
         for syuntu in compMentu.syuntuList {
             let num = syuntu.identifierTile.getNumber()
             if (num != 2 && num != 8) {
