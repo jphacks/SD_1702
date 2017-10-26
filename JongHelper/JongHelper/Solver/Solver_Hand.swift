@@ -367,10 +367,10 @@ class Hand {
         mentuCandidate.append(contentsOf: serchSyuntuCandidate(start: 1, end: 26))
         
         let ukiNum = countRemainderTiles()
-        if (ukiNum < 2) {
+        if (ukiNum < 3) {
             let ukiList = getRemainderTiles()
-            var arr = ukiList
             for (i, elem) in ukiList.enumerated() {
+                var arr = ukiList
                 arr.remove(at: i)
                 let tenpai = Tenpai(mentuList: mentuCandidate, ukiList: arr, suteTile: ukiList[i])
                 if(tenpai.isTenpai) {
@@ -420,10 +420,10 @@ class Hand {
         mentuCandidate.append(contentsOf: serchKotuCandidate())
         
         let ukiNum = countRemainderTiles()
-        if (ukiNum < 2) {
+        if (ukiNum < 3) {
             let ukiList = getRemainderTiles()
-            var arr = ukiList
             for (i, elem) in ukiList.enumerated() {
+                var arr = ukiList
                 arr.remove(at: i)
                 let tenpai = Tenpai(mentuList: mentuCandidate, ukiList: arr, suteTile: ukiList[i])
                 
