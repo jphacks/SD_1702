@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UITableViewDelegate, UITableViewDataSource, UIPopoverPresentationControllerDelegate, HaiSelecterDelegate {
+class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UITableViewDelegate, UITableViewDataSource, UIPopoverPresentationControllerDelegate, HaiSelecterDelegate, SettingViewDelegate {
     
     @IBOutlet weak var imageView: UIImageView!
 
@@ -162,8 +162,12 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     }
     func pushSetting() {
         let storyboard = UIStoryboard(name: "SettingView", bundle: nil)
-        let settingViewController = storyboard.instantiateInitialViewController()
-        self.present(settingViewController!, animated: true, completion: nil)
+        let settingViewController = storyboard.instantiateInitialViewController() as! SettingViewController
+        settingViewController.delegate = self
+        settingViewController.bakazeTile = self.bakazeTile
+        settingViewController.jikazeTile = self.jikazeTile
+        settingViewController.doraTileArray = self.doraTileArray
+        self.present(settingViewController, animated: true, completion: nil)
 //        let nextView = storyboard.instantiateInitialViewController()
 //        nextView?.modalPresentationStyle = UIModalPresentationStyle.popover
 //        nextView?.preferredContentSize = CGSize(width: 300, height: 400)
@@ -176,6 +180,13 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
 //        popoverController?.sourceRect = tehaiView.bounds
 //
 //        self.present(nextView!, animated: true, completion: nil)
+    }
+    
+    func setSituation(jikaze: Tile, bakaze: Tile, dora: [Tile]) {
+        self.jikazeTile = jikaze
+        self.bakazeTile = bakaze
+        self.doraTileArray = dora
+        calculate()
     }
     
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
@@ -291,15 +302,11 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             }
             return cell
         }
-        
-        var celll : UITableViewCell!
-        return celll
+        return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if(tableView.tag == 0){
-            return 46
-        } else if(tableView.tag > 0 && tableView.tag < 99) {
+        if(tableView.tag > 0 && tableView.tag < 99) {
             return 45
         } else if (tableView.tag == 99) {
             return 120
