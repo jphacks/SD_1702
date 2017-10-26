@@ -127,15 +127,17 @@ class  CompMentu: Hashable {
     }
     
     func isRyanmen() -> Bool {
+        if isPenchan() {
+            return false
+        }
+        
         for syuntu in syuntuList {
             if (syuntu.identifierTile.getType() != tumo.getType()) {
                 continue
             }
             
             let number = syuntu.identifierTile.getNumber()
-            if number == 8 || number == 2 {
-                continue
-            }
+    
             if number - 1 == tumo.getNumber() || number + 1 == tumo.getNumber() {
                 return true
             }
@@ -143,6 +145,23 @@ class  CompMentu: Hashable {
         return false
     }
     
+    func isPenchan() -> Bool {
+        
+        for syuntu in syuntuList {
+            if (syuntu.identifierTile.getType() != tumo.getType()) {
+                continue
+            }
+            
+            var number = syuntu.identifierTile.getNumber()
+            if number == 8 && tumo.getNumber() == 7 {
+                return true
+            }
+            if number == 2 && tumo.getNumber() == 3 {
+                return true
+            }
+        }
+        return false
+    }
     
     func isKanchan() -> Bool {
         if isRyanmen() {
@@ -159,27 +178,6 @@ class  CompMentu: Hashable {
         }
         return false
     }
-    
-    func isPenchan() -> Bool {
-        if (isRyanmen()) {
-            return false
-        }
-        for syuntu in syuntuList {
-            if (syuntu.identifierTile.getType() != tumo.getType()) {
-                continue
-            }
-            
-            var number = syuntu.identifierTile.getNumber()
-            if number == 8 && tumo.getNumber() == 7 {
-                return true
-            }
-            if number == 2 && tumo.getNumber() == 3 {
-                return true
-            }
-        }
-        return false
-    }
-
     
     func hashCode() -> Int {
         var result = 0

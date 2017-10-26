@@ -21,6 +21,8 @@ class Hand {
     var agariSet = Set<CompMentu>()
     // チートイかどうか
     var isTitoitu = false
+    // 国士かどうか
+    var isKokusi = false
     // いま積もった牌 点数計算に必要
     var tumo = Tile.null
     
@@ -28,6 +30,8 @@ class Hand {
     // テンパイ時に返すものは，これを捨ててこれを引いたら，この点数で上がれるよ
     // テンパイしているかどうか
     var isTenpai = false
+    // 国士テンパイかどうか
+    var isKokusiTenpai = false
     // テンパイ形のセット tenpai: toituList, syuntuList, kotuList, uki, wait
     var tenpaiSet = Set<Tenpai>()
     
@@ -94,10 +98,16 @@ class Hand {
         for tenpai in tenpaiSet { // テンパイ形の候補の中でループ
             for mati in tenpai.getWait() {
                 let compMentu = CompMentu(tenpai: tenpai, tumo: mati, isOpenHand: false)
-                let calculator = Calculator(compMentu: compMentu ,generalSituation: genSituation, personalSituation: perSituation)
                 
+                var calculator = Calculator(compMentu: compMentu ,generalSituation: genSituation, personalSituation: perSituation)
                 let ronScore = calculator.calculateScore(addHan: 0)
-                let tumoScore = calculator.calculateScore(addHan: 1)
+                
+                
+                perSituation.isTsumo = true
+                calculator = Calculator(compMentu: compMentu ,generalSituation: genSituation, personalSituation: perSituation)
+                let tumoScore = calculator.calculateScore(addHan: 0)
+                
+                perSituation.isTsumo = false
                 
                 if result.count == 0 {
                     result.append(TenpaiData(sute: tenpai.suteTile, mati: [(mati, ronScore.score.ron, tumoScore.score.tumo)]))
@@ -141,13 +151,14 @@ class Hand {
     }
     
     func getCompMentuSet() {
-        
+    
+//        initTmp()
+//        judgeKokusi()
         
         initTmp()
-        
         //頭の候補を探してストック
         let toituList: [Toitu] = Toitu.findJantoCandidate(tiles: tmpTiles)
-        
+
         // 七対子に対する処理
         if (toituList.count == 7) {
             isAgari = true
@@ -420,6 +431,28 @@ class Hand {
                     isTenpai = true
                 }
             }
+        }
+    }
+    
+    func judgeKokusi() {
+        var kokusi = [1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+        var count = 0
+        for i in 0 ..< tmpTiles.count {
+            tmpTiles[i] -= kokusi[i]
+        }
+        
+        for i in 0 ..< tmpTiles.count {
+            tmpTiles[i] -= kokusi[i]
+            
+            if tmpTiles[i] == -1 {
+                count += 1
+            }
+        }
+        
+        if count == 0 {
+            isKokusi = true
+        } else if count == 1 {
+            isKokusiTenpai = false
         }
     }
 }

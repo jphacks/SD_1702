@@ -90,6 +90,16 @@ class Calculator {
     func calculateScore(addHan: Int) -> (score: (ron: Int, tumo: Int), fu: Int, han: Int){
         
         // 本当は役満を先に探さなければならないが，役満を未実装のため通常役のみみる
+//        let yakumanCount = calculateYakuman()
+//
+//        if yakumanCount > 0 {
+//            if personalSituation.isParent {
+//                return (score: (ron: 48000 * yakumanCount, tumo: 48000 * yakumanCount), 0, 0)
+//            } else {
+//                return (score: (ron: 32000 * yakumanCount, tumo: 32000 * yakumanCount), 0, 0)
+//            }
+//        }
+        
         
         let fu = calculateFu()
         let han = calculateHan() + addHan
@@ -148,6 +158,18 @@ class Calculator {
                 return (tmpscore, fu, han)
             }
         }
+    }
+    
+    func calculateYakuman() -> Int {
+        var yakumanCount = 0
+        for i in 0 ..< yakumanFuncList.count {
+            if(yakumanFuncList[i]()) {
+                yakumanList.append(Yakuman(rawValue: i)!)
+                yakumanCount += Yakuman(rawValue: i)!.isDoubleYakuman() ? 2 : 1
+            }
+        }
+        
+        return yakumanCount
     }
     
     
@@ -254,10 +276,13 @@ class Calculator {
         }
         return false
     }
+    
+    
     func isPinhu() -> Bool {
         if compMentu.getSyuntuCount() < 4 {
             return false
         }
+        
         let janto = compMentu.getJanto().identifierTile
         if janto.getType() == "SANGEN" {
             return false
@@ -342,6 +367,7 @@ class Calculator {
         }
         return false
     }
+    
     func isBakaze() -> Bool {
         for kotu in compMentu.kotuList {
             if (kotu.identifierTile == generalSituation.bakaze) {
@@ -536,7 +562,7 @@ class Calculator {
         return false
     }
     
-    // 先に役満の判定を行って仕舞えば，これだけですむ
+    // 面前手のみなのでトイトイはない
     func isToiToi() -> Bool {
         return compMentu.getKotuCount() == 4
     }
@@ -698,7 +724,7 @@ class Calculator {
         let allMentu = compMentu.getAllMentu()
         let type = allMentu[0].identifierTile.getType()
         
-        for mentu in allMentu {
+        for mentu in compMentu.getAllMentu() {
             if(type != mentu.identifierTile.getType()) {
                 return false
             }
@@ -708,43 +734,205 @@ class Calculator {
     }
     
     func isSuankou() -> Bool {
-        return false
+        return !compMentu.isTanki() && compMentu.getKotuCount() == 4
     }
     
     func isSuankouTanki() -> Bool {
-        return false
+        return compMentu.isTanki() && compMentu.getKotuCount() == 4
     }
     
     func isDaisangen() -> Bool {
+        var count = 0
+        for kotu in compMentu.kotuList {
+            if (kotu.identifierTile.getType() == "SANGEN") {
+                count += 1
+            }
+            if (count == 3) {
+                return true
+            }
+        }
         return false
     }
     
     func isTuiso() -> Bool {
-        return false
+        for mentu in compMentu.getAllMentu() {
+            if mentu.identifierTile.getNumber() != 0 {
+                return false
+            }
+        }
+        
+        return true
     }
     
     func isSusiHou() -> Bool {
+        if compMentu.getJanto().identifierTile.getType() != "FONPAI" {
+            return false
+        }
+        
+        var count = 0
+        for kotu in compMentu.kotuList {
+            if kotu.identifierTile.getType() == "FONPAI" {
+                count += 1
+            }
+        }
+        
+        if count == 3 {
+            return true
+        }
         return false
     }
     
     func isDaisusi() -> Bool {
+        for kotu in compMentu.kotuList {
+            if kotu.identifierTile.getType() != "FONPAI" {
+                return false
+            }
+        }
+        
         return false
     }
     
     func isRyuisou() -> Bool {
-        return false
+        
+        for syuntu in compMentu.syuntuList {
+            if syuntu.identifierTile.getCode() != 20 {
+                return false
+            }
+        }
+        
+        for kotu in compMentu.kotuList {
+            var tmp = kotu.identifierTile.getCode()
+            if tmp != 19 && tmp != 20 && tmp != 21 && tmp != 23 && tmp != 25 && tmp != 32{
+                return false
+            }
+        }
+        
+        for toitu in compMentu.toituList {
+            var tmp = toitu.identifierTile.getCode()
+            if tmp != 19 && tmp != 20 && tmp != 21 && tmp != 23 && tmp != 25 && tmp != 32{
+                return false
+            }
+        }
+        
+        return true
     }
     
     func isTyurenPoutou() -> Bool {
+        if !isTinitu() {
+            return false
+        }
+        
+        if isJunseiTyurenpoutou() {
+            return false
+        }
+        
+        let allMentu = compMentu.getAllMentu()
+        let type = allMentu[0].identifierTile.getType()
+        var hand = compMentu.mentuListToIntList()
+        var start = 0
+        var end = 8
+        
+        switch type {
+        case "MANZU": start = 0; end = 8
+        case "PINZU": start = 9; end = 17
+        case "SOHZU": start = 18; end = 26
+        default: return false
+        }
+        
+        if hand[start] >= 3  && hand[end] >= 3 {
+            hand[start] -= 3
+            hand[end] -= 3
+        } else {
+            return false
+        }
+        
+        for i in start + 1 ..< end {
+            if hand[i] >= 1 {
+                hand[start] -= 1
+            } else {
+                return false
+            }
+        }
+        
+        for i in start ... end {
+            if hand[i] == 1 {
+                return true
+            }
+        }
+        
         return false
     }
     
     func isJunseiTyurenpoutou() -> Bool {
+        if !isTinitu() {
+            return false
+        }
+        
+        if isJunseiTyurenpoutou() {
+            return false
+        }
+        
+        let allMentu = compMentu.getAllMentu()
+        let type = allMentu[0].identifierTile.getType()
+        var hand = compMentu.mentuListToIntList()
+        var start = 0
+        var end = 8
+        
+        switch type {
+        case "MANZU": start = 0; end = 8
+        case "PINZU": start = 9; end = 17
+        case "SOHZU": start = 18; end = 26
+        default: return false
+        }
+        
+        if hand[start] >= 3  && hand[end] >= 3 {
+            hand[start] -= 3
+            hand[end] -= 3
+        } else {
+            return false
+        }
+        
+        for i in start + 1 ..< end {
+            if hand[i] >= 1 {
+                hand[start] -= 1
+            } else {
+                return false
+            }
+        }
+        
+        for i in start ... end {
+            if hand[i] != 1 {
+                continue
+            }
+            
+            if (i == compMentu.tumo.getCode()) {
+                return true
+            } else {
+                return false
+            }
+        }
+        
         return false
     }
     
     func isTinroutou() -> Bool {
-        return false
+        
+        if compMentu.syuntuList.count > 0 {
+            return false
+        }
+        
+        var janto = compMentu.getJanto().identifierTile
+        if janto.getNumber() != 1 && janto.getNumber() != 9 {
+            return false
+        }
+        
+        for kotu in compMentu.kotuList {
+            if kotu.identifierTile.getNumber() != 1 && kotu.identifierTile.getNumber() != 9 {
+                return false
+            }
+        }
+        
+        return true
     }
     
     func isSukantu() -> Bool {
@@ -752,10 +940,64 @@ class Calculator {
     }
     
     func isKokusimusou() -> Bool {
-        return false
+        var kokusi = [1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+        
+        if isKokusimusou13() {
+            return false
+        }
+        
+        var count = 0
+        var hand = compMentu.mentuListToIntList()
+        
+        for i in 0 ..< hand.count {
+            hand[i] -= kokusi[i]
+            
+            if hand[i] == -1 {
+                return false
+            }
+            
+            if kokusi[i] == 0 && hand[i] > 0 {
+                return false
+            }
+        }
+        
+        return true
     }
     
     func isKokusimusou13() -> Bool {
+        var kokusi = [1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+        
+        if isKokusimusou13() {
+            return false
+        }
+        
+        var count = 0
+        var hand = compMentu.mentuListToIntList()
+        
+        for i in 0 ..< hand.count {
+            hand[i] -= kokusi[i]
+            
+            if hand[i] == -1 {
+                return false
+            }
+            
+            if kokusi[i] == 0 && hand[i] > 0 {
+                return false
+            }
+        }
+        
+        for i in 0 ..< hand.count {
+            if hand[i] != 1 {
+                continue
+            }
+            
+            if (i == compMentu.tumo.getCode()) {
+                return true
+            } else {
+                return false
+            }
+        }
+        
         return false
     }
     
