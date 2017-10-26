@@ -13,6 +13,8 @@
 		5A450A571FA053C400A63FB5 /* YakuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A450A551FA053C400A63FB5 /* YakuTableViewCell.swift */; };
 		5A450A581FA053C400A63FB5 /* YakuTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A450A561FA053C400A63FB5 /* YakuTableViewCell.xib */; };
 		5A450A5A1FA07E2B00A63FB5 /* AgariTapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A450A591FA07E2B00A63FB5 /* AgariTapGestureRecognizer.swift */; };
+		5A450A5C1FA191D500A63FB5 /* HaiSelecterView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A450A5B1FA191D500A63FB5 /* HaiSelecterView.storyboard */; };
+		5A450A5E1FA191E400A63FB5 /* HaiSelecterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A450A5D1FA191E400A63FB5 /* HaiSelecterViewController.swift */; };
 		5A46BE861F9AD40F008F1ACB /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A46BE851F9AD40F008F1ACB /* opencv2.framework */; };
 		5A46BE891F9AD48A008F1ACB /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A46BE881F9AD48A008F1ACB /* OpenCVWrapper.mm */; };
 		5A46BE8C1F9AD93D008F1ACB /* AVCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A46BE8B1F9AD93D008F1ACB /* AVCapture.swift */; };
@@ -58,6 +60,8 @@
 		5A450A551FA053C400A63FB5 /* YakuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YakuTableViewCell.swift; sourceTree = "<group>"; };
 		5A450A561FA053C400A63FB5 /* YakuTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = YakuTableViewCell.xib; sourceTree = "<group>"; };
 		5A450A591FA07E2B00A63FB5 /* AgariTapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgariTapGestureRecognizer.swift; sourceTree = "<group>"; };
+		5A450A5B1FA191D500A63FB5 /* HaiSelecterView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HaiSelecterView.storyboard; sourceTree = "<group>"; };
+		5A450A5D1FA191E400A63FB5 /* HaiSelecterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HaiSelecterViewController.swift; sourceTree = "<group>"; };
 		5A46BE851F9AD40F008F1ACB /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		5A46BE871F9AD48A008F1ACB /* JongHelper-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JongHelper-Bridging-Header.h"; sourceTree = "<group>"; };
 		5A46BE881F9AD48A008F1ACB /* OpenCVWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCVWrapper.mm; sourceTree = "<group>"; };
@@ -138,10 +142,13 @@
 				6B31C7731F9BE2B800B612D6 /* CoreMLHaiClassifier.mlmodel */,
 				5A46BE881F9AD48A008F1ACB /* OpenCVWrapper.mm */,
 				5AEEBAB81F98994D00E006F3 /* Info.plist */,
+				5A450A5B1FA191D500A63FB5 /* HaiSelecterView.storyboard */,
 				5A3A0D841F9F39E3007004CC /* SettingView.storyboard */,
 				5A3A0D801F9F2EA7007004CC /* TokutenView.storyboard */,
+				5A450A591FA07E2B00A63FB5 /* AgariTapGestureRecognizer.swift */,
 				5AEEBAAC1F98994D00E006F3 /* AppDelegate.swift */,
 				5A46BE8B1F9AD93D008F1ACB /* AVCapture.swift */,
+				5A450A5D1FA191E400A63FB5 /* HaiSelecterViewController.swift */,
 				5A46BEA11F9B13BB008F1ACB /* NotenView.swift */,
 				6B31C7751F9BE2FE00B612D6 /* Recognizer.swift */,
 				5A3A0D821F9F398E007004CC /* SettingViewController.swift */,
@@ -153,18 +160,17 @@
 				5A46BE991F9AE51B008F1ACB /* Tile.swift */,
 				5AA52CCF1F9C5101006107AB /* TokutenViewController.swift */,
 				5AEEBAAE1F98994D00E006F3 /* ViewController.swift */,
+				5A450A551FA053C400A63FB5 /* YakuTableViewCell.swift */,
 				5AEEBAB31F98994D00E006F3 /* Assets.xcassets */,
 				5A46BE9E1F9B139B008F1ACB /* NotenView.xib */,
 				5A46BE8F1F9AE1D0008F1ACB /* TehaiTableViewCell.xib */,
 				5A46BE901F9AE1D0008F1ACB /* TehaiView.xib */,
 				5AA52CC81F9C1D4F006107AB /* TenpaiTableViewCell.xib */,
 				5A46BEA51F9B1DB0008F1ACB /* TenpaiView.xib */,
+				5A450A561FA053C400A63FB5 /* YakuTableViewCell.xib */,
 				5AEEBAB51F98994D00E006F3 /* LaunchScreen.storyboard */,
 				5AEEBAB01F98994D00E006F3 /* Main.storyboard */,
 				9975A4151F9CFB7D00968D2F /* Solver */,
-				5A450A551FA053C400A63FB5 /* YakuTableViewCell.swift */,
-				5A450A561FA053C400A63FB5 /* YakuTableViewCell.xib */,
-				5A450A591FA07E2B00A63FB5 /* AgariTapGestureRecognizer.swift */,
 			);
 			path = JongHelper;
 			sourceTree = "<group>";
@@ -267,6 +273,7 @@
 				5AEEBAB71F98994D00E006F3 /* LaunchScreen.storyboard in Resources */,
 				5AEEBAB41F98994D00E006F3 /* Assets.xcassets in Resources */,
 				5A46BE911F9AE1D1008F1ACB /* TehaiTableViewCell.xib in Resources */,
+				5A450A5C1FA191D500A63FB5 /* HaiSelecterView.storyboard in Resources */,
 				5AEEBAB21F98994D00E006F3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -296,6 +303,7 @@
 				5AA52CBC1F9B51E1006107AB /* Solver_Yaku.swift in Sources */,
 				5A46BEA81F9B26AB008F1ACB /* TenpaiView.swift in Sources */,
 				5A46BE941F9AE1F0008F1ACB /* TehaiView.swift in Sources */,
+				5A450A5E1FA191E400A63FB5 /* HaiSelecterViewController.swift in Sources */,
 				5AA52CB91F9B51E1006107AB /* Solver_Mentsu.swift in Sources */,
 				5AA52CC91F9C1D4F006107AB /* TenpaiTableViewCell.swift in Sources */,
 				5AA52CBF1F9B51E1006107AB /* Solver_Hand.swift in Sources */,

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UITableViewDelegate, UITableViewDataSource, UIPopoverPresentationControllerDelegate, HaiSelecterDelegate {
     
     @IBOutlet weak var imageView: UIImageView!
 
@@ -51,6 +51,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         for tv in (tehaiView?.tableViews)! {
             tv.delegate = self
             tv.dataSource = self
+            tv.isScrollEnabled = false
             tv.register(UINib(nibName: "TehaiTableViewCell", bundle:nil), forCellReuseIdentifier:"TehaiCell")
         }
         /*for tv in (tehaiView?.tableViewDora)! {
@@ -160,8 +161,27 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         
     }
     func pushSetting() {
-        
+        let storyboard = UIStoryboard(name: "SettingView", bundle: nil)
+        let settingViewController = storyboard.instantiateInitialViewController()
+        self.present(settingViewController!, animated: true, completion: nil)
+//        let nextView = storyboard.instantiateInitialViewController()
+//        nextView?.modalPresentationStyle = UIModalPresentationStyle.popover
+//        nextView?.preferredContentSize = CGSize(width: 300, height: 400)
+//        let popoverController = nextView?.popoverPresentationController
+//        popoverController?.delegate = self
+//        // 出す向き(DownはsourceViewの上)
+//        popoverController?.permittedArrowDirections = UIPopoverArrowDirection.down
+//        // どこから出た感じにするか
+//        popoverController?.sourceView = tehaiView
+//        popoverController?.sourceRect = tehaiView.bounds
+//
+//        self.present(nextView!, animated: true, completion: nil)
     }
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return UIModalPresentationStyle.none
+    }
+    
     func pushCaptureClose() {
         switchView(isTenpai)
         isCaptureMode = false
@@ -269,12 +289,6 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
                 
                 
             }
-            
-//            for i in 0..<min(tenpaiDatas[indexPath.row].matiTiles.count, 3) {
-//                //cell.matiImageViews[i].image = Array(tenpaiDatas[indexPath.row].matiTiles)[i].toUIImage()
-//            }
-            
-            //cell.score.text = String(tenpaiDatas[indexPath.row].score)
             return cell
         }
         
@@ -333,7 +347,22 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if(tableView.tag == 99) {
+        if(tableView.tag >= 1 && tableView.tag <= 14){
+            let storyboard = UIStoryboard(name: "HaiSelecterView", bundle: nil)
+            let selecterView = storyboard.instantiateInitialViewController() as! HaiSelecterViewController
+            selecterView.delegate = self
+            selecterView.haiIndex = tableView.tag - 1
+            selecterView.modalPresentationStyle = UIModalPresentationStyle.popover
+            selecterView.preferredContentSize = CGSize(width: 393, height: 236)
+            let popoverController = selecterView.popoverPresentationController
+            popoverController?.delegate = self
+            // 出す向き(DownはsourceViewの上)
+            popoverController?.permittedArrowDirections = UIPopoverArrowDirection.down
+            // どこから出た感じにするか
+            popoverController?.sourceView = tableView
+            popoverController?.sourceRect = tableView.bounds
+            self.present(selecterView, animated: true, completion: nil)
+        } else if(tableView.tag == 99) {
             agariHaiIndex = indexPath.row
             tableView.deselectRow(at: indexPath, animated: true)
             performSegue(withIdentifier: "toTokutenView",sender: nil)
@@ -349,6 +378,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
 
         let agariSender = sender as! AgariTapGestureRecognizer
         vc.matiTile = tenpaiDatas[agariSender.row!].matiTiles[agariSender.index!].tile
+        //print("まちはこれ！：\(tenpaiDatas[agariSender.row!].matiTiles[agariSender.index!].tile)")
         vc.suteTile = tenpaiDatas[agariSender.row!].suteTile
     }
     
@@ -359,6 +389,12 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         //print("タップ\(sender.row),\(sender.index)")
         performSegue(withIdentifier: "toTokutenView",sender: sender)
         
+    }
+    
+    func selectedHai(index: Int, tile: Tile) {
+        tehaiTileArray[index] = tile
+        setTehaiView(tehaiTileArray, animated: true)
+        calculate()
     }
     
     func indexPathToTileArray(_ indexPaths: [IndexPath]) -> [Tile] {
@@ -442,7 +478,6 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             suteArr = Set(tmpSyanten.gomi)
         }
         
-        print("まち：\(matiArr.count) すて：\(suteArr.count)")
         if(hand.invalidHand){
             notenView.syantenLabel.text = "手牌が不正です"
             switchView(false)
