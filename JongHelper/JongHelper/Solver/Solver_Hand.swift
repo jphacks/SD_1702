@@ -35,7 +35,8 @@ class Hand {
     var genSituation = GeneralSituation()
     var perSituation = PersonalSituation()
     
-    
+    // ----- ノーテン状態に関するプロパティ -----
+    var syantenNum = 99
     
     // 不正な手かどうか
     var invalidHand = false
@@ -68,51 +69,64 @@ class Hand {
     }
     
     // 点数, 役のタプルを返す関数
-    func getScore() -> (Int, Int, Int, [NormalYaku]) {
+    func getScore(addHan: Int) -> (score: (ron: Int, tumo: Int), fu: Int, han:  Int, yakuList: [NormalYaku]) {
         // 点数 (点数，飜，符）と役のタプル
-        var score = (0, 0, 0, [NormalYaku]())
+        var result = (score: (ron: 0, tumo: 0), fu: 0, han: 0, yakuList: [NormalYaku]())
         
         for agari in agariSet {
             let calculator = Calculator(compMentu: agari, generalSituation: genSituation, personalSituation: perSituation)
-            if(score.0 < calculator.score) {
-                score.0 = calculator.score
-                score.1 = calculator.han
-                score.2 = calculator.fu
-                score.3 = calculator.normalYakuList
+            let calcScore = calculator.calculateScore(addHan: addHan)
+            if(result.score.ron < calcScore.score.ron) {
+                result.score = calcScore.score
+                result.fu = calcScore.fu
+                result.han = calcScore.han
+                result.yakuList = calculator.normalYakuList
             }
         }
         
-        return score
+        return result
     }
-
+    
     // テンパイ時に，これを捨ててこれを引いたら，この点数で上がれるよ　を返す
     func getTenpaiData() -> [TenpaiData] {
         var result = [TenpaiData]()
         
-        for tenpai in tenpaiSet {
+        for tenpai in tenpaiSet { // テンパイ形の候補の中でループ
             for mati in tenpai.getWait() {
-                var suteTile = tenpai.suteTile
                 let compMentu = CompMentu(tenpai: tenpai, tumo: mati, isOpenHand: false)
                 let calculator = Calculator(compMentu: compMentu ,generalSituation: genSituation, personalSituation: perSituation)
                 
-                let score = calculator.score
+                let ronScore = calculator.calculateScore(addHan: 0)
+                let tumoScore = calculator.calculateScore(addHan: 1)
                 
-                
-                let matiTiles:Set<Tile> = [mati]
                 if result.count == 0 {
-                    result.append(TenpaiData(sute: tenpai.suteTile, mati: matiTiles, score: score))
+                    result.append(TenpaiData(sute: tenpai.suteTile, mati: [(mati, ronScore.score.ron, tumoScore.score.tumo)]))
                 } else {
-                    var flag = true
+                    var flag1 = true
                     
-                    for elem in result {
-                        if elem.suteTile == tenpai.suteTile && elem.score == score {
-                            elem.matiTiles.insert(mati)
-                            flag = false
+                    for (i, elem) in result.enumerated() {
+                        if elem.suteTile == tenpai.suteTile {
+                            var flag2 = true
+                            
+                            for (j, matiTile) in elem.matiTiles.enumerated() {
+                                if matiTile.tile == mati {
+                                    if matiTile.ron < ronScore.score.ron {
+                                        result[i].matiTiles[j] = (mati, ronScore.score.ron, tumoScore.score.tumo)
+                                    }
+                                    flag2 = false
+                                    break
+                                }
+                            }
+                            
+                            if flag2 {
+                                result[i].matiTiles.append((mati, ronScore.score.ron, tumoScore.score.tumo))
+                            }
+                            flag1 = false
                         }
                     }
                     
-                    if flag {
-                        result.append(TenpaiData(sute: tenpai.suteTile, mati: matiTiles, score: score))
+                    if flag1 {
+                        result.append(TenpaiData(sute: tenpai.suteTile, mati: [(mati, ronScore.score.ron, tumoScore.score.tumo)]))
                     }
                 }
             }
@@ -121,17 +135,6 @@ class Hand {
         return result
     }
     
-    
-    // 鳴いている場合はその面子をリストで入力
-    /*init(inputtedTiles: [Tile], mentuList: [Mentu]) {
-        isOpenHand = true
-        for tile in inputtedTiles {
-            self.inputtedTiles[tile.getCode()] += 1
-        }
-        inputtedMentuList = mentuList
-        getCompMentuSet()
-    }*/
-
     // 作業用配列の初期化用関数
     func initTmp() {
         tmpTiles = inputtedTiles
@@ -148,12 +151,34 @@ class Hand {
         // 七対子に対する処理
         if (toituList.count == 7) {
             isAgari = true
-            var titoi = [Toitu]()
-            titoi.append(contentsOf: toituList)
+            isTitoitu = true
+            
+            let compMentu = CompMentu(mentuList: toituList, tumo: tumo, isOpenHand: false)
+            agariSet.insert(compMentu)
             // 上がりの形に追加
         } else if (toituList.count == 6) {
-            isTenpai = true
-            // テンパイ形に追加
+            initTmp()
+            var ukiTile1: Tile! = nil
+            var ukiTile2: Tile! = nil
+            
+            for index in 0 ..< tmpTiles.count{
+                if tmpTiles[index] == 1 {
+                    isTenpai = true
+                    // テンパイ形に追加
+                    if ukiTile1 == nil {
+                        ukiTile1 = Tile(rawValue: index)
+                    } else {
+                        ukiTile2 = Tile(rawValue: index)
+                    }
+                }
+            }
+            
+            if ukiTile1 != nil && ukiTile2 != nil {
+                var tenpai = Tenpai(mentuList: toituList, ukiList: [ukiTile1], suteTile: ukiTile2)
+                tenpaiSet.insert(tenpai)
+                tenpai = Tenpai(mentuList: toituList, ukiList: [ukiTile2], suteTile: ukiTile1)
+                tenpaiSet.insert(tenpai)
+            }
         }
         
         // 副露している場合は副露している面子をあらかじめ追加しておく
@@ -176,6 +201,8 @@ class Hand {
         // 頭なしのメンツ探索
         searchPriorityKotu()
         searchPrioritySyuntu()
+        
+        
         
         //多面チャンを探していく (浮き牌の数によって余りを何個許容するか変わることに注意)
         for tenpai in tenpaiSet {

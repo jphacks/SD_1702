@@ -8,18 +8,16 @@
 
 import UIKit
 
-class TokutenViewController: UIViewController {
+class TokutenViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet var tileImage: [UIImageView]!
     @IBOutlet var doraImage: [UIImageView]!
     @IBOutlet weak var jikazemage: UIImageView!
     @IBOutlet weak var bakazemage: UIImageView!
-    @IBOutlet weak var tumoSW: UISwitch!
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var hanLabel: UILabel!
-    @IBOutlet weak var hanStepper: UIStepper!
-    @IBOutlet weak var yakuTV: UITextView!
-    @IBOutlet weak var huLabel: UILabel!
-    @IBOutlet weak var tenLabel: UILabel!
+    @IBOutlet weak var plusHanLabel: UILabel!
+    @IBOutlet weak var scoreLabel: UILabel!
     
      var tehaiTileArray: [Tile] = []
      var doraTileArray: [Tile] = [Tile.m1, Tile.null, Tile.null, Tile.null]
@@ -30,21 +28,39 @@ class TokutenViewController: UIViewController {
     var matiTile: Tile!
     
     var isTsumo = false
+    var isReach = false
     var plushan = 0
+    
+    var yakuList: [NormalYaku] = []
     
     @IBAction func pushClose(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func stepperValueChanged(_ sender: UIStepper) {
-        plushan = Int(sender.value)
+    @IBAction func switchTumo(_ sender: UISegmentedControl) {
+        isTsumo = sender.selectedSegmentIndex == 1
         calculate()
     }
     
-    @IBAction func toggleSwitch(_ sender: UISwitch) {
-        isTsumo = sender.isOn
+    @IBAction func switchReach(_ sender: UISegmentedControl) {
+        isReach = sender.selectedSegmentIndex == 1
         calculate()
     }
+    
+    @IBAction func pushMinus(_ sender: UIButton) {
+        if(plushan > 0) {
+            plushan -= 1
+        }
+        plusHanLabel.text = String(plushan) + "飜"
+        calculate()
+    }
+    
+    @IBAction func pushPlus(_ sender: UIButton) {
+        plushan += 1
+        plusHanLabel.text = String(plushan) + "飜"
+        calculate()
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,27 +81,60 @@ class TokutenViewController: UIViewController {
         }
         jikazemage.image = jikazeTile.toUIImage()
         bakazemage.image = bakazeTile.toUIImage()
+        
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.register(UINib(nibName: "YakuTableViewCell", bundle:nil), forCellReuseIdentifier:"YakuTableViewCell")
+        
         calculate()
     }
     
     func calculate() {
-        var normalYakuList = [NormalYaku]()
+        let normalYakuList = [NormalYaku]()
         
-        var gs = GeneralSituation(isHoutei: false, bakaze: bakazeTile, dora: doraTileArray, honba: 1)
-        var ps = PersonalSituation(isTsumo: isTsumo, isIppatu: false, isReach: false, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: jikazeTile)
+        let gs = GeneralSituation(isHoutei: false, bakaze: bakazeTile, dora: doraTileArray, honba: 1)
+        let ps = PersonalSituation(isTsumo: isTsumo, isIppatu: false, isReach: isReach, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: jikazeTile)
     
 
-        var hand = Hand(inputtedTiles: tehaiTileArray, tumo: matiTile, genSituation:gs, perSituation: ps)
-        var score = hand.getScore()
+        let hand = Hand(inputtedTiles: tehaiTileArray, tumo: matiTile, genSituation:gs, perSituation: ps)
+        let score = hand.getScore(addHan: plushan)
         
         var str = ""
         for s in score.3 {
             str += s.getName()
         }
-        yakuTV.text = str
-        huLabel.text = "\(score.1)飜\(score.2)符"
-        tenLabel.text = "\(score.0)点"
+        yakuList = score.yakuList
+        //yakuTV.text = str
+        hanLabel.text = "\(score.2)飜\(score.1)符"
+        if(isTsumo){
+            scoreLabel.text = "\(score.0.tumo)点"
+        } else {
+            scoreLabel.text = "\(score.0.ron)点"
+        }
         
+        //huLabel.text = "\(score.1)飜\(score.2)符"
+        //tenLabel.text = "\(score.0)点"
         
+        self.tableView.reloadData()
     }
+    
+    //tableview===============================================================
+    // tag: 0->役リスト 1~14->手牌 20->場風 21->自風 31~34->ドラ
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return yakuList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "YakuTableViewCell", for:indexPath) as! YakuTableViewCell
+        cell.yakuLabel.text = yakuList[indexPath.row].getName()
+        cell.hanLabel.text = String(yakuList[indexPath.row].getHan())
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 44
+    }
+    //tableview===============================================================
+    
 }

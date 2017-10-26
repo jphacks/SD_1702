@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UITableViewDelegate, UITableViewDataSource, UIPopoverPresentationControllerDelegate, HaiSelecterDelegate, SettingViewDelegate {
     
     @IBOutlet weak var imageView: UIImageView!
 
@@ -37,23 +37,24 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     
     var agariHaiIndex: Int!
     
+    var isCaptureMode = true
+    
+    var isTenpai = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         avCapture.delegate = self
         
-        //ノーテン時のビュー
-        notenView = UINib(nibName: "NotenView", bundle: nil).instantiate(withOwner: self, options: nil).first as? NotenView
-        addSubviewWithAutoLayoutTop(childView: notenView!, parentView: self.view)
-
         //手牌ビューのレイヤー追加
         tehaiView = UINib(nibName: "TehaiView", bundle: nil).instantiate(withOwner: self, options: nil).first as? TehaiView
         for tv in (tehaiView?.tableViews)! {
             tv.delegate = self
             tv.dataSource = self
+            tv.isScrollEnabled = false
             tv.register(UINib(nibName: "TehaiTableViewCell", bundle:nil), forCellReuseIdentifier:"TehaiCell")
         }
-        for tv in (tehaiView?.tableViewDora)! {
+        /*for tv in (tehaiView?.tableViewDora)! {
             tv.delegate = self
             tv.dataSource = self
             tv.register(UINib(nibName: "TehaiTableViewCell", bundle:nil), forCellReuseIdentifier:"TehaiCell")
@@ -64,6 +65,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         tehaiView.tableViewBakaze.delegate = self
         tehaiView.tableViewBakaze.dataSource = self
         tehaiView.tableViewBakaze.register(UINib(nibName: "TehaiTableViewCell", bundle:nil), forCellReuseIdentifier:"TehaiCell")
+         */
         
         //tehaiView.frame = CGRect(x:0,y:0,width:self.view.frame.size.width, height: 150.0)
         addSubviewWithAutoLayout(childView: tehaiView!, parentView: self.view)
@@ -72,15 +74,25 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         
         setTehaiView(tehaiTileArray, animated: false)
         
+        
         //テンパイ時のビュー
         tenpaiView = UINib(nibName: "TenpaiView", bundle: nil).instantiate(withOwner: self, options: nil).first as? TenpaiView
-        tenpaiView.frame = CGRect(x:0,y:0,width:self.view.frame.size.width, height: 150.0)
+        tenpaiView.frame = CGRect(x:0,y:0,width:self.view.frame.size.width, height: self.view.frame.height - 120.0)
         addSubviewWithAutoLayoutTop(childView: tenpaiView!, parentView: self.view)
         tenpaiView.tableView.delegate = self
         tenpaiView.tableView.dataSource = self
+        tenpaiView.tableView.allowsSelection = false
         tenpaiView.tableView.register(UINib(nibName: "TenpaiTableViewCell", bundle:nil), forCellReuseIdentifier:"TenpaiViewCell")
-
-        switchView(false)
+        
+        
+        //ノーテン時のビュー
+        notenView = UINib(nibName: "NotenView", bundle: nil).instantiate(withOwner: self, options: nil).first as? NotenView
+        notenView.frame = CGRect(x:0,y:0,width:self.view.frame.size.width, height: self.view.frame.height - 120.0)
+        addSubviewWithAutoLayoutTop(childView: notenView!, parentView: self.view)
+        
+        calculate()
+        tenpaiView.isHidden = true
+        notenView.isHidden = true
     }
     
     override func viewDidLayoutSubviews() {
@@ -89,6 +101,10 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     }
     
     func switchView(_ b: Bool) {
+        if(isCaptureMode) {
+            isCaptureMode = false
+            //avCapture.stopRunning()
+        }
         if(b){
             notenView.isHidden = true
             tenpaiView.isHidden = false
@@ -123,13 +139,64 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             let arr2 = intArrToTile(arr)
             tehaiTileArray = arr2
             setTehaiView(arr2, animated: true)
-            self.calculate(fromTalbe: false)
+            self.calculate()
         }
         
     }
     // TehaiViewDelegate
     func pushCapture() {
-        avCapture.takePicture()
+        if (isCaptureMode) {
+            avCapture.takePicture()
+            isCaptureMode = false
+            //avCapture.stopRunning()
+            //ビューをノーマルモードへ
+            
+        } else {
+            isCaptureMode = true
+            //avCapture.startRunning()
+            //ビューをカメラモードへ
+            tenpaiView.isHidden = true
+            notenView.isHidden = true
+        }
+        
+    }
+    func pushSetting() {
+        let storyboard = UIStoryboard(name: "SettingView", bundle: nil)
+        let settingViewController = storyboard.instantiateInitialViewController() as! SettingViewController
+        settingViewController.delegate = self
+        settingViewController.bakazeTile = self.bakazeTile
+        settingViewController.jikazeTile = self.jikazeTile
+        settingViewController.doraTileArray = self.doraTileArray
+        self.present(settingViewController, animated: true, completion: nil)
+//        let nextView = storyboard.instantiateInitialViewController()
+//        nextView?.modalPresentationStyle = UIModalPresentationStyle.popover
+//        nextView?.preferredContentSize = CGSize(width: 300, height: 400)
+//        let popoverController = nextView?.popoverPresentationController
+//        popoverController?.delegate = self
+//        // 出す向き(DownはsourceViewの上)
+//        popoverController?.permittedArrowDirections = UIPopoverArrowDirection.down
+//        // どこから出た感じにするか
+//        popoverController?.sourceView = tehaiView
+//        popoverController?.sourceRect = tehaiView.bounds
+//
+//        self.present(nextView!, animated: true, completion: nil)
+    }
+    
+    func setSituation(jikaze: Tile, bakaze: Tile, dora: [Tile]) {
+        self.jikazeTile = jikaze
+        self.bakazeTile = bakaze
+        self.doraTileArray = dora
+        calculate()
+    }
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return UIModalPresentationStyle.none
+    }
+    
+    func pushCaptureClose() {
+        switchView(isTenpai)
+        isCaptureMode = false
+        //avCapture.stopRunning()
     }
 
     override func didReceiveMemoryWarning() {
@@ -155,8 +222,6 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         parentView.addConstraint(NSLayoutConstraint(item: childView, attribute: .left, relatedBy: .equal, toItem: parentView, attribute: .left, multiplier: 1.0, constant: 0))
         
     }
-    
-    
     
     //tableview===============================================================
     // tag: 0->役リスト 1~14->手牌 20->場風 21->自風 31~34->ドラ
@@ -211,24 +276,40 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         } else if(tableView.tag == 99) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "TenpaiViewCell", for:indexPath) as! TenpaiTableViewCell
             cell.suteImageView.image = tenpaiDatas[indexPath.row].suteTile.toUIImage()
-            for i in 0..<min(tenpaiDatas[indexPath.row].matiTiles.count, 3) {
-                cell.matiImageViews[i].image = Array(tenpaiDatas[indexPath.row].matiTiles)[i].toUIImage()
+            
+            for i in 0..<cell.matiImageViews.count {
+                cell.matiImageViews[i].isHidden = true
+                cell.tumoScores[i].isHidden = true
+                cell.ronScores[i].isHidden = true
             }
-            cell.score.text = String(tenpaiDatas[indexPath.row].score)
+            
+            for (k, elem) in tenpaiDatas[indexPath.row].matiTiles.enumerated() {
+                cell.matiImageViews[k].image = elem.tile.toUIImage()
+                cell.tumoScores[k].text = String(elem.tumo)
+                cell.ronScores[k].text = String(elem.ron)
+                cell.matiImageViews[k].isHidden = false
+                cell.tumoScores[k].isHidden = false
+                cell.ronScores[k].isHidden = false
+                
+                //imageViewをボタン化
+                cell.matiImageViews[k].isUserInteractionEnabled = true
+                let gesture = AgariTapGestureRecognizer(target: self, action: #selector(ViewController.matiImageViewTapped(_:)))
+                gesture.row = indexPath.row
+                gesture.index = k
+                cell.matiImageViews[k].addGestureRecognizer(gesture)
+                
+                
+            }
             return cell
         }
-        
-        var celll : UITableViewCell!
-        return celll
+        return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if(tableView.tag == 0){
-            return 46
-        } else if(tableView.tag > 0 && tableView.tag < 99) {
+        if(tableView.tag > 0 && tableView.tag < 99) {
             return 45
         } else if (tableView.tag == 99) {
-            return 80
+            return 120
         }
         return 1
     }
@@ -240,7 +321,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if ((scrollView as! UITableView).tag != 99) {
             stopTehaiCell(scrollView)
-            self.calculate(fromTalbe: true)
+            self.calculate()
         }
     }
     
@@ -273,7 +354,22 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if(tableView.tag == 99) {
+        if(tableView.tag >= 1 && tableView.tag <= 14){
+            let storyboard = UIStoryboard(name: "HaiSelecterView", bundle: nil)
+            let selecterView = storyboard.instantiateInitialViewController() as! HaiSelecterViewController
+            selecterView.delegate = self
+            selecterView.haiIndex = tableView.tag - 1
+            selecterView.modalPresentationStyle = UIModalPresentationStyle.popover
+            selecterView.preferredContentSize = CGSize(width: 393, height: 236)
+            let popoverController = selecterView.popoverPresentationController
+            popoverController?.delegate = self
+            // 出す向き(DownはsourceViewの上)
+            popoverController?.permittedArrowDirections = UIPopoverArrowDirection.down
+            // どこから出た感じにするか
+            popoverController?.sourceView = tableView
+            popoverController?.sourceRect = tableView.bounds
+            self.present(selecterView, animated: true, completion: nil)
+        } else if(tableView.tag == 99) {
             agariHaiIndex = indexPath.row
             tableView.deselectRow(at: indexPath, animated: true)
             performSegue(withIdentifier: "toTokutenView",sender: nil)
@@ -286,11 +382,27 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         vc.doraTileArray = self.doraTileArray
         vc.bakazeTile = self.bakazeTile
         vc.jikazeTile = self.jikazeTile
-        vc.matiTile = Array(tenpaiDatas[agariHaiIndex].matiTiles)[0]
-        vc.suteTile = tenpaiDatas[agariHaiIndex].suteTile
+
+        let agariSender = sender as! AgariTapGestureRecognizer
+        vc.matiTile = tenpaiDatas[agariSender.row!].matiTiles[agariSender.index!].tile
+        //print("まちはこれ！：\(tenpaiDatas[agariSender.row!].matiTiles[agariSender.index!].tile)")
+        vc.suteTile = tenpaiDatas[agariSender.row!].suteTile
     }
     
     //tableview===============================================================
+    
+    // 画像がタップされたら呼ばれる
+    @objc func matiImageViewTapped(_ sender: AgariTapGestureRecognizer) {
+        //print("タップ\(sender.row),\(sender.index)")
+        performSegue(withIdentifier: "toTokutenView",sender: sender)
+        
+    }
+    
+    func selectedHai(index: Int, tile: Tile) {
+        tehaiTileArray[index] = tile
+        setTehaiView(tehaiTileArray, animated: true)
+        calculate()
+    }
     
     func indexPathToTileArray(_ indexPaths: [IndexPath]) -> [Tile] {
         var tiles: [Tile] = []
@@ -338,38 +450,8 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         }
         return tehaiList
     }
-    
-    func mergeTenpaiDatas() {
-        print("mergeTenpaiDatas")
-        var arr: [TenpaiData] = []
-        for elem in tenpaiDatas {
-            if(arr.count != 0){
-                var flag = true
-                for elem2 in arr {
-                    if(compTenpaiData(data1: elem, data2: elem2)) {
-                        flag = false
-                        break
-                    }
-                }
-                if (flag) {
-                    arr.append(elem)
-                }
-            } else {
-                arr.append(elem)
-            }
-        }
-        tenpaiDatas = arr
-    }
-    
-    func compTenpaiData(data1: TenpaiData, data2: TenpaiData) -> Bool {
-        let sameSuteTile = data1.suteTile == data2.suteTile
-        let sameScore = data1.score == data2.score
-        let sameMatiTile = Array(data1.matiTiles)[0] == Array(data2.matiTiles)[0]
-        let result = sameSuteTile && sameScore && sameMatiTile
-        return ( result )
-    }
-    
-    func calculate(fromTalbe: Bool) {
+
+    func calculate() {
         //ドラのリスト作る
         var dora: [Tile] = []
         var isFirst = true
@@ -397,27 +479,22 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         tenpaiDatas = hand.getTenpaiData()
         
         if !hand.isTenpai {
-            for i in 0 ..< 14 {
-                var arr = tehaiTileArray
-                arr.remove(at: i)
-                
-                let syanten = Syanten(hand: arr)
-                let tmpSyanten = syanten.getNormalSyantenNum()
-                if (minSyanten > tmpSyanten.0) {
-                    minSyanten = tmpSyanten.0
-                    suteArr = Set(tmpSyanten.1)
-                }
-            }
+            let syanten = Syanten(hand: tehaiTileArray)
+            let tmpSyanten = syanten.getNormalSyantenNum()
+            minSyanten = tmpSyanten.syanten_normal
+            suteArr = Set(tmpSyanten.gomi)
         }
         
-        print("まち：\(matiArr.count) すて：\(suteArr.count)")
         if(hand.invalidHand){
             notenView.syantenLabel.text = "手牌が不正です"
             switchView(false)
+            self.isTenpai = false
         } else {
             if(hand.isTenpai) {
+                self.isTenpai = true
                 tenpaiView.tableView.reloadData()
             } else {
+                self.isTenpai = false
                 for (k, elem) in suteArr.enumerated() {
                     if(k < 3) {
                         notenView.haiImage[k].image = elem.toUIImage()
