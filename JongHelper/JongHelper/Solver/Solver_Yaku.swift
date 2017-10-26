@@ -22,7 +22,7 @@ enum NormalYaku: Int {
     case Rinsyan
     case Tyankan
     case Haitei
-    case Houtei
+    case Houtei //14
     // 2han
     case DoubleReach
     case Tyanta
@@ -34,7 +34,7 @@ enum NormalYaku: Int {
     case Sanankou
     case Sankantu
     case Syousangen
-    case Titoitu
+    case Titoitu //25
     // 3han
     case Ryanpeikou
     case Juntyan
@@ -42,7 +42,7 @@ enum NormalYaku: Int {
     // 6han
     case Tinitu
     // Dora
-    case Dora
+    case Dora //30
     
     func getHan() -> Int {
         switch self {
@@ -72,7 +72,7 @@ enum NormalYaku: Int {
         case .Hatu: return "發"
         case .Tyun: return "中"
         case .Jikaze: return"門風牌"
-        case .Bakaze: return "門風牌"
+        case .Bakaze: return "荘風牌"
         case .Rinsyan: return "嶺上開花"
         case .Tyankan: return "槍槓"
         case .Haitei: return "海底撈月"
