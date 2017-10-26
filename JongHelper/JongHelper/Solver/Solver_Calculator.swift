@@ -16,7 +16,7 @@ class Calculator {
     
     // 役満を判定するための関数テーブル
     var yakumanFuncList:[() -> Bool] {
-        return[isSuankou, isSuankouTanki,  isDaisangen, isTuiso,  isSusiHou, isDaisusi, isRyuisou, isTyurenPoutou,  isJunseiTyurenpoutou, isTinroutou, isSukantu, isKokusimusou, isKokusimusou13, isTenhou, isTihou]
+        return[isSuankou, isSuankouTanki,  isDaisangen, isTuiso,  isSyoususi, isDaisusi, isRyuisou, isTyurenPoutou,  isJunseiTyurenpoutou, isTinroutou, isSukantu, isKokusimusou, isKokusimusou13, isTenhou, isTihou]
     }
     
     /*var scoreTableParent = [
@@ -207,7 +207,7 @@ class Calculator {
         if (janto == personalSituation.jikaze) {
             tmp += 2
         }
-        if (janto.getType() == "SANGEN") {
+        if (janto.getType() == "SANGENPAI") {
             tmp += 2
         }
         return tmp
@@ -286,7 +286,7 @@ class Calculator {
         }
         
         let janto = compMentu.getJanto().identifierTile
-        if janto.getType() == "SANGEN" || janto == personalSituation.jikaze || janto == generalSituation.bakaze {
+        if janto.getType() == "SANGENPAI" || janto == personalSituation.jikaze || janto == generalSituation.bakaze {
             return false
         }
         
@@ -643,13 +643,13 @@ class Calculator {
     }
     
     func isSyousangen() -> Bool {
-        if (compMentu.getJanto().identifierTile.getType() != "SANGEN") {
+        if (compMentu.getJanto().identifierTile.getType() != "SANGENPAI") {
             return false;
         }
         
         var count = 0
         for kotu in compMentu.kotuList {
-            if (kotu.identifierTile.getType() == "SANGEN") {
+            if (kotu.identifierTile.getType() == "SANGENPAI") {
                 count += 1
             }
             if (count == 2) {
@@ -749,7 +749,7 @@ class Calculator {
     func isDaisangen() -> Bool {
         var count = 0
         for kotu in compMentu.kotuList {
-            if (kotu.identifierTile.getType() == "SANGEN") {
+            if (kotu.identifierTile.getType() == "SANGENPAI") {
                 count += 1
             }
             if (count == 3) {
@@ -769,7 +769,7 @@ class Calculator {
         return true
     }
     
-    func isSusiHou() -> Bool {
+    func isSyoususi() -> Bool {
         if compMentu.getJanto().identifierTile.getType() != "FONPAI" {
             return false
         }
@@ -788,13 +788,17 @@ class Calculator {
     }
     
     func isDaisusi() -> Bool {
+        if compMentu.getSyuntuCount() > 0 {
+            return false
+        }
+        
         for kotu in compMentu.kotuList {
             if kotu.identifierTile.getType() != "FONPAI" {
                 return false
             }
         }
         
-        return false
+        return true
     }
     
     func isRyuisou() -> Bool {
@@ -853,14 +857,14 @@ class Calculator {
         
         for i in start + 1 ..< end {
             if hand[i] >= 1 {
-                hand[start] -= 1
+                hand[i] -= 1
             } else {
                 return false
             }
         }
         
         for i in start ... end {
-            if hand[i] == 1 {
+            if hand[i] > 0 {
                 return true
             }
         }
@@ -870,10 +874,6 @@ class Calculator {
     
     func isJunseiTyurenpoutou() -> Bool {
         if !isTinitu() {
-            return false
-        }
-        
-        if isJunseiTyurenpoutou() {
             return false
         }
         
@@ -899,14 +899,14 @@ class Calculator {
         
         for i in start + 1 ..< end {
             if hand[i] >= 1 {
-                hand[start] -= 1
+                hand[i] -= 1
             } else {
                 return false
             }
         }
         
         for i in start ... end {
-            if hand[i] != 1 {
+            if hand[i] > 0 {
                 continue
             }
             

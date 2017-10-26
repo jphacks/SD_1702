@@ -30,7 +30,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     var jikazeTile = Tile.Ton
     //let initTehaiArray: [Tile] = Array(repeating: Tile.p7, count: 14)
     //let initTehaiArray: [Tile] = [Tile.m2,Tile.m3,Tile.m4,Tile.m2,Tile.m3,Tile.m4,Tile.p2,Tile.p3,Tile.p4,Tile.s3,Tile.s4,Tile.m7,Tile.m7,Tile.Haku]
-    var tehaiTileArray = [Tile.Haku,Tile.Haku,Tile.Haku,Tile.Hatu,Tile.Hatu,Tile.Hatu,Tile.Tyun,Tile.Tyun,Tile.Tyun,Tile.Ton,Tile.Ton,Tile.Ton,Tile.Sya,Tile.Sya]
+    var tehaiTileArray = [Tile.m1,Tile.m1,Tile.m1,Tile.m2,Tile.m3,Tile.m4,Tile.m5,Tile.m6,Tile.m7,Tile.m8,Tile.m9,Tile.m9,Tile.m9,Tile.Sya]
     //[Tile.p2,Tile.p3,Tile.p3,Tile.p3,Tile.p5,Tile.p6,Tile.p6,Tile.p7,Tile.p7,Tile.p8,Tile.p8,Tile.p9,Tile.p9,Tile.p9]
     
     var tenpaiDatas: [TenpaiData] = []
