@@ -203,29 +203,36 @@
                                 <constraint firstItem="aL9-DH-kLd" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="yt4-BX-edr"/>
                             </constraints>
                         </view>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oJf-Gt-It8">
-                            <rect key="frame" x="617" y="70" width="50" height="50"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oJf-Gt-It8">
+                            <rect key="frame" x="617" y="70" width="100" height="100"/>
                             <color key="backgroundColor" red="0.90588235294117647" green="0.29803921568627451" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="50" id="Bmj-LB-jUo"/>
-                                <constraint firstAttribute="width" constant="50" id="wMf-Oh-pOP"/>
+                                <constraint firstAttribute="height" constant="100" id="Bmj-LB-jUo"/>
+                                <constraint firstAttribute="width" constant="100" id="wMf-Oh-pOP"/>
                             </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                            <state key="normal" title="Capture">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <state key="normal" image="CameraIcon">
+                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
+                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                    <integer key="value" value="50"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
                             <connections>
                                 <action selector="pushCapture:" destination="iN0-l3-epB" eventType="touchUpInside" id="ZNp-Cb-Apd"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RiN-iG-NDd">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RiN-iG-NDd">
                             <rect key="frame" x="617" y="4" width="50" height="50"/>
-                            <color key="backgroundColor" red="0.90588235289999997" green="0.29803921570000003" blue="0.23529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="50" id="Z9r-py-vjZ"/>
                                 <constraint firstAttribute="width" constant="50" id="ekh-Rl-nt7"/>
                             </constraints>
-                            <state key="normal" title="Dora">
+                            <color key="tintColor" red="0.90588235289999997" green="0.29803921570000003" blue="0.23529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <state key="normal" title="Dora" image="SettingIcon">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </state>
                             <connections>
@@ -235,13 +242,13 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="oJf-Gt-It8" secondAttribute="trailing" id="2d1-Ty-Zed"/>
+                        <constraint firstAttribute="trailing" secondItem="oJf-Gt-It8" secondAttribute="trailing" constant="-50" id="2d1-Ty-Zed"/>
                         <constraint firstAttribute="trailing" secondItem="RiN-iG-NDd" secondAttribute="trailing" id="BNN-z4-Lnm"/>
                         <constraint firstAttribute="height" constant="120" id="Dnf-jf-m2e"/>
                         <constraint firstItem="F38-kd-bKe" firstAttribute="top" secondItem="JS0-aN-Ji9" secondAttribute="top" id="IPV-6r-a5L"/>
                         <constraint firstAttribute="bottom" secondItem="F38-kd-bKe" secondAttribute="bottom" id="Mpk-Nj-MqT"/>
                         <constraint firstItem="oJf-Gt-It8" firstAttribute="top" secondItem="RiN-iG-NDd" secondAttribute="bottom" constant="16" id="WHS-Z8-3K0"/>
-                        <constraint firstAttribute="bottom" secondItem="oJf-Gt-It8" secondAttribute="bottom" id="YGM-Z9-HR2"/>
+                        <constraint firstAttribute="bottom" secondItem="oJf-Gt-It8" secondAttribute="bottom" constant="-50" id="YGM-Z9-HR2"/>
                         <constraint firstItem="4Xu-VP-lNo" firstAttribute="leading" secondItem="JS0-aN-Ji9" secondAttribute="leading" id="aZT-PH-7S1"/>
                         <constraint firstItem="F38-kd-bKe" firstAttribute="leading" secondItem="JS0-aN-Ji9" secondAttribute="leading" id="alE-Gm-Jlr"/>
                         <constraint firstAttribute="bottom" secondItem="4Xu-VP-lNo" secondAttribute="bottom" id="bLw-h1-uNQ"/>
@@ -291,6 +298,8 @@
         </view>
     </objects>
     <resources>
+        <image name="CameraIcon" width="196" height="196"/>
         <image name="CloseButton" width="24" height="24"/>
+        <image name="SettingIcon" width="98" height="98"/>
     </resources>
 </document>
