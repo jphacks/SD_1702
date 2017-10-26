@@ -15,6 +15,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     var tehaiView: TehaiView!
     var notenView: NotenView!
     var tenpaiView: TenpaiView!
+    var agariView: AgariView!
     
     let avCapture = AVCapture()
     let openCVWrapper = OpenCVWrapper()
@@ -40,6 +41,8 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     var isCaptureMode = true
     
     var isTenpai = false
+    
+    var isAgari = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,7 +80,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         
         //テンパイ時のビュー
         tenpaiView = UINib(nibName: "TenpaiView", bundle: nil).instantiate(withOwner: self, options: nil).first as? TenpaiView
-        tenpaiView.frame = CGRect(x:0,y:0,width:self.view.frame.size.width, height: self.view.frame.height - 120.0)
+        tenpaiView.frame = CGRect(x: 0, y: 0, width:self.view.frame.size.width, height: self.view.frame.height - 120.0)
         addSubviewWithAutoLayoutTop(childView: tenpaiView!, parentView: self.view)
         tenpaiView.tableView.delegate = self
         tenpaiView.tableView.dataSource = self
@@ -87,8 +90,14 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         
         //ノーテン時のビュー
         notenView = UINib(nibName: "NotenView", bundle: nil).instantiate(withOwner: self, options: nil).first as? NotenView
-        notenView.frame = CGRect(x:0,y:0,width:self.view.frame.size.width, height: self.view.frame.height - 120.0)
+        notenView.frame = CGRect(x: 0, y: 0, width:self.view.frame.size.width, height: self.view.frame.height - 120.0)
         addSubviewWithAutoLayoutTop(childView: notenView!, parentView: self.view)
+        
+        //アガリ時のビュー
+        agariView = UINib(nibName: "AgariView", bundle: nil).instantiate(withOwner: self, options: nil).first as? AgariView
+        agariView.frame = CGRect(x: 0, y: 0, width:self.view.frame.size.width, height: self.view.frame.height - 120.0)
+        addSubviewWithAutoLayoutTop(childView: agariView!, parentView: self.view)
+        
         
         calculate()
         tenpaiView.isHidden = true
@@ -105,6 +114,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             isCaptureMode = false
             //avCapture.stopRunning()
         }
+        agariView.isHidden = !isAgari
         if(b){
             notenView.isHidden = true
             tenpaiView.isHidden = false
@@ -149,7 +159,6 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             avCapture.takePicture()
             isCaptureMode = false
             //avCapture.stopRunning()
-            //ビューをノーマルモードへ
             
         } else {
             isCaptureMode = true
@@ -157,6 +166,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             //ビューをカメラモードへ
             tenpaiView.isHidden = true
             notenView.isHidden = true
+            agariView.isHidden = true
         }
         
     }
@@ -473,7 +483,11 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         
         let hand = Hand(inputtedTiles: tehaiTileArray, tumo: tehaiTileArray[0], genSituation: gs, perSituation: ps)
         if(hand.isAgari) {
+            isAgari = true
+            switchView(false)
             return
+        } else {
+            isAgari = false
         }
         
         tenpaiDatas = hand.getTenpaiData()

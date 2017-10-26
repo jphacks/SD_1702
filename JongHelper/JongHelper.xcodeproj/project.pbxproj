@@ -15,6 +15,8 @@
 		5A450A5A1FA07E2B00A63FB5 /* AgariTapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A450A591FA07E2B00A63FB5 /* AgariTapGestureRecognizer.swift */; };
 		5A450A5C1FA191D500A63FB5 /* HaiSelecterView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A450A5B1FA191D500A63FB5 /* HaiSelecterView.storyboard */; };
 		5A450A5E1FA191E400A63FB5 /* HaiSelecterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A450A5D1FA191E400A63FB5 /* HaiSelecterViewController.swift */; };
+		5A450A601FA1BE2D00A63FB5 /* AgariView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A450A5F1FA1BE2D00A63FB5 /* AgariView.xib */; };
+		5A450A621FA1BEBA00A63FB5 /* AgariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A450A611FA1BEBA00A63FB5 /* AgariView.swift */; };
 		5A46BE861F9AD40F008F1ACB /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A46BE851F9AD40F008F1ACB /* opencv2.framework */; };
 		5A46BE891F9AD48A008F1ACB /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A46BE881F9AD48A008F1ACB /* OpenCVWrapper.mm */; };
 		5A46BE8C1F9AD93D008F1ACB /* AVCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A46BE8B1F9AD93D008F1ACB /* AVCapture.swift */; };
@@ -62,6 +64,8 @@
 		5A450A591FA07E2B00A63FB5 /* AgariTapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgariTapGestureRecognizer.swift; sourceTree = "<group>"; };
 		5A450A5B1FA191D500A63FB5 /* HaiSelecterView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HaiSelecterView.storyboard; sourceTree = "<group>"; };
 		5A450A5D1FA191E400A63FB5 /* HaiSelecterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HaiSelecterViewController.swift; sourceTree = "<group>"; };
+		5A450A5F1FA1BE2D00A63FB5 /* AgariView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AgariView.xib; sourceTree = "<group>"; };
+		5A450A611FA1BEBA00A63FB5 /* AgariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgariView.swift; sourceTree = "<group>"; };
 		5A46BE851F9AD40F008F1ACB /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		5A46BE871F9AD48A008F1ACB /* JongHelper-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JongHelper-Bridging-Header.h"; sourceTree = "<group>"; };
 		5A46BE881F9AD48A008F1ACB /* OpenCVWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCVWrapper.mm; sourceTree = "<group>"; };
@@ -171,6 +175,8 @@
 				5AEEBAB51F98994D00E006F3 /* LaunchScreen.storyboard */,
 				5AEEBAB01F98994D00E006F3 /* Main.storyboard */,
 				9975A4151F9CFB7D00968D2F /* Solver */,
+				5A450A5F1FA1BE2D00A63FB5 /* AgariView.xib */,
+				5A450A611FA1BEBA00A63FB5 /* AgariView.swift */,
 			);
 			path = JongHelper;
 			sourceTree = "<group>";
@@ -269,6 +275,7 @@
 				5A46BE8E1F9AE181008F1ACB /* Resource in Resources */,
 				5A3A0D851F9F39E3007004CC /* SettingView.storyboard in Resources */,
 				5A450A581FA053C400A63FB5 /* YakuTableViewCell.xib in Resources */,
+				5A450A601FA1BE2D00A63FB5 /* AgariView.xib in Resources */,
 				5A46BEA01F9B139C008F1ACB /* NotenView.xib in Resources */,
 				5AEEBAB71F98994D00E006F3 /* LaunchScreen.storyboard in Resources */,
 				5AEEBAB41F98994D00E006F3 /* Assets.xcassets in Resources */,
@@ -307,6 +314,7 @@
 				5AA52CB91F9B51E1006107AB /* Solver_Mentsu.swift in Sources */,
 				5AA52CC91F9C1D4F006107AB /* TenpaiTableViewCell.swift in Sources */,
 				5AA52CBF1F9B51E1006107AB /* Solver_Hand.swift in Sources */,
+				5A450A621FA1BEBA00A63FB5 /* AgariView.swift in Sources */,
 				5AA52CCC1F9C230A006107AB /* TenpaiData.swift in Sources */,
 				5AEEBAAD1F98994D00E006F3 /* AppDelegate.swift in Sources */,
 				5AA52CBA1F9B51E1006107AB /* Solver_Kotsu.swift in Sources */,

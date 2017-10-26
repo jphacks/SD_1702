@@ -76,10 +76,10 @@
                                 <constraint firstAttribute="height" constant="45" id="OQ8-58-AWB"/>
                             </constraints>
                         </imageView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5シャンテン" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D9c-SX-XMf">
-                            <rect key="frame" x="461" y="167" width="168" height="42"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-シャンテン" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D9c-SX-XMf">
+                            <rect key="frame" x="429" y="167" width="200" height="42"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="168" id="C4n-3e-Uos"/>
+                                <constraint firstAttribute="width" constant="200" id="C4n-3e-Uos"/>
                                 <constraint firstAttribute="height" constant="42" id="oZw-WF-aSl"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="28"/>
