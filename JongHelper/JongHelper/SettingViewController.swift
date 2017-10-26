@@ -147,6 +147,10 @@ class SettingViewController: UIViewController, UITableViewDelegate, UITableViewD
             let selecterView = storyboard.instantiateInitialViewController() as! HaiSelecterViewController
             selecterView.delegate = self
             selecterView.haiIndex = tableView.tag
+            if(tableView.tag != 0) {
+                selecterView.canSetNull = true
+            }
+            
             selecterView.modalPresentationStyle = UIModalPresentationStyle.popover
             selecterView.preferredContentSize = CGSize(width: 393, height: 236)
             let popoverController = selecterView.popoverPresentationController
