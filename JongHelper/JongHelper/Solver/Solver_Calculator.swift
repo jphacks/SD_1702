@@ -254,10 +254,13 @@ class Calculator {
         }
         return false
     }
+    
+    
     func isPinhu() -> Bool {
         if compMentu.getSyuntuCount() < 4 {
             return false
         }
+        
         let janto = compMentu.getJanto().identifierTile
         if janto.getType() == "SANGEN" {
             return false
@@ -536,7 +539,7 @@ class Calculator {
         return false
     }
     
-    // 先に役満の判定を行って仕舞えば，これだけですむ
+    // 面前手のみなのでトイトイはない
     func isToiToi() -> Bool {
         return compMentu.getKotuCount() == 4
     }
@@ -698,7 +701,7 @@ class Calculator {
         let allMentu = compMentu.getAllMentu()
         let type = allMentu[0].identifierTile.getType()
         
-        for mentu in allMentu {
+        for mentu in compMentu.getAllMentu() {
             if(type != mentu.identifierTile.getType()) {
                 return false
             }
@@ -708,35 +711,124 @@ class Calculator {
     }
     
     func isSuankou() -> Bool {
-        return false
+        return !compMentu.isTanki() && compMentu.getKotuCount() == 4
     }
     
     func isSuankouTanki() -> Bool {
-        return false
+        return compMentu.isTanki() && compMentu.getKotuCount() == 4
     }
     
     func isDaisangen() -> Bool {
+        var count = 0
+        for kotu in compMentu.kotuList {
+            if (kotu.identifierTile.getType() == "SANGEN") {
+                count += 1
+            }
+            if (count == 3) {
+                return true
+            }
+        }
         return false
     }
     
     func isTuiso() -> Bool {
-        return false
+        for mentu in compMentu.getAllMentu() {
+            if mentu.identifierTile.getNumber() != 0 {
+                return false
+            }
+        }
+        
+        return true
     }
     
     func isSusiHou() -> Bool {
+        if compMentu.getJanto().identifierTile.getType() != "FONPAI" {
+            return false
+        }
+        
+        var count = 0
+        for kotu in compMentu.kotuList {
+            if kotu.identifierTile.getType() == "FONPAI" {
+                count += 1
+            }
+        }
+        
+        if count == 3 {
+            return true
+        }
         return false
     }
     
     func isDaisusi() -> Bool {
+        for kotu in compMentu.kotuList {
+            if kotu.identifierTile.getType() != "FONPAI" {
+                return false
+            }
+        }
+        
         return false
     }
     
     func isRyuisou() -> Bool {
-        return false
+        
+        for syuntu in compMentu.syuntuList {
+            if syuntu.identifierTile.getCode() != 20 {
+                return false
+            }
+        }
+        
+        for kotu in compMentu.kotuList {
+            var tmp = kotu.identifierTile.getCode()
+            if tmp != 19 && tmp != 20 && tmp != 21 && tmp != 23 && tmp != 25 && tmp != 32{
+                return false
+            }
+        }
+        
+        for toitu in compMentu.toituList {
+            var tmp = toitu.identifierTile.getCode()
+            if tmp != 19 && tmp != 20 && tmp != 21 && tmp != 23 && tmp != 25 && tmp != 32{
+                return false
+            }
+        }
+        
+        return true
     }
     
     func isTyurenPoutou() -> Bool {
-        return false
+        if !isTinitu() {
+            return false
+        }
+        
+        if isJunseiTyurenpoutou() {
+            return false
+        }
+        
+        let allMentu = compMentu.getAllMentu()
+        let type = allMentu[0].identifierTile.getType()
+        var tmp = compMentu.mentuListToIntList()
+        var start = 0
+        var end = 8
+        
+        switch type {
+        case "MANZU": start = 0; end = 8
+        case "PINZU": start = 9; end = 17
+        case "SOHZU": start = 18; end = 26
+        default: return false
+        }
+        
+        if tmp[start] < 3 {
+            return false
+        }
+        for i in start + 1 ..< end {
+            if tmp[i] < 1 {
+                return false
+            }
+        }
+        if tmp[end] < 3 {
+            return false
+        }
+        
+        return true
     }
     
     func isJunseiTyurenpoutou() -> Bool {
