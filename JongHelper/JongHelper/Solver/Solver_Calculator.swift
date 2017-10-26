@@ -82,6 +82,8 @@ class Calculator {
     var generalSituation: GeneralSituation
     var personalSituation: PersonalSituation
     
+
+    
     init(compMentu: CompMentu, generalSituation: GeneralSituation, personalSituation: PersonalSituation) {
         self.compMentu = compMentu
         self.generalSituation = generalSituation
@@ -945,60 +947,10 @@ class Calculator {
     }
     
     func isKokusimusou() -> Bool {
-        var kokusi = [1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
-        
-        if isKokusimusou13() {
-            return false
-        }
-        
-        var count = 0
-        var hand = compMentu.mentuListToIntList()
-        
-        for i in 0 ..< hand.count {
-            hand[i] -= kokusi[i]
-            
-            if hand[i] == -1 {
-                return false
-            }
-            
-            if kokusi[i] == 0 && hand[i] > 0 {
-                return false
-            }
-        }
-        
         return true
     }
     
     func isKokusimusou13() -> Bool {
-        var kokusi = [1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
-        
-        var count = 0
-        var hand = compMentu.mentuListToIntList()
-        
-        for i in 0 ..< hand.count {
-            hand[i] -= kokusi[i]
-            
-            if hand[i] == -1 {
-                return false
-            }
-            
-            if kokusi[i] == 0 && hand[i] > 0 {
-                return false
-            }
-        }
-        
-        for i in 0 ..< hand.count {
-            if hand[i] != 1 {
-                continue
-            }
-            
-            if (i == compMentu.tumo.getCode()) {
-                return true
-            } else {
-                return false
-            }
-        }
-        
         return false
     }
     

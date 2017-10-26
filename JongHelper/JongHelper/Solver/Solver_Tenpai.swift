@@ -65,6 +65,13 @@ class Tenpai: Hashable {
         
         hashValue = hashCode()
     }
+    
+    init(isKokusiTenpai: Bool, ukiList: [Tile], suteTile: Tile) {
+        
+
+        
+        hashValue = hashCode()
+    }
 
     func getWait() -> [Tile] {
         return wait

@@ -76,6 +76,7 @@ class  CompMentu: Hashable {
         self.isOpenHand = isOpenHand
     }
     
+    
     func getJanto() -> Toitu {
         return toituList[0]
     }

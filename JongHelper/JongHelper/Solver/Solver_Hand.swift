@@ -78,6 +78,23 @@ class Hand {
         // 点数 (点数，飜，符）と役のタプル
         var result = (score: (ron: -1, tumo: -1), fu: -1, han: -1, yakuList: [Yaku]())
         
+        if isKokusi {
+            let x = calcKokusi()
+            if x == 1 {
+                if perSituation.isParent {
+                    return (score: (ron: x * 48000, tumo: x * 48000), fu: 0, han: 0, yakuList: [Yaku.Kokusimusou])
+                } else {
+                    return (score: (ron: x * 32000, tumo: x * 32000), fu: 0, han: 0, yakuList: [Yaku.Kokusimusou])
+                }
+            } else if x == 2 {
+                if perSituation.isParent {
+                    return (score: (ron: x * 48000, tumo: x * 48000), fu: 0, han: 0, yakuList: [Yaku.Kokusimusou13])
+                } else {
+                    return (score: (ron: x * 32000, tumo: x * 32000), fu: 0, han: 0, yakuList: [Yaku.Kokusimusou13])
+                }
+            }
+        }
+        
         for agari in agariSet {
             let calculator = Calculator(compMentu: agari, generalSituation: genSituation, personalSituation: perSituation)
             let calcScore = calculator.calculateScore(addHan: addHan)
@@ -93,9 +110,23 @@ class Hand {
         return result
     }
     
+//    class TenpaiData {
+//        var suteTile: Tile!
+//        var matiTiles: [(tile: Tile, ron: Int, tumo: Int)]!
+//
+//        init(sute: Tile!, mati: [(Tile, Int, Int)]!) {
+//            self.suteTile = sute
+//            self.matiTiles = mati
+//        }
+//    }
+    
     // テンパイ時に，これを捨ててこれを引いたら，この点数で上がれるよ　を返す
     func getTenpaiData() -> [TenpaiData] {
         var result = [TenpaiData]()
+        
+        if isKokusiTenpai {
+            return [getKokusiTenpaiData()]
+        }
         
         for tenpai in tenpaiSet { // テンパイ形の候補の中でループ
             for mati in tenpai.getWait() {
@@ -154,8 +185,16 @@ class Hand {
     
     func getCompMentuSet() {
     
-//        initTmp()
-//        judgeKokusi()
+        // 国士無双に対する処理
+        judgeKokusi()
+        
+        if isKokusi {
+            isAgari = true
+            return
+        } else if isKokusiTenpai {
+            isTenpai = true
+            return
+        }
         
         initTmp()
         //頭の候補を探してストック
@@ -439,10 +478,8 @@ class Hand {
     func judgeKokusi() {
         var kokusi = [1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
         var count = 0
-        for i in 0 ..< tmpTiles.count {
-            tmpTiles[i] -= kokusi[i]
-        }
         
+        initTmp()
         for i in 0 ..< tmpTiles.count {
             tmpTiles[i] -= kokusi[i]
             
@@ -452,11 +489,97 @@ class Hand {
         }
         
         if count == 0 {
-            isKokusi = true
-        } else if count == 1 {
-            isKokusiTenpai = false
+            for i in 0 ..< tmpTiles.count {
+                if kokusi[i] == 1 && tmpTiles[i] == 1 {
+                    isKokusi = true
+                }
+            }
+            
+            if !isKokusi {
+                isKokusiTenpai = true
+            }
+        } else if count == 1{
+            isKokusiTenpai = true
         }
     }
+    
+
+    func getKokusiTenpaiData() -> TenpaiData {
+        
+        var matiTiles: [Tile] = []
+        var suteTile: Tile = Tile.null
+        
+        initTmp()
+        var kokusi = [1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+        for i in 0 ..< tmpTiles.count {
+            tmpTiles[i] -= kokusi[i]
+            if tmpTiles[i] == -1 {
+                matiTiles.append(Tile(rawValue: i)!)
+            }
+        }
+        
+        if matiTiles.count == 0 {
+            for i in 0 ..< kokusi.count {
+                if kokusi[i] == 1 {
+                    matiTiles.append(Tile(rawValue: i)!)
+                }
+            }
+        }
+        
+        for i in 0 ..< tmpTiles.count {
+            if tmpTiles[i] > 0 {
+                if kokusi[i] != 1 {
+                    suteTile = Tile(rawValue: i)!
+                } else if tmpTiles[i] > 1 {
+                    suteTile = Tile(rawValue: i)!
+                }
+            }
+        }
+        
+        if matiTiles.count > 1 {
+            var score: [(Tile, Int, Int)] = []
+            if perSituation.isParent {
+                for elem in matiTiles {
+                    score.append((elem, 48000 * 2, 48000 * 2))
+                }
+            } else {
+                for elem in matiTiles {
+                    score.append((elem, 32000 * 2, 32000 * 2))
+                }
+            }
+            return TenpaiData(sute: suteTile, mati: score)
+        }
+        
+        if perSituation.isParent {
+            return TenpaiData(sute: suteTile, mati: [(matiTiles[0], 48000, 48000)])
+        }
+        return TenpaiData(sute: suteTile, mati: [(matiTiles[0], 32000, 32000)])
+    }
+    
+    func calcKokusi() -> Int {
+        
+        initTmp()
+        
+        var kokusi = [1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+        
+        for i in 0 ..< tmpTiles.count {
+            tmpTiles[i] -= kokusi[i]
+        }
+        
+        for i in 0 ..< tmpTiles.count {
+            if tmpTiles[i] != 1 {
+                continue
+            }
+            
+            if (i == tumo.getCode()) {
+                return 2
+            } else {
+                return 1
+            }
+        }
+        return 0
+    }
+    
 }
 
 
