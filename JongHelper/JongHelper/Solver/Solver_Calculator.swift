@@ -8,10 +8,13 @@
 import Foundation
 
 class Calculator {
+    
+    // 通常役を判定するための関数テーブル
     var normalYakuFuncList:[()->Bool] {
         return [isReach, isIppatu, isTumo, isPinhu, isTanyao, isIpeiko, isHaku, isHatu, isTyun, isJikaze, isBakaze, isRinsyan, isTyankan, isHaitei, isHoutei, isDoubleReach, isTyanta, isHonroutou, isSansyokuDoujun, isIttuu, isToiToi, isSansyokuDoukou, isSanankou, isSankantu, isSyousangen, isTitoitu, isRyanpeiko, isJuntyan, isHonitu, isTinitu]
     }
     
+    // 役満を判定するための関数テーブル
     var yakumanFuncList:[() -> Bool] {
         return[isSuankou, isSuankouTanki,  isDaisangen, isTuiso,  isSusiHou, isDaisusi, isRyuisou, isTyurenPoutou,  isJunseiTyurenpoutou, isTinroutou, isSukantu, isKokusimusou, isKokusimusou13, isTenhou, isTihou]
     }
@@ -361,7 +364,7 @@ class Calculator {
     
     func isJikaze() -> Bool {
         for kotu in compMentu.kotuList {
-            if (kotu.identifierTile == personalSituation.jikaze) {
+            if kotu.identifierTile == personalSituation.jikaze {
                 return true
             }
         }
