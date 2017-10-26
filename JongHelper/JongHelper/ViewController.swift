@@ -449,9 +449,10 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         
         if !hand.isTenpai {
             let syanten = Syanten(hand: tehaiTileArray)
-            let tmpSyanten = syanten.getNormalSyantenNum()
-            minSyanten = tmpSyanten.syanten_normal
-            suteArr = Set(tmpSyanten.gomi)
+            let tmpSyanten = syanten.getSyantenNum()
+            minSyanten = tmpSyanten.0
+            suteArr = Set(tmpSyanten.1)
+            print(tmpSyanten.1)
         }
         
         print("まち：\(matiArr.count) すて：\(suteArr.count)")
