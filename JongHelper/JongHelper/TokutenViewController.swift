@@ -95,7 +95,7 @@ class TokutenViewController: UIViewController, UITableViewDelegate, UITableViewD
         let gs = GeneralSituation(isHoutei: false, bakaze: bakazeTile, dora: doraTileArray, honba: 1)
         let ps = PersonalSituation(isTsumo: isTsumo, isIppatu: false, isReach: isReach, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: jikazeTile)
     
-
+        print(matiTile)
         let hand = Hand(inputtedTiles: tehaiTileArray, tumo: matiTile, genSituation:gs, perSituation: ps)
         let score = hand.getScore(addHan: plushan)
         

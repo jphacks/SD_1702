@@ -64,12 +64,13 @@ class Hand {
                 break
             }
         }
-        if (!invalidHand) {
-            getCompMentuSet()
-        }
+        
         self.tumo = tumo
         self.genSituation = genSituation
         self.perSituation = perSituation
+        if (!invalidHand) {
+            getCompMentuSet()
+        }
     }
     
     // 点数, 役のタプルを返す関数

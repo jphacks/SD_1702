@@ -284,7 +284,7 @@ class Calculator {
         }
         
         let janto = compMentu.getJanto().identifierTile
-        if janto.getType() == "SANGEN" {
+        if janto.getType() == "SANGEN" || janto == personalSituation.jikaze || janto == generalSituation.bakaze {
             return false
         }
         
