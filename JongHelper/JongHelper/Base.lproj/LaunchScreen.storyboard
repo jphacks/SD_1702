@@ -17,28 +17,44 @@
                         <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="JongHelper" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="42Y-la-RK6">
-                                <rect key="frame" x="233.5" y="166.5" width="200" height="42"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Image" translatesAutoresizingMaskIntoConstraints="NO" id="KPV-HG-dPC">
+                                <rect key="frame" x="233" y="47.5" width="200" height="200"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="hnA-ch-vy5"/>
-                                    <constraint firstAttribute="height" constant="42" id="q9O-mR-vHD"/>
+                                    <constraint firstAttribute="height" constant="200" id="Fmz-b5-MTH"/>
+                                    <constraint firstAttribute="width" constant="200" id="s4j-ue-67M"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="36"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="JongHelper" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W9b-fc-OA3">
+                                <rect key="frame" x="246" y="255.5" width="175" height="42"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="35"/>
                                 <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="let's play mahjong!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RbJ-Jd-qzv">
+                                <rect key="frame" x="245" y="305.5" width="177.5" height="26.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="42Y-la-RK6" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="1t3-gY-FDz"/>
-                            <constraint firstItem="42Y-la-RK6" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="WtH-tz-Iht"/>
+                            <constraint firstItem="RbJ-Jd-qzv" firstAttribute="top" secondItem="W9b-fc-OA3" secondAttribute="bottom" constant="8" id="0Ra-Q0-nOd"/>
+                            <constraint firstItem="W9b-fc-OA3" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="6uc-3b-NNt"/>
+                            <constraint firstItem="KPV-HG-dPC" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="OAH-Oe-3WN"/>
+                            <constraint firstItem="W9b-fc-OA3" firstAttribute="top" secondItem="KPV-HG-dPC" secondAttribute="bottom" constant="8" id="bJ7-Df-PPg"/>
+                            <constraint firstItem="KPV-HG-dPC" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-40" id="d8f-bO-g24"/>
+                            <constraint firstItem="RbJ-Jd-qzv" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="ihj-MZ-34f"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="52.623688155922046" y="373.60000000000002"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Image" width="318" height="318"/>
+    </resources>
 </document>
