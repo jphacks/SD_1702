@@ -33,6 +33,9 @@ static const int PADDING_BOTTOM = 0;
 static const int PADDING_LEFT = 2;
 static const int PADDING_RIGHT = 2;
 
+const double PHOTO_SIZE_WIDTH = 3264.0;
+const double PHOTO_SIZE_HEIGHT = 2448.0;
+
 cv::Point2f gCornerQuad[4];
 
 - (id) init {
@@ -46,9 +49,17 @@ cv::Point2f gCornerQuad[4];
     cv::Mat mat;
     UIImageToMat(image, mat);
     
+//    std::cout << "初期サイズ：" << mat.size().width << std::endl;
+//
+    // iPhone6のカメラの解像度に合わせる
+    if(mat.size().width != (int)PHOTO_SIZE_WIDTH) {
+        std::cout << "リサイズした" << std::endl;
+        cv::resize(mat, mat, cv::Size(), PHOTO_SIZE_WIDTH/mat.cols, PHOTO_SIZE_HEIGHT/mat.rows, cv::INTER_AREA);
+    }
+    
     int width = mat.size().width;
     int height = mat.size().height;
-    
+    //std::cout << "width: " << width << "  height: " << height << std::endl;
     // 射影変換
     
     cv::Point2f cornerQuadPixel[4];
@@ -93,9 +104,16 @@ cv::Point2f gCornerQuad[4];
         for (int y = 0; y < TARGET_HEIGHT; ++y) {
             for (int x = 0; x < TARGET_WIDTH; ++x) {
                 NSInteger val = roi.data[y * roi.step + x * roi.elemSize()];
+                
+                // デバッグ用
+                //std::cout << (val == 1 ? '*' : '.');
+                
                 [feature addObject:[NSNumber numberWithInteger:val]];
             }
+            std::cout << std::endl;
         }
+        
+        std::cout << std::endl;
         
         [features addObject:feature];
     }
@@ -112,6 +130,7 @@ cv::Point2f gCornerQuad[4];
     
     int width = mat.size().width;
     int height = mat.size().height;
+    std::cout << "width: " << width << "  height: " << height << std::endl;
     int center = mat.size().height * TRIM_CENTER_RATIO;
     int trimHeight = width / TRIM_ASPECT_RATIO;
     cv::Rect trimRect = cv::Rect(0, center - trimHeight / 2, width, trimHeight);
@@ -225,7 +244,7 @@ cv::Point2f gCornerQuad[4];
     
     //cv::rectangle(mat, trimRect, cv::Scalar(0, 0, 255, 255));
     
-    //    cv::putText(mat, label, cv::Point(40,80), cv::FONT_HERSHEY_PLAIN, 4.0, cv::Scalar(255,0,0,255), 5);
+    //cv::putText(mat, label, cv::Point(40,80), cv::FONT_HERSHEY_PLAIN, 4.0, cv::Scalar(255,0,0,255), 5);
     //std::cout << std::endl << std::endl;
     
     return MatToUIImage(mat);
