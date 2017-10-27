@@ -2,7 +2,7 @@ import Foundation
 
 class Syanten {
     
-
+    
     //変数定義したい
     var mentu: Int=0      //メンツ数
     var toitu: Int=0        //トイツ数
@@ -10,6 +10,10 @@ class Syanten {
     var temp: Int=0        //シャンテン数（計算用）
     var syanten_normal: Int = 0    //シャンテン数（結果用）
     var tmp: [Int] = [Int](repeating: 0, count: 34)
+    var gomi_normal: [Tile] = []
+    var gomi_kokusi: [Tile] = []
+    var gomi_tiitoi: [Tile] = []
+    var gomi_min: [Tile] = []
     var gomi: [Tile] = []
     
     init(hand: [Tile]) {
@@ -20,44 +24,69 @@ class Syanten {
     }
     
     // シャンテン数を返す
-    func getSyantenNum() -> Int {
-        return min(getKokusiSyantenNum(), getTiitoituSyantenNum(), getNormalSyantenNum().syanten_normal)
+    func getSyantenNum() ->(syanten_min:Int,gomi_min:Array<Tile>) {
+        let syanten_min = min(getKokusiSyantenNum().syanten_kokusi, getTiitoituSyantenNum().syanten_tiitoi, getNormalSyantenNum().syanten_normal)
+        
+        if (syanten_min == getKokusiSyantenNum().syanten_kokusi){
+            gomi_min = getKokusiSyantenNum().gomi_kokusi
+        }else if (syanten_min == getTiitoituSyantenNum().syanten_tiitoi){
+            gomi_min = getTiitoituSyantenNum().gomi_tiitoi
+        }else{
+            gomi_min = getNormalSyantenNum().gomi_normal
+        }
+        print(syanten_min,gomi_min)
+        return (syanten_min,gomi_min);
     }
     
     //国士無双のシャンテン数を返すyo///////////////////////////////////////
-    func getKokusiSyantenNum()->Int{
+    func getKokusiSyantenNum()->(syanten_kokusi:Int,gomi_kokusi:Array<Tile>){
         var toituflag = false, syanten_kokusi = 13
         //老頭牌
-        
         for i in 0 ..< 34 {
             if (Tile(rawValue: i)?.isYaochu())! {
                 if (tmp[i] > 0) {
                     syanten_kokusi -= 1
+                    tmp[i] -= 1
                 }
                 if (tmp[i] >= 2 && !toituflag) {
                     toituflag  = true
+                    tmp[i] -= 1
                 }
+            }
+        }
+        gomi_kokusi = []
+        for k in 0..<34{
+            if(tmp[k] == 1) {
+                gomi_kokusi.append(Tile(rawValue: k)!)
             }
         }
         //頭
         syanten_kokusi -= toituflag ? 1 : 0
-        return syanten_kokusi
+        return (syanten_kokusi,gomi_kokusi);
     }
-
+    
     //チートイツのシャンテン数を返すyo/////////////////////////////
-    func getTiitoituSyantenNum()->Int{
+    func getTiitoituSyantenNum()->(syanten_tiitoi:Int,gomi_tiitoi:Array<Tile>){
         var toitu = 0, syanten_tiitoi = 6
         //トイツ数を数える
         for i in 0..<34{
-            if(tmp[i] >= 2) {toitu += 1}
+            if(tmp[i] >= 2) {
+                toitu += 1
+                tmp[i] -= 2
+            }
             if(tmp[i] == 4) {toitu -= 1}
         }
         syanten_tiitoi -= toitu
-        return syanten_tiitoi
+        for k in 0..<34{
+            if(tmp[k] == 1) {
+                gomi_tiitoi.append(Tile(rawValue: k)!)
+            }
+        }
+        return (syanten_tiitoi,gomi_tiitoi);
     }
-
+    
     //普通にシャンテン数考えるyo/////////////////////////////////////
-    func getNormalSyantenNum()->(syanten_normal:Int,gomi:Array<Tile>){
+    func getNormalSyantenNum()->(syanten_normal:Int,gomi_normal:Array<Tile>){
         mentu = 0
         toitu = 0
         kouho = 0
@@ -76,10 +105,10 @@ class Syanten {
             }
             mentu_cut(i: 0)   //頭無しと仮定して計算
         }
-        return (syanten_normal, gomi);    //最終的な結果
+        return (syanten_normal, gomi_normal);    //最終的な結果
     }
-
-
+    
+    
     //メンツ抜き出しの関数//////////////////////////
     func mentu_cut(i: Int){
         var j = 0
@@ -118,8 +147,8 @@ class Syanten {
         //メンツ無しと仮定
         mentu_cut(i: j+1)
     }
-
-
+    
+    
     //ターツ抜き出しの関数///////////////////////////
     func taatu_cut(i: Int){
         var j=0
@@ -134,10 +163,10 @@ class Syanten {
             temp = 8 - mentu * 2 - kouho - toitu
             if(temp < syanten_normal){
                 syanten_normal = temp
-                gomi = []
+                gomi_normal = []
                 for k in 0..<34{
                     if(tmp[k] == 1) {
-                        gomi.append(Tile(rawValue: k)!)
+                        gomi_normal.append(Tile(rawValue: k)!)
                     }
                 }
             }
@@ -182,5 +211,6 @@ class Syanten {
         //ターツなしと仮定
         taatu_cut(i: j+1)
     }
-
+    
 }
+
