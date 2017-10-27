@@ -31,7 +31,9 @@ class Syanten {
     func getSyantenNum() ->(syanten_min:Int,gomi_min:Array<Tile>) {
         let syanten_min = min(getKokusiSyantenNum().syanten_kokusi, getTiitoituSyantenNum().syanten_tiitoi, getNormalSyantenNum().syanten_normal)
         
+        print(getKokusiSyantenNum().syanten_kokusi)
         if (syanten_min == getKokusiSyantenNum().syanten_kokusi){
+            print(getKokusiSyantenNum().gomi_kokusi)
             return (syanten_min,getKokusiSyantenNum().gomi_kokusi)
         }else if (syanten_min == getTiitoituSyantenNum().syanten_tiitoi){
             return (syanten_min,getTiitoituSyantenNum().gomi_tiitoi)
@@ -46,11 +48,11 @@ class Syanten {
         //老頭牌
         for i in 0 ..< 34 {
             if (Tile(rawValue: i)?.isYaochu())! {
-                if (tmp2[i] > 0) {
+                if (tmp[i] > 0) {
                     syanten_kokusi -= 1
                     tmp2[i] -= 1
                 }
-                if (tmp2[i] >= 2 && !toituflag) {
+                if (tmp[i] >= 2 && !toituflag) {
                     toituflag  = true
                     tmp2[i] -= 1
                 }
@@ -72,11 +74,11 @@ class Syanten {
         var toitu = 0, syanten_tiitoi = 6
         //トイツ数を数える
         for i in 0..<34{
-            if(tmp3[i] >= 2) {
+            if(tmp[i] >= 2) {
                 toitu += 1
                 tmp3[i] -= 2
             }
-            if(tmp3[i] == 4) {toitu -= 1}
+            if(tmp[i] == 4) {toitu -= 1}
         }
         syanten_tiitoi -= toitu
         for k in 0..<34{
