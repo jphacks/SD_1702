@@ -25,6 +25,7 @@
                                 <constraint firstAttribute="width" constant="200" id="Djj-Bp-lWH"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ozV-Ja-OXc" userLabel="haiimg1">
@@ -83,6 +84,7 @@
                                 <constraint firstAttribute="height" constant="42" id="oZw-WF-aSl"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="op8-TI-4vy" userLabel="haiimg8">
