@@ -10,6 +10,8 @@ class Syanten {
     var temp: Int=0        //シャンテン数（計算用）
     var syanten_normal: Int = 0    //シャンテン数（結果用）
     var tmp: [Int] = [Int](repeating: 0, count: 34)
+    var tmp2: [Int] = [Int](repeating: 0, count: 34)
+    var tmp3: [Int] = [Int](repeating: 0, count: 34)
     var gomi_normal: [Tile] = []
     var gomi_kokusi: [Tile] = []
     var gomi_tiitoi: [Tile] = []
@@ -20,6 +22,8 @@ class Syanten {
         
         for tile in hand {
             tmp[tile.getCode()] += 1
+            tmp2[tile.getCode()] += 1
+            tmp3[tile.getCode()] += 1
         }
     }
     
@@ -28,14 +32,12 @@ class Syanten {
         let syanten_min = min(getKokusiSyantenNum().syanten_kokusi, getTiitoituSyantenNum().syanten_tiitoi, getNormalSyantenNum().syanten_normal)
         
         if (syanten_min == getKokusiSyantenNum().syanten_kokusi){
-            gomi_min = getKokusiSyantenNum().gomi_kokusi
+            return (syanten_min,getKokusiSyantenNum().gomi_kokusi)
         }else if (syanten_min == getTiitoituSyantenNum().syanten_tiitoi){
-            gomi_min = getTiitoituSyantenNum().gomi_tiitoi
+            return (syanten_min,getTiitoituSyantenNum().gomi_tiitoi)
         }else{
-            gomi_min = getNormalSyantenNum().gomi_normal
+            return (syanten_min,getNormalSyantenNum().gomi_normal)
         }
-        print(syanten_min,gomi_min)
-        return (syanten_min,gomi_min);
     }
     
     //国士無双のシャンテン数を返すyo///////////////////////////////////////
@@ -44,19 +46,19 @@ class Syanten {
         //老頭牌
         for i in 0 ..< 34 {
             if (Tile(rawValue: i)?.isYaochu())! {
-                if (tmp[i] > 0) {
+                if (tmp2[i] > 0) {
                     syanten_kokusi -= 1
-                    tmp[i] -= 1
+                    tmp2[i] -= 1
                 }
-                if (tmp[i] >= 2 && !toituflag) {
+                if (tmp2[i] >= 2 && !toituflag) {
                     toituflag  = true
-                    tmp[i] -= 1
+                    tmp2[i] -= 1
                 }
             }
         }
         gomi_kokusi = []
         for k in 0..<34{
-            if(tmp[k] == 1) {
+            if(tmp2[k] == 1) {
                 gomi_kokusi.append(Tile(rawValue: k)!)
             }
         }
@@ -70,15 +72,15 @@ class Syanten {
         var toitu = 0, syanten_tiitoi = 6
         //トイツ数を数える
         for i in 0..<34{
-            if(tmp[i] >= 2) {
+            if(tmp3[i] >= 2) {
                 toitu += 1
-                tmp[i] -= 2
+                tmp3[i] -= 2
             }
-            if(tmp[i] == 4) {toitu -= 1}
+            if(tmp3[i] == 4) {toitu -= 1}
         }
         syanten_tiitoi -= toitu
         for k in 0..<34{
-            if(tmp[k] == 1) {
+            if(tmp3[k] == 1) {
                 gomi_tiitoi.append(Tile(rawValue: k)!)
             }
         }
