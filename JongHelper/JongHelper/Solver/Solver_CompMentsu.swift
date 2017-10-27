@@ -16,9 +16,11 @@
 
 import Foundation
 
+// 上がりの形を管理するクラス
 class  CompMentu: Hashable {
     
     var hashValue = 0
+    // 上がりの形における各面子のリスト
     var toituList = [Toitu]()
     var syuntuList = [Syuntu]()
     var kotuList = [Kotu]()
@@ -28,6 +30,7 @@ class  CompMentu: Hashable {
     
     var isOpenHand = false
     
+    // [Mentu]の配列によりイニシャライズ
     init(mentuList: [Mentu], tumo: Tile, isOpenHand: Bool) {
         
         for mentu in mentuList
@@ -45,6 +48,7 @@ class  CompMentu: Hashable {
         self.isOpenHand = isOpenHand
     }
     
+    // Tenpai型によるイニシャライズ
     init(tenpai: Tenpai, tumo: Tile, isOpenHand: Bool) {
         self.tumo = tumo
         
@@ -52,6 +56,7 @@ class  CompMentu: Hashable {
         syuntuList = tenpai.syuntuList
         kotuList = tenpai.kotuList
         
+        // テンパイ形における浮き牌と上がり牌で面子を構成し面子のリストに追加
         if (tenpai.isTanki()) {
             // 頭まち & チートイ待ち
             toituList.append(Toitu(identifierTile: tenpai.ukiList[0]))
@@ -76,23 +81,27 @@ class  CompMentu: Hashable {
         self.isOpenHand = isOpenHand
     }
     
-    
+    // 雀頭を得る関数
     func getJanto() -> Toitu {
         return toituList[0]
     }
     
+    // 対子の数をカウントする関数
     func getToituCount() -> Int {
         return toituList.count
     }
     
+    // 順子の数をカウントする関数
     func getSyuntuCount() -> Int {
         return syuntuList.count
     }
     
+    // 刻子の数をカウントする関数
     func getKotuCount() -> Int {
         return kotuList.count
     }
     
+    // 全ての面子の配列を得る関数
     func getAllMentu() -> [Mentu] {
         var allMentu = [Mentu]()
         allMentu.append(contentsOf: toituList as [Mentu])
@@ -101,6 +110,7 @@ class  CompMentu: Hashable {
         return allMentu
     }
     
+    // 面子の配列からIntの配列へ変換を行う関数
     func mentuListToIntList() -> [Int] {
         var result = [Int](repeating: 0, count: 34)
         for mentu in getAllMentu() {
@@ -123,10 +133,12 @@ class  CompMentu: Hashable {
         return lhs.toituList == rhs.toituList && lhs.syuntuList == rhs.syuntuList && lhs.kotuList == rhs.kotuList && lhs.tumo == rhs.tumo
     }
     
+    // 単騎待ちかどうか
     func isTanki() -> Bool {
         return getJanto().identifierTile == tumo
     }
     
+    // リャンメン待ちかどうか
     func isRyanmen() -> Bool {
         if isPenchan() {
             return false
@@ -146,6 +158,7 @@ class  CompMentu: Hashable {
         return false
     }
     
+    // 辺張待ちかどうか
     func isPenchan() -> Bool {
         
         for syuntu in syuntuList {
@@ -164,6 +177,7 @@ class  CompMentu: Hashable {
         return false
     }
     
+    // かんちゃん待ちかどうか
     func isKanchan() -> Bool {
         if isRyanmen() {
             return false

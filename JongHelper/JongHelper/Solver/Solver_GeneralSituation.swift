@@ -8,6 +8,7 @@
 
 import Foundation
 
+// 場の情報を管理するクラス
 class GeneralSituation {
     var isHoutei: Bool
     var bakaze: Tile
