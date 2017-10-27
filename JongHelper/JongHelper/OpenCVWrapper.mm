@@ -20,17 +20,10 @@ const auto AKAZE = cv::AKAZE::create();
 
 static const double TEHAI_ASPECT_RATIO = 2 * 14 / 2.7;
 static const double TRIM_ASPECT_RATIO = 8;
+static const double TRIM_CENTER_RATIO = 0.7;
 static const double THRESH_WIDTH = 0.6;
-static const int THRESH_CANNY_LOW = 30;
-static const int THRESH_CANNY_HIGH = 150;
 static const int TEMPLATE_WIDTH = 200;
 static const int TEMPLATE_HEIGHT = 270;
-static const int ANGLE_SEARCH_SIZE = 10;
-static const int ANGLE_SEARCH_STEP = 0.1;
-static const int ANGLE_SEARCH_CANNY_LOW = 10;
-static const int ANGLE_SEARCH_CANNY_HIGH = 200;
-static const int ANGLE_SEARCH_WIDTH = 3;
-
 
 static const int TARGET_WIDTH = 30;
 static const int TARGET_HEIGHT = 42;
@@ -110,149 +103,6 @@ cv::Point2f gCornerQuad[4];
     return features;
 }
 
-/*- (NSArray *)getTehaiArray:(UIImage *)image
-{
-    cv::Mat mat;
-    cv::Mat filtered;
-    //Matへ変換
-    UIImageToMat(image, mat);
-    
-    int width = mat.size().width;
-    int height = mat.size().height;
-    int center = mat.size().height / 2;
-    int trimHeight = width / TRIM_ASPECT_RATIO;
-    cv::Rect trimRect = cv::Rect(0, center - trimHeight / 2, width, trimHeight);
-    cv::Mat trimed(mat, trimRect);
-    cv::cvtColor(trimed, filtered, CV_BGR2GRAY);
-    
-    // ソーベルフィルタ
-    cv::Sobel(filtered, filtered, CV_8U, 0, 1, 3, -1);
-    // 膨張
-    cv::Mat kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(5, 5));
-    cv::dilate(filtered, filtered, kernel);
-    // ２値化
-    cv::threshold(filtered, filtered, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
-    
-    cv::Mat filteredCnv;
-    cv::Mat copyDest(mat, cv::Rect(0,0,width, trimHeight));
-    cv::cvtColor(filtered, filteredCnv, cv::ColorConversionCodes::COLOR_GRAY2BGRA);
-    //filteredCnv.copyTo(copyDest);
-    
-    // ラベリング
-    cv::Mat labels;
-    cv::Mat stats;
-    cv::Mat centroids;
-    cv::connectedComponentsWithStats(filtered, labels, stats, centroids, 8, CV_16U, cv::ConnectedComponentsAlgorithmsTypes::CCL_DEFAULT);
-    
-    cv::Rect detectedAreaRect(0,0,0,0);
-    bool detected = false;
-    int detectedLabel = -1;
-    for(int i=1; i<stats.rows; i++)
-    {
-        int x = stats.at<int>(cv::Point(0, i));
-        int y = stats.at<int>(cv::Point(1, i));
-        int w = stats.at<int>(cv::Point(2, i));
-        int h = stats.at<int>(cv::Point(3, i));
-        
-        cv::Rect rect(x,y + center - trimHeight / 2,w,h);
-        if (rect.width > width * THRESH_WIDTH) {
-            if (!detected) {
-                detectedAreaRect = rect;
-                detectedLabel = i;
-            }
-            detected = true;
-            if (detectedAreaRect.y + detectedAreaRect.height < rect.y + rect.height) {
-                detectedAreaRect = rect;
-                detectedLabel = i;
-            }
-        }
-    }
-    NSMutableArray *array = [NSMutableArray array];
-    NSMutableArray *features = [NSMutableArray array];
-    if (detected) {
-        cv::Rect localRect(detectedAreaRect.x, detectedAreaRect.y - center + trimHeight / 2, detectedAreaRect.width, detectedAreaRect.height);
-        cv::Mat detectedArea(labels, localRect);
-        cv::Mat detectedComponent;
-        cv::inRange(detectedArea, detectedLabel, detectedLabel, detectedComponent);
-        
-        cv::Rect left(0, 0, 1, localRect.height);
-        cv::Rect right(localRect.width - 1, 0, 1, localRect.height);
-        cv::Moments mLeft = cv::moments(cv::Mat(detectedComponent, left), true);
-        cv::Moments mRight = cv::moments(cv::Mat(detectedComponent, right), true);
-        
-        int yLeft = mLeft.m01 / mLeft.m00;
-        int yRight = mRight.m01 / mRight.m00;
-        
-        
-        cv::Point pLeft(detectedAreaRect.x, yLeft + detectedAreaRect.y);
-        cv::Point pRight(detectedAreaRect.x + detectedAreaRect.width, yRight + detectedAreaRect.y);
-        cv::Point delta = pRight - pLeft;
-        cv::Point normal(delta.y / TEHAI_ASPECT_RATIO, - delta.x / TEHAI_ASPECT_RATIO);
-        
-        // 射影変換
-        cv::Point2f cornerQuad[4];
-        cv::Point2f outputQuad[4];
-        
-        cornerQuad[0] = pLeft;
-        cornerQuad[1] = pRight;
-        cornerQuad[2] = pRight + normal;
-        cornerQuad[3] = pLeft + normal;
-        
-        int outputWidth = TEMPLATE_WIDTH * 14;
-        int outputHeight = TEMPLATE_HEIGHT;
-        cv::Mat output(outputHeight, outputWidth, mat.type());
-        output += cv::Scalar(100, 100, 100, 255);
-        
-        outputQuad[0] = cv::Point2f(0, outputHeight - 1);
-        outputQuad[1] = cv::Point2f(outputWidth - 1, outputHeight - 1);
-        outputQuad[2] = cv::Point2f(outputWidth - 1, 0);
-        outputQuad[3] = cv::Point2f(0, 0);
-        
-        cv::Mat transform = cv::getPerspectiveTransform(cornerQuad, outputQuad);
-        
-        cv::warpPerspective(mat, output, transform, output.size());
-        
-        //14等分
-        cv::Mat haiArr[14];
-        int w = output.size().width / 14;
-        int h = output.size().height;
-        const int padding_w = 8;
-        const int padding_h = 8;
-        
-        
-        for(int i = 0; i < 14; i++){
-            cv::Rect rect(i * w + padding_w, padding_h, w - padding_w, h - padding_h);
-            cv::Mat roi(output, rect);
-            //haiArr[i] = roi;
-            
-            cv::Mat resized_roi(cv::Size(TARGET_WIDTH, TARGET_HEIGHT), roi.type());
-            cv::resize(roi, resized_roi, resized_roi.size());
-            cv::cvtColor(resized_roi, resized_roi, cv::COLOR_BGRA2GRAY);
-            cv::threshold(resized_roi, resized_roi, 0, 1, cv::THRESH_BINARY_INV | cv::THRESH_OTSU);
-            
-            NSMutableArray *feature = [NSMutableArray array];
-            
-            for (int y = 0; y < TARGET_WIDTH; ++y) {
-                for (int x = 0; x < TARGET_HEIGHT; ++x) {
-                    NSInteger val = resized_roi.data[y * resized_roi.step + x * resized_roi.elemSize()];
-                    [feature addObject:[NSNumber numberWithInteger:val]];
-                }
-            }
-            
-            [features addObject:feature];
-        }
-        //for(int i = 0; i < 14; i++){
-        //    [array addObject:[NSNumber numberWithInt:[[self class] detectFromMat:haiArr[i]]]];
-        //}
-        return features;
-        
-    } else {
-        std::cout << "認識失敗" << std::endl;
-        [array addObject:[NSNumber numberWithInt:0]];
-    }
-    return features;
-}*/
-
 - (UIImage *)filter:(UIImage *)image
 {
     cv::Mat mat;
@@ -262,9 +112,12 @@ cv::Point2f gCornerQuad[4];
     
     int width = mat.size().width;
     int height = mat.size().height;
-    int center = mat.size().height / 2;
+    int center = mat.size().height * TRIM_CENTER_RATIO;
     int trimHeight = width / TRIM_ASPECT_RATIO;
     cv::Rect trimRect = cv::Rect(0, center - trimHeight / 2, width, trimHeight);
+    
+    //cv::rectangle(mat, trimRect, cv::Scalar(0, 255, 0, 255), 5);
+    
     cv::Mat trimed(mat, trimRect);
     cv::cvtColor(trimed, filtered, CV_BGR2GRAY);
     // ソーベルフィルタ
@@ -358,15 +211,15 @@ cv::Point2f gCornerQuad[4];
         // 輪郭点 をプレビュー
         //cv::Point2f delta = (pRight - pLeft) / 14;
         
-        cv::Scalar linecolor(20, 50, 250, 255);
+        cv::Scalar linecolor(231, 76, 60, 255);
         int linewidth = 2;
         for (int i = 0; i < 15; ++i) {
             cv::Point bottom = pLeft + delta * i / 14;
             cv::Point top = bottom + normal;
-            cv::line(mat, bottom, top, linecolor, linewidth);
+            cv::line(mat, bottom, top, linecolor, linewidth, CV_AA);
         }
-        cv::line(mat, pRight, pLeft, linecolor, linewidth);
-        cv::line(mat, pRight + normal, pLeft + normal, linecolor, linewidth);
+        cv::line(mat, pRight, pLeft, linecolor, linewidth, CV_AA);
+        cv::line(mat, pRight + normal, pLeft + normal, linecolor, linewidth, CV_AA);
         
     }
     
