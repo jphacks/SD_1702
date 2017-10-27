@@ -947,7 +947,7 @@ class Calculator {
     }
     
     func isKokusimusou() -> Bool {
-        return true
+        return false
     }
     
     func isKokusimusou13() -> Bool {
