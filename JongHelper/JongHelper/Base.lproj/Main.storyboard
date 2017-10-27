@@ -20,12 +20,30 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="a8Z-NI-ugn">
                                 <rect key="frame" x="0.0" y="0.0" width="667" height="255"/>
                             </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VKG-Wm-Sj6">
+                                <rect key="frame" x="0.0" y="0.0" width="667" height="120"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="120" id="Kb5-Gq-X42"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="牌をなるべく正面から、表示される枠線に合わせて撮影してください" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qF5-HZ-sWb">
+                                <rect key="frame" x="64" y="49.5" width="538" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="a8Z-NI-ugn" secondAttribute="trailing" id="4Ak-TM-Xy4"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="a8Z-NI-ugn" secondAttribute="bottom" constant="120" id="CWZ-mC-co2"/>
+                            <constraint firstItem="VKG-Wm-Sj6" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="DNj-0u-vG2"/>
+                            <constraint firstItem="VKG-Wm-Sj6" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="ENV-dh-gaR"/>
+                            <constraint firstItem="VKG-Wm-Sj6" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="bHa-hd-NXn"/>
                             <constraint firstItem="a8Z-NI-ugn" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="bPD-kB-nXf"/>
+                            <constraint firstItem="qF5-HZ-sWb" firstAttribute="centerY" secondItem="VKG-Wm-Sj6" secondAttribute="centerY" id="c1X-nj-LbU"/>
+                            <constraint firstItem="qF5-HZ-sWb" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ckd-e5-GE9"/>
                             <constraint firstItem="a8Z-NI-ugn" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="dT4-AD-r5b"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -37,7 +55,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="27" y="9"/>
+            <point key="canvasLocation" x="26.53673163418291" y="8.8000000000000007"/>
         </scene>
         <!--TokutenView-->
         <scene sceneID="VFg-d6-bDL">
