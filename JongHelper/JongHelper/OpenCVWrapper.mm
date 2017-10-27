@@ -35,10 +35,123 @@ static const int PADDING_RIGHT = 2;
 
 cv::Point2f gCornerQuad[4];
 
+static cv::Mat loadMatFromFile(NSString *fileName)
+{
+    NSString *resourcePath = [[NSBundle mainBundle] resourcePath];
+    NSString *path = [resourcePath stringByAppendingPathComponent:fileName];
+    const char *pathChars = [path UTF8String];
+    return cv::imread(pathChars);
+}
+
 - (id) init {
     if (self = [super init]) {
+        
+        templates.push_back(loadMatFromFile(@"templates/manzu/1m.JPG")); // 1 2m 8m
+        templates.push_back(loadMatFromFile(@"templates/manzu/2m.JPG")); // 3 8m
+        templates.push_back(loadMatFromFile(@"templates/manzu/3m.JPG")); // 1 2m
+        templates.push_back(loadMatFromFile(@"templates/manzu/4m.JPG")); // 4
+        templates.push_back(loadMatFromFile(@"templates/manzu/5m.JPG")); // 3 2m
+        templates.push_back(loadMatFromFile(@"templates/manzu/6m.JPG")); // 5
+        templates.push_back(loadMatFromFile(@"templates/manzu/7m.JPG")); // 3 2m
+        templates.push_back(loadMatFromFile(@"templates/manzu/8m.JPG")); // 1 2m
+        templates.push_back(loadMatFromFile(@"templates/manzu/9m.JPG")); // 1 2m
+        
+        templates.push_back(loadMatFromFile(@"templates/pinzu/1p.JPG")); // 4 2p
+        templates.push_back(loadMatFromFile(@"templates/pinzu/2p.JPG")); // 3 3p
+        templates.push_back(loadMatFromFile(@"templates/pinzu/3p.JPG")); // 5
+        templates.push_back(loadMatFromFile(@"templates/pinzu/4p.JPG")); // 4 3p
+        templates.push_back(loadMatFromFile(@"templates/pinzu/5p.JPG")); // 3 3p
+        templates.push_back(loadMatFromFile(@"templates/pinzu/6p.JPG")); // 4 3p
+        templates.push_back(loadMatFromFile(@"templates/pinzu/7p.JPG")); // 4 9p
+        templates.push_back(loadMatFromFile(@"templates/pinzu/8p.JPG")); // 3 2p
+        templates.push_back(loadMatFromFile(@"templates/pinzu/9p.JPG")); // 5 9p
+        
+        templates.push_back(loadMatFromFile(@"templates/souzu/1s.JPG")); // 2 2p 3p
+        templates.push_back(loadMatFromFile(@"templates/souzu/2s.JPG")); // 4
+        templates.push_back(loadMatFromFile(@"templates/souzu/3s.JPG")); // 5
+        templates.push_back(loadMatFromFile(@"templates/souzu/4s.JPG")); // 5
+        templates.push_back(loadMatFromFile(@"templates/souzu/5s.JPG")); // 5
+        templates.push_back(loadMatFromFile(@"templates/souzu/6s.JPG")); // 5
+        templates.push_back(loadMatFromFile(@"templates/souzu/7s.JPG")); // 2 9s
+        templates.push_back(loadMatFromFile(@"templates/souzu/8s.JPG")); // 5
+        templates.push_back(loadMatFromFile(@"templates/souzu/9s.JPG")); // 5
+        
+        templates.push_back(loadMatFromFile(@"templates/zihai/1z.JPG")); // 5
+        templates.push_back(loadMatFromFile(@"templates/zihai/2z.JPG")); // 4 8s
+        templates.push_back(loadMatFromFile(@"templates/zihai/3z.JPG")); // 5
+        templates.push_back(loadMatFromFile(@"templates/zihai/4z.JPG")); // 5
+        templates.push_back(loadMatFromFile(@"templates/zihai/5z.JPG")); // 1
+        templates.push_back(loadMatFromFile(@"templates/zihai/6z.JPG")); // 5
+        templates.push_back(loadMatFromFile(@"templates/zihai/7z.JPG")); // 5
+        
+        for (cv::Mat temp : templates) {
+            cv::Mat resized_temp;
+            cv::resize(temp,resized_temp , cv::Size(TEMPLATE_WIDTH, TEMPLATE_HEIGHT));
+            std::vector<cv::KeyPoint> keypoints;
+            cv::Mat descripter;
+            AKAZE->detect(resized_temp, keypoints);
+            AKAZE->compute(resized_temp, keypoints, descripter);
+            templatesKeypoints.push_back(keypoints);
+            templatesDescripters.push_back(descripter);
+        }
     }
     return self;
+}
+
+- (NSArray*)getTehaiArray:(UIImage *)image
+{
+    cv::Mat mat;
+    cv::Mat filtered;
+    //Matへ変換
+    UIImageToMat(image, mat);
+    
+    int width = mat.size().width;
+    int height = mat.size().height;
+//    int center = mat.size().height / 2;
+//    int trimHeight = width / TRIM_ASPECT_RATIO;
+//    cv::Rect trimRect = cv::Rect(0, center - trimHeight / 2, width, trimHeight);
+//    cv::Mat trimed(mat, trimRect);
+//    cv::cvtColor(trimed, filtered, CV_BGR2GRAY);
+    
+    // 射影変換
+    
+    cv::Point2f cornerQuadPixel[4];
+    
+    cornerQuadPixel[0] = cv::Point2f(gCornerQuad[0].x * width, gCornerQuad[0].y * height);
+    cornerQuadPixel[1] = cv::Point2f(gCornerQuad[1].x * width, gCornerQuad[1].y * height);
+    cornerQuadPixel[2] = cv::Point2f(gCornerQuad[2].x * width, gCornerQuad[2].y * height);
+    cornerQuadPixel[3] = cv::Point2f(gCornerQuad[3].x * width, gCornerQuad[3].y * height);
+    
+    const int padding_w = 8;
+    const int padding_h = 8;
+    
+    int persWidth = (TEMPLATE_WIDTH + padding_w * 2) * 14;
+    int persHeight = TEMPLATE_HEIGHT + padding_h * 2;
+    
+    cv::Point2f outputQuadPixel[4];
+    
+    outputQuadPixel[0] = cv::Point2f(0, persHeight);
+    outputQuadPixel[1] = cv::Point2f(persWidth, persHeight);
+    outputQuadPixel[2] = cv::Point2f(persWidth, 0);
+    outputQuadPixel[3] = cv::Point2f(0, 0);
+    
+    cv::Mat output(cv::Size(persWidth, persHeight), mat.type());
+    cv::Mat transform = cv::getPerspectiveTransform(cornerQuadPixel, outputQuadPixel);
+    cv::warpPerspective(mat, output, transform, output.size());
+    
+    //14等分
+    cv::Mat haiArr[14];
+    NSMutableArray *array = [NSMutableArray array];
+    for(int i = 0; i < 14; i++){
+        cv::Rect rect(i * (TEMPLATE_WIDTH + padding_w * 2) + padding_w, padding_h, TEMPLATE_WIDTH, TEMPLATE_HEIGHT);
+        cv::Mat roi(output, rect);
+        haiArr[i] = roi;
+    }
+    for(int i = 0; i < 14; i++){
+        [array addObject:[NSNumber numberWithInt:[[self class] detectFromMat:haiArr[i]]]];
+    }
+    
+    return array;
 }
 
 - (NSArray *)getFeatures:(UIImage *)image

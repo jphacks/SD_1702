@@ -46,6 +46,7 @@
 		5AA52CCA1F9C1D4F006107AB /* TenpaiTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5AA52CC81F9C1D4F006107AB /* TenpaiTableViewCell.xib */; };
 		5AA52CCC1F9C230A006107AB /* TenpaiData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA52CCB1F9C230A006107AB /* TenpaiData.swift */; };
 		5AA52CD01F9C5101006107AB /* TokutenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA52CCF1F9C5101006107AB /* TokutenViewController.swift */; };
+		5AB39E341FA351D9007DF014 /* templates in Resources */ = {isa = PBXBuildFile; fileRef = 5AB39E331FA351D8007DF014 /* templates */; };
 		5AEEBAAD1F98994D00E006F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEEBAAC1F98994D00E006F3 /* AppDelegate.swift */; };
 		5AEEBAAF1F98994D00E006F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEEBAAE1F98994D00E006F3 /* ViewController.swift */; };
 		5AEEBAB21F98994D00E006F3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AEEBAB01F98994D00E006F3 /* Main.storyboard */; };
@@ -97,6 +98,7 @@
 		5AA52CC81F9C1D4F006107AB /* TenpaiTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TenpaiTableViewCell.xib; sourceTree = "<group>"; };
 		5AA52CCB1F9C230A006107AB /* TenpaiData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TenpaiData.swift; sourceTree = "<group>"; };
 		5AA52CCF1F9C5101006107AB /* TokutenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokutenViewController.swift; sourceTree = "<group>"; };
+		5AB39E331FA351D8007DF014 /* templates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = templates; sourceTree = "<group>"; };
 		5AEEBAA91F98994D00E006F3 /* JongHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JongHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AEEBAAC1F98994D00E006F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5AEEBAAE1F98994D00E006F3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 		5AEEBAAB1F98994D00E006F3 /* JongHelper */ = {
 			isa = PBXGroup;
 			children = (
+				5AB39E331FA351D8007DF014 /* templates */,
 				5A46BE8D1F9AE180008F1ACB /* Resource */,
 				5A46BE851F9AD40F008F1ACB /* opencv2.framework */,
 				5A46BE871F9AD48A008F1ACB /* JongHelper-Bridging-Header.h */,
@@ -282,6 +285,7 @@
 				5A46BE911F9AE1D1008F1ACB /* TehaiTableViewCell.xib in Resources */,
 				5A450A5C1FA191D500A63FB5 /* HaiSelecterView.storyboard in Resources */,
 				5AEEBAB21F98994D00E006F3 /* Main.storyboard in Resources */,
+				5AB39E341FA351D9007DF014 /* templates in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

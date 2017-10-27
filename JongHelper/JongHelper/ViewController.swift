@@ -120,7 +120,14 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         }
         
         if(arr.count == 14){
-            let arr2 = intArrToTile(arr)
+            var arr2 = intArrToTile(arr)
+            // 白だけテンプレートマッチングで行う
+            let arrHaku = intArrToTile(openCVWrapper.getTehaiArray(image) as! [Int])
+            for (k, tile) in arr2.enumerated() {
+                if(arrHaku[k] == Tile.Haku) {
+                    arr2[k] = Tile.Haku
+                }
+            }
             tehaiTileArray = arr2
             setTehaiView(arr2, animated: true)
             self.calculate()
