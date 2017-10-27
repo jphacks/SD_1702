@@ -31,7 +31,7 @@ class TokutenViewController: UIViewController, UITableViewDelegate, UITableViewD
     var isReach = false
     var plushan = 0
     
-    var yakuList: [NormalYaku] = []
+    var yakuList: [Yaku] = []
     
     @IBAction func pushClose(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
@@ -51,13 +51,13 @@ class TokutenViewController: UIViewController, UITableViewDelegate, UITableViewD
         if(plushan > 0) {
             plushan -= 1
         }
-        plusHanLabel.text = String(plushan) + "飜"
+        plusHanLabel.text = "+" + String(plushan) + "飜"
         calculate()
     }
     
     @IBAction func pushPlus(_ sender: UIButton) {
         plushan += 1
-        plusHanLabel.text = String(plushan) + "飜"
+        plusHanLabel.text = "+" + String(plushan) + "飜"
         calculate()
     }
     
@@ -90,7 +90,7 @@ class TokutenViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func calculate() {
-        let normalYakuList = [NormalYaku]()
+        let normalYakuList = [Yaku]()
         
         let gs = GeneralSituation(isHoutei: false, bakaze: bakazeTile, dora: doraTileArray, honba: 1)
         let ps = PersonalSituation(isTsumo: isTsumo, isIppatu: false, isReach: isReach, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: jikazeTile)
@@ -104,16 +104,25 @@ class TokutenViewController: UIViewController, UITableViewDelegate, UITableViewD
             str += s.getName()
         }
         yakuList = score.yakuList
-        //yakuTV.text = str
-        hanLabel.text = "\(score.2)飜\(score.1)符"
+        
+        //役満を探す
+        var isYakuman = false
+        for yaku in yakuList {
+            if(yaku.getHan() == -1) {
+                isYakuman = true
+            }
+        }
+        if(isYakuman){
+            hanLabel.text = "役満"
+        } else {
+            hanLabel.text = "\(score.2)飜\(score.1)符"
+        }
+        
         if(isTsumo){
             scoreLabel.text = "\(score.0.tumo)点"
         } else {
             scoreLabel.text = "\(score.0.ron)点"
         }
-        
-        //huLabel.text = "\(score.1)飜\(score.2)符"
-        //tenLabel.text = "\(score.0)点"
         
         self.tableView.reloadData()
     }
@@ -128,7 +137,11 @@ class TokutenViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "YakuTableViewCell", for:indexPath) as! YakuTableViewCell
         cell.yakuLabel.text = yakuList[indexPath.row].getName()
-        cell.hanLabel.text = String(yakuList[indexPath.row].getHan())
+        if(yakuList[indexPath.row].getHan() == -1) {
+            cell.hanLabel.text = "役満"
+        } else {
+            cell.hanLabel.text = String(yakuList[indexPath.row].getHan())
+        }
         return cell
     }
     

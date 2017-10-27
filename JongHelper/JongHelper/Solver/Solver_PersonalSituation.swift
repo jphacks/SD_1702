@@ -8,6 +8,7 @@
 
 import Foundation
 
+// 自身の情報を管理するクラス
 class PersonalSituation {
     var isParent: Bool
     var isTsumo: Bool

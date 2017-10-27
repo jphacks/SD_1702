@@ -16,7 +16,7 @@ class Calculator {
     
     // 役満を判定するための関数テーブル
     var yakumanFuncList:[() -> Bool] {
-        return[isSuankou, isSuankouTanki,  isDaisangen, isTuiso,  isSusiHou, isDaisusi, isRyuisou, isTyurenPoutou,  isJunseiTyurenpoutou, isTinroutou, isSukantu, isKokusimusou, isKokusimusou13, isTenhou, isTihou]
+        return[isSuankou, isSuankouTanki,  isDaisangen, isTuiso,  isSyoususi, isDaisusi, isRyuisou, isTyurenPoutou,  isJunseiTyurenpoutou, isTinroutou, isSukantu, isKokusimusou, isKokusimusou13, isTenhou, isTihou]
     }
     
     /*var scoreTableParent = [
@@ -75,13 +75,14 @@ class Calculator {
         [(3600, 3600), (7100, 7200), (8000, 8000), (8000, 8000)]
     ]
     
-    var normalYakuList = [NormalYaku]()
-    var yakumanList = [Yakuman]()
+    var yakuList = [Yaku]()
     
     var compMentu: CompMentu
     
     var generalSituation: GeneralSituation
     var personalSituation: PersonalSituation
+    
+
     
     init(compMentu: CompMentu, generalSituation: GeneralSituation, personalSituation: PersonalSituation) {
         self.compMentu = compMentu
@@ -93,22 +94,22 @@ class Calculator {
     func calculateScore(addHan: Int) -> (score: (ron: Int, tumo: Int), fu: Int, han: Int){
         
         // 本当は役満を先に探さなければならないが，役満を未実装のため通常役のみみる
-//        let yakumanCount = calculateYakuman()
-//
-//        if yakumanCount > 0 {
-//            if personalSituation.isParent {
-//                return (score: (ron: 48000 * yakumanCount, tumo: 48000 * yakumanCount), 0, 0)
-//            } else {
-//                return (score: (ron: 32000 * yakumanCount, tumo: 32000 * yakumanCount), 0, 0)
-//            }
-//        }
+        let yakumanCount = calculateYakuman()
+
+        if yakumanCount > 0 {
+            if personalSituation.isParent {
+                return (score: (ron: 48000 * yakumanCount, tumo: 48000 * yakumanCount), 0, 0)
+            } else {
+                return (score: (ron: 32000 * yakumanCount, tumo: 32000 * yakumanCount), 0, 0)
+            }
+        }
         
         
         let han = calculateHan() + addHan
         let fu = calculateFu()
         
         print("役: ", terminator:"")
-        for yaku in normalYakuList {
+        for yaku in yakuList {
             print("\(yaku.getName())", terminator:", ")
         }
         print(han)
@@ -167,8 +168,8 @@ class Calculator {
         var yakumanCount = 0
         for i in 0 ..< yakumanFuncList.count {
             if(yakumanFuncList[i]()) {
-                yakumanList.append(Yakuman(rawValue: i)!)
-                yakumanCount += Yakuman(rawValue: i)!.isDoubleYakuman() ? 2 : 1
+                yakuList.append(Yaku(rawValue: 31 + i)!)
+                yakumanCount += Yaku(rawValue: 31 + i)!.isDoubleYakuman() ? 2 : 1
             }
         }
         
@@ -178,11 +179,11 @@ class Calculator {
     
     func calculateFu() -> Int {
         
-        if (normalYakuList.index(of: NormalYaku.Pinhu) != nil && normalYakuList.index(of: NormalYaku.Tumo) != nil) {
+        if (yakuList.index(of: Yaku.Pinhu) != nil && yakuList.index(of: Yaku.Tumo) != nil) {
             return 20
         }
         
-        if (normalYakuList.index(of: NormalYaku.Titoitu) != nil) {
+        if (yakuList.index(of: Yaku.Titoitu) != nil) {
             return 25
         }
         
@@ -208,7 +209,7 @@ class Calculator {
         if (janto == personalSituation.jikaze) {
             tmp += 2
         }
-        if (janto.getType() == "SANGEN") {
+        if (janto.getType() == "SANGENPAI") {
             tmp += 2
         }
         return tmp
@@ -235,8 +236,8 @@ class Calculator {
         var tmpHan = 0
         for i in 0 ..< normalYakuFuncList.count {
             if(normalYakuFuncList[i]()) {
-                normalYakuList.append(NormalYaku(rawValue: i)!)
-                tmpHan += NormalYaku(rawValue: i)!.getHan()
+                yakuList.append(Yaku(rawValue: i)!)
+                tmpHan += Yaku(rawValue: i)!.getHan()
             }
         }
         
@@ -256,7 +257,7 @@ class Calculator {
             }
         }
         for _ in 0 ..< dora {
-            normalYakuList.append(NormalYaku.Dora)
+            yakuList.append(Yaku.Dora)
         }
         return dora
     }
@@ -287,7 +288,7 @@ class Calculator {
         }
         
         let janto = compMentu.getJanto().identifierTile
-        if janto.getType() == "SANGEN" || janto == personalSituation.jikaze || janto == generalSituation.bakaze {
+        if janto.getType() == "SANGENPAI" || janto == personalSituation.jikaze || janto == generalSituation.bakaze {
             return false
         }
         
@@ -644,13 +645,13 @@ class Calculator {
     }
     
     func isSyousangen() -> Bool {
-        if (compMentu.getJanto().identifierTile.getType() != "SANGEN") {
+        if (compMentu.getJanto().identifierTile.getType() != "SANGENPAI") {
             return false;
         }
         
         var count = 0
         for kotu in compMentu.kotuList {
-            if (kotu.identifierTile.getType() == "SANGEN") {
+            if (kotu.identifierTile.getType() == "SANGENPAI") {
                 count += 1
             }
             if (count == 2) {
@@ -750,7 +751,7 @@ class Calculator {
     func isDaisangen() -> Bool {
         var count = 0
         for kotu in compMentu.kotuList {
-            if (kotu.identifierTile.getType() == "SANGEN") {
+            if (kotu.identifierTile.getType() == "SANGENPAI") {
                 count += 1
             }
             if (count == 3) {
@@ -770,7 +771,7 @@ class Calculator {
         return true
     }
     
-    func isSusiHou() -> Bool {
+    func isSyoususi() -> Bool {
         if compMentu.getJanto().identifierTile.getType() != "FONPAI" {
             return false
         }
@@ -789,13 +790,17 @@ class Calculator {
     }
     
     func isDaisusi() -> Bool {
+        if compMentu.getSyuntuCount() > 0 {
+            return false
+        }
+        
         for kotu in compMentu.kotuList {
             if kotu.identifierTile.getType() != "FONPAI" {
                 return false
             }
         }
         
-        return false
+        return true
     }
     
     func isRyuisou() -> Bool {
@@ -854,14 +859,14 @@ class Calculator {
         
         for i in start + 1 ..< end {
             if hand[i] >= 1 {
-                hand[start] -= 1
+                hand[i] -= 1
             } else {
                 return false
             }
         }
         
         for i in start ... end {
-            if hand[i] == 1 {
+            if hand[i] > 0 {
                 return true
             }
         }
@@ -871,10 +876,6 @@ class Calculator {
     
     func isJunseiTyurenpoutou() -> Bool {
         if !isTinitu() {
-            return false
-        }
-        
-        if isJunseiTyurenpoutou() {
             return false
         }
         
@@ -900,14 +901,14 @@ class Calculator {
         
         for i in start + 1 ..< end {
             if hand[i] >= 1 {
-                hand[start] -= 1
+                hand[i] -= 1
             } else {
                 return false
             }
         }
         
         for i in start ... end {
-            if hand[i] != 1 {
+            if hand[i] > 0 {
                 continue
             }
             
@@ -946,64 +947,10 @@ class Calculator {
     }
     
     func isKokusimusou() -> Bool {
-        var kokusi = [1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
-        
-        if isKokusimusou13() {
-            return false
-        }
-        
-        var count = 0
-        var hand = compMentu.mentuListToIntList()
-        
-        for i in 0 ..< hand.count {
-            hand[i] -= kokusi[i]
-            
-            if hand[i] == -1 {
-                return false
-            }
-            
-            if kokusi[i] == 0 && hand[i] > 0 {
-                return false
-            }
-        }
-        
-        return true
+        return false
     }
     
     func isKokusimusou13() -> Bool {
-        var kokusi = [1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
-        
-        if isKokusimusou13() {
-            return false
-        }
-        
-        var count = 0
-        var hand = compMentu.mentuListToIntList()
-        
-        for i in 0 ..< hand.count {
-            hand[i] -= kokusi[i]
-            
-            if hand[i] == -1 {
-                return false
-            }
-            
-            if kokusi[i] == 0 && hand[i] > 0 {
-                return false
-            }
-        }
-        
-        for i in 0 ..< hand.count {
-            if hand[i] != 1 {
-                continue
-            }
-            
-            if (i == compMentu.tumo.getCode()) {
-                return true
-            } else {
-                return false
-            }
-        }
-        
         return false
     }
     

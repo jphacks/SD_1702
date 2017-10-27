@@ -8,7 +8,7 @@
 
 import Foundation
 
-// 14枚
+// テンパイ形の情報を管理するクラス
 class Tenpai: Hashable {
     var hashValue = 0
     
@@ -16,14 +16,20 @@ class Tenpai: Hashable {
         return (lhs.toituList == rhs.toituList) && (lhs.syuntuList == rhs.syuntuList) && (lhs.kotuList == rhs.kotuList) && (lhs.ukiList == rhs.ukiList) && (lhs.wait == rhs.wait)
     }
     
+    // 面子のリスト
     var toituList = [Toitu]()
     var syuntuList = [Syuntu]()
     var kotuList = [Kotu]()
+    // 捨て牌
     var suteTile = Tile.null
+    // 浮いている牌の配列
     var ukiList = [Tile]() // uki[0] < uki[1]
+    // 待ち牌の配列
     var wait = [Tile]()
+    // テンパイ形かどうかのフラグ
     var isTenpai = false
 
+    // イニシャライズ
     init(mentuList: [Mentu], ukiList: [Tile], suteTile: Tile) {
         
         for mentu in mentuList
@@ -142,6 +148,7 @@ class Tenpai: Hashable {
         return false
     }
     
+    // デバッグ用の表示関数
     func printTenpai() {
         
         for kotu in kotuList {
