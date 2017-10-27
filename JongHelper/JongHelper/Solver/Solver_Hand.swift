@@ -474,11 +474,14 @@ class Hand {
                 }
             }
             
-            if !isKokusi {
-                isKokusiTenpai = true
-            }
-        } else if count == 1{
+            // 13面待ちテンパイ
             isKokusiTenpai = true
+        } else if count == 1 {
+            for i in 0 ..< tmpTiles.count {
+                if kokusi[i] == 1 && tmpTiles[i] == 1 {
+                    isKokusiTenpai = true
+                }
+            }
         }
     }
     
