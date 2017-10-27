@@ -71,8 +71,12 @@ class Tenpai: Hashable {
         
         hashValue = hashCode()
     }
+
+    func getWait() -> [Tile] {
+        return wait
+    }
     
-    // 浮き牌と同じtypeの順子を取ってくると同時に残りの面子も返す
+    // 浮き牌と同じtypeの順子を取ってくる，とった順子の残りも返す
     func getSyuntuList() -> ([Syuntu], [Mentu]) {
         var _syuntuList = [Syuntu]()
         var nokori = [Mentu]()
