@@ -54,7 +54,7 @@
 
 
 #### 使用言語
-* Swift, Objective-C++, Python
+* Swift, C++, Python
 
 #### フレームワーク・ライブラリ・モジュール
 * コンピュータ・ビジョン・ライブラリ「OpenCV」
@@ -62,7 +62,7 @@
 
 
 #### デバイス
-* iPhone × 1台
+* iPhone6
 
 
 ### 独自開発技術（Hack Dayで開発したもの）
