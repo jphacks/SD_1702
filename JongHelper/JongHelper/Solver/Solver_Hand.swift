@@ -103,7 +103,7 @@ class Hand {
         var result = [TenpaiData]()
         
         if isKokusiTenpai {
-            return [getKokusiTenpaiData()]
+            return getKokusiTenpaiData()
         }
         
         for tenpai in tenpaiSet { // テンパイ形の候補の中でループ
@@ -484,13 +484,15 @@ class Hand {
     
 
     // 国士のテンパイ形を得る関数
-    func getKokusiTenpaiData() -> TenpaiData {
+    func getKokusiTenpaiData() -> [TenpaiData] {
         
         var matiTiles: [Tile] = []
-        var suteTile: Tile = Tile.null
+        var suteTiles: [Tile] = []
         
         initTmp()
         var kokusi = [1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1]
+        
+        // 単騎待ちの処理
         for i in 0 ..< tmpTiles.count {
             tmpTiles[i] -= kokusi[i]
             if tmpTiles[i] == -1 {
@@ -498,6 +500,7 @@ class Hand {
             }
         }
         
+        // 13面待ちの処理
         if matiTiles.count == 0 {
             for i in 0 ..< kokusi.count {
                 if kokusi[i] == 1 {
@@ -506,34 +509,49 @@ class Hand {
             }
         }
         
+        // 捨て牌の候補を探索
         for i in 0 ..< tmpTiles.count {
             if tmpTiles[i] > 0 {
                 if kokusi[i] != 1 {
-                    suteTile = Tile(rawValue: i)!
-                } else if tmpTiles[i] > 1 {
-                    suteTile = Tile(rawValue: i)!
+                    suteTiles.removeAll()
+                    suteTiles.append(Tile(rawValue: i)!)
+                    break
+                } else if tmpTiles[i] > 0 {
+                    suteTiles.append(Tile(rawValue: i)!)
                 }
             }
         }
         
-        if matiTiles.count > 1 {
-            var score: [(Tile, Int, Int)] = []
+        if suteTiles.count == 1 {
+            if matiTiles.count == 13 {
+                var score: [(Tile, Int, Int)] = []
+                if perSituation.isParent {
+                    for elem in matiTiles {
+                        score.append((elem, 48000 * 2, 48000 * 2))
+                    }
+                } else {
+                    for elem in matiTiles {
+                        score.append((elem, 32000 * 2, 32000 * 2))
+                    }
+                }
+                return [TenpaiData(sute: suteTiles[0], mati: score)]
+            }
+            
             if perSituation.isParent {
-                for elem in matiTiles {
-                    score.append((elem, 48000 * 2, 48000 * 2))
-                }
-            } else {
-                for elem in matiTiles {
-                    score.append((elem, 32000 * 2, 32000 * 2))
-                }
+                return [TenpaiData(sute: suteTiles[0], mati: [(matiTiles[0], 48000, 48000)])]
             }
-            return TenpaiData(sute: suteTile, mati: score)
+            return [TenpaiData(sute: suteTiles[0], mati: [(matiTiles[0], 32000, 32000)])]
         }
         
-        if perSituation.isParent {
-            return TenpaiData(sute: suteTile, mati: [(matiTiles[0], 48000, 48000)])
+        var result: [TenpaiData] = []
+        for elem in suteTiles {
+            if perSituation.isParent {
+                result.append(TenpaiData(sute: elem, mati: [(matiTiles[0], 48000, 48000)]))
+            } else {
+                result.append(TenpaiData(sute: elem, mati: [(matiTiles[0], 32000, 32000)]))
+            }
         }
-        return TenpaiData(sute: suteTile, mati: [(matiTiles[0], 32000, 32000)])
+        return result
     }
     
     // 国士の点数を計算する関数
