@@ -426,11 +426,25 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             }
         }
         
+        //ドラのラベル更新
+        for label in tehaiView.doraLabels {
+            label.isHidden = true
+        }
+        for dora in doraTileArray {
+            if(dora != Tile.null) {
+                for (k, tile) in tehaiTileArray.enumerated() {
+                    if(dora == tile) {
+                        tehaiView.doraLabels[k].isHidden = false
+                    }
+                }
+            }
+        }
+        
         let gs = GeneralSituation(isHoutei: false, bakaze: bakazeTile, dora: dora, honba: 1)
         let ps = PersonalSituation(isTsumo: false, isIppatu: false, isReach: false, isDoubleReach: false, isTyankan: false, isRinsyan: false, jikaze: jikazeTile)
         var matiArr: Set<Tile> = []
         var suteArr: Set<Tile> = []
-        var minSyanten = 99
+        var syantenNum = 99
         tenpaiDatas = []
         
         let hand = Hand(inputtedTiles: tehaiTileArray, tumo: tehaiTileArray[0], genSituation: gs, perSituation: ps)
@@ -446,9 +460,8 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         
         if !hand.isTenpai {
             let syanten = Syanten(hand: tehaiTileArray)
-            let tmpSyanten = syanten.getNormalSyantenNum()
-            minSyanten = tmpSyanten.syanten_normal
-            suteArr = Set(tmpSyanten.gomi)
+            syantenNum = syanten.getSyantenNum()
+            suteArr = Set(syanten.gomi)
         }
         
         if(hand.invalidHand){
@@ -470,7 +483,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
                         notenView.haiImage[k].isHidden = false
                     }
                 }
-                notenView.syantenLabel.text = String(minSyanten) + "シャンテン"
+                notenView.syantenLabel.text = String(syantenNum) + "シャンテン"
             }
             switchView(hand.isTenpai)
         }

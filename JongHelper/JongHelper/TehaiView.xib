@@ -18,14 +18,6 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JS0-aN-Ji9">
                     <rect key="frame" x="0.0" y="255" width="667" height="120"/>
                     <subviews>
-                        <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Xu-VP-lNo">
-                            <rect key="frame" x="0.0" y="0.0" width="667" height="120"/>
-                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="aug-p5-zYL">
-                                <rect key="frame" x="0.0" y="0.0" width="667" height="120"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            </view>
-                            <blurEffect style="light"/>
-                        </visualEffectView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F38-kd-bKe">
                             <rect key="frame" x="0.0" y="0.0" width="568" height="120"/>
                             <subviews>
@@ -169,36 +161,218 @@
                                     <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </tableView>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DXG-MQ-Zvb" userLabel="DoraLabel1">
+                                    <rect key="frame" x="8" y="90" width="32" height="4"/>
+                                    <color key="backgroundColor" red="0.75294117647058822" green="0.22352941176470587" blue="0.16862745098039217" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="32" id="7DO-xa-dWM"/>
+                                        <constraint firstAttribute="height" constant="4" id="MdG-AC-vAR"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H5f-2t-06s" userLabel="DoraLabel2">
+                                    <rect key="frame" x="46" y="91" width="32" height="4"/>
+                                    <color key="backgroundColor" red="0.75294117650000003" green="0.22352941179999999" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="4" id="CsF-uX-hgC"/>
+                                        <constraint firstAttribute="width" constant="32" id="GiP-Bo-hc3"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ueP-Ym-p4i" userLabel="DoraLabel3">
+                                    <rect key="frame" x="86" y="91" width="32" height="4"/>
+                                    <color key="backgroundColor" red="0.75294117650000003" green="0.22352941179999999" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="32" id="PeP-6L-AFM"/>
+                                        <constraint firstAttribute="height" constant="4" id="YrT-Q4-0M2"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KYQ-H8-FkK" userLabel="DoraLabel4">
+                                    <rect key="frame" x="126" y="90" width="32" height="4"/>
+                                    <color key="backgroundColor" red="0.75294117650000003" green="0.22352941179999999" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="32" id="gga-d6-1OB"/>
+                                        <constraint firstAttribute="height" constant="4" id="wud-MK-zDS"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xRe-ae-V2C" userLabel="DoraLabel5">
+                                    <rect key="frame" x="166" y="90" width="32" height="4"/>
+                                    <color key="backgroundColor" red="0.75294117650000003" green="0.22352941179999999" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="4" id="P3R-GX-R3B"/>
+                                        <constraint firstAttribute="width" constant="32" id="v3L-dE-3iC"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ry-It-8Gp" userLabel="DoraLabel6">
+                                    <rect key="frame" x="206" y="90" width="32" height="4"/>
+                                    <color key="backgroundColor" red="0.75294117650000003" green="0.22352941179999999" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="32" id="Bdp-sV-hMe"/>
+                                        <constraint firstAttribute="height" constant="4" id="vGe-81-0od"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ccQ-14-W5m" userLabel="DoraLabel7">
+                                    <rect key="frame" x="246" y="90" width="32" height="4"/>
+                                    <color key="backgroundColor" red="0.75294117650000003" green="0.22352941179999999" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="32" id="hEI-q6-wRr"/>
+                                        <constraint firstAttribute="height" constant="4" id="nc8-EA-2c8"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7YP-Hr-uCp" userLabel="DoraLabel8">
+                                    <rect key="frame" x="286" y="90" width="32" height="4"/>
+                                    <color key="backgroundColor" red="0.75294117650000003" green="0.22352941179999999" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="4" id="EzE-Bn-qd0"/>
+                                        <constraint firstAttribute="width" constant="32" id="U3c-8a-ZaA"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gHv-qp-ec2" userLabel="DoraLabel9">
+                                    <rect key="frame" x="326" y="90" width="32" height="4"/>
+                                    <color key="backgroundColor" red="0.75294117650000003" green="0.22352941179999999" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="4" id="7bd-S3-lsj"/>
+                                        <constraint firstAttribute="width" constant="32" id="vID-eI-5JH"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Mu-ih-0Tj" userLabel="DoraLabel10">
+                                    <rect key="frame" x="366" y="90" width="32" height="4"/>
+                                    <color key="backgroundColor" red="0.75294117650000003" green="0.22352941179999999" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="32" id="iQa-0q-wR5"/>
+                                        <constraint firstAttribute="height" constant="4" id="vzD-VJ-JnJ"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WDw-Es-Y35" userLabel="DoraLabel11">
+                                    <rect key="frame" x="406" y="91" width="32" height="4"/>
+                                    <color key="backgroundColor" red="0.75294117650000003" green="0.22352941179999999" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="4" id="6gM-aC-WXX"/>
+                                        <constraint firstAttribute="width" constant="32" id="EcU-6k-QrW"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S9k-CS-g7Q" userLabel="DoraLabel12">
+                                    <rect key="frame" x="446" y="91" width="32" height="4"/>
+                                    <color key="backgroundColor" red="0.75294117650000003" green="0.22352941179999999" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="32" id="GDQ-kX-Snu"/>
+                                        <constraint firstAttribute="height" constant="4" id="TFk-uu-pr2"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zt4-dm-g7G" userLabel="DoraLabel13">
+                                    <rect key="frame" x="486" y="90" width="32" height="4"/>
+                                    <color key="backgroundColor" red="0.75294117650000003" green="0.22352941179999999" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="32" id="nKb-rb-EML"/>
+                                        <constraint firstAttribute="height" constant="4" id="vNe-pc-PvN"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Glp-ri-LM0" userLabel="DoraLabel14">
+                                    <rect key="frame" x="526" y="90" width="32" height="4"/>
+                                    <color key="backgroundColor" red="0.75294117650000003" green="0.22352941179999999" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="32" id="Lbp-gD-ced"/>
+                                        <constraint firstAttribute="height" constant="4" id="lef-oc-Cdw"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
+                                <constraint firstItem="7YP-Hr-uCp" firstAttribute="leading" secondItem="ccQ-14-W5m" secondAttribute="trailing" constant="8" id="0dh-IR-FDU"/>
+                                <constraint firstItem="ccQ-14-W5m" firstAttribute="leading" secondItem="3ry-It-8Gp" secondAttribute="trailing" constant="8" id="2bQ-ai-qNd"/>
+                                <constraint firstItem="ueP-Ym-p4i" firstAttribute="leading" secondItem="H5f-2t-06s" secondAttribute="trailing" constant="8" id="3bn-HG-Ufd"/>
                                 <constraint firstItem="IH6-tV-EJc" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="47w-gN-rYR"/>
+                                <constraint firstItem="7YP-Hr-uCp" firstAttribute="top" secondItem="mPF-6j-Uw2" secondAttribute="bottom" constant="8" id="4M8-Jj-L8b"/>
+                                <constraint firstItem="gHv-qp-ec2" firstAttribute="leading" secondItem="7YP-Hr-uCp" secondAttribute="trailing" constant="8" id="5eJ-lz-i0b"/>
                                 <constraint firstItem="9G2-SY-HVq" firstAttribute="leading" secondItem="gLG-UW-WQf" secondAttribute="trailing" constant="8" id="5xN-6I-tGq"/>
                                 <constraint firstItem="UqG-Qb-v2g" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="98P-Bn-UNP"/>
+                                <constraint firstItem="H5f-2t-06s" firstAttribute="top" secondItem="hsQ-dU-M5z" secondAttribute="bottom" constant="8" id="Aft-7z-X4f"/>
                                 <constraint firstItem="hsQ-dU-M5z" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="BTT-AE-3OX"/>
+                                <constraint firstItem="S9k-CS-g7Q" firstAttribute="leading" secondItem="WDw-Es-Y35" secondAttribute="trailing" constant="8" id="Cgt-Xp-rx4"/>
                                 <constraint firstItem="gLG-UW-WQf" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="Chc-m6-A6O"/>
+                                <constraint firstItem="KYQ-H8-FkK" firstAttribute="leading" secondItem="ueP-Ym-p4i" secondAttribute="trailing" constant="8" id="FAd-MZ-D4q"/>
                                 <constraint firstItem="zAF-Vh-DMg" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="GdF-xg-1gZ"/>
+                                <constraint firstItem="xRe-ae-V2C" firstAttribute="leading" secondItem="KYQ-H8-FkK" secondAttribute="trailing" constant="8" id="Ira-5o-lhK"/>
                                 <constraint firstItem="hsQ-dU-M5z" firstAttribute="leading" secondItem="TNM-Vp-PS7" secondAttribute="trailing" constant="8" id="KEx-5E-cAY"/>
+                                <constraint firstItem="WDw-Es-Y35" firstAttribute="leading" secondItem="0Mu-ih-0Tj" secondAttribute="trailing" constant="8" id="MRr-L0-RWB"/>
                                 <constraint firstItem="MgV-3N-wC4" firstAttribute="leading" secondItem="5na-d8-0VX" secondAttribute="trailing" constant="8" id="O3n-fc-JVQ"/>
                                 <constraint firstItem="bwj-Io-mqe" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="OFV-AP-PRY"/>
                                 <constraint firstItem="mPF-6j-Uw2" firstAttribute="leading" secondItem="9G2-SY-HVq" secondAttribute="trailing" constant="8" id="ORN-WJ-wbO"/>
+                                <constraint firstItem="KYQ-H8-FkK" firstAttribute="top" secondItem="Iq5-HI-UT7" secondAttribute="bottom" constant="8" id="U1r-G2-Alf"/>
+                                <constraint firstItem="DXG-MQ-Zvb" firstAttribute="top" secondItem="TNM-Vp-PS7" secondAttribute="bottom" constant="8" id="UDu-RE-RCe"/>
                                 <constraint firstItem="Iq5-HI-UT7" firstAttribute="leading" secondItem="IH6-tV-EJc" secondAttribute="trailing" constant="8" id="Ude-YX-QMy"/>
+                                <constraint firstItem="Zt4-dm-g7G" firstAttribute="leading" secondItem="S9k-CS-g7Q" secondAttribute="trailing" constant="8" id="V0B-gt-oGJ"/>
                                 <constraint firstItem="UqG-Qb-v2g" firstAttribute="leading" secondItem="zAF-Vh-DMg" secondAttribute="trailing" constant="8" id="VE8-9P-GhB"/>
                                 <constraint firstItem="5na-d8-0VX" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="WCv-lr-N3F"/>
                                 <constraint firstAttribute="width" constant="568" id="Yxh-Am-U1p"/>
                                 <constraint firstItem="5na-d8-0VX" firstAttribute="leading" secondItem="mPF-6j-Uw2" secondAttribute="trailing" constant="8" id="ZLg-vv-WTZ"/>
                                 <constraint firstItem="zAF-Vh-DMg" firstAttribute="leading" secondItem="aL9-DH-kLd" secondAttribute="trailing" constant="8" id="aR3-gq-YhT"/>
                                 <constraint firstItem="TNM-Vp-PS7" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="btp-Ns-k8K"/>
+                                <constraint firstItem="DXG-MQ-Zvb" firstAttribute="leading" secondItem="F38-kd-bKe" secondAttribute="leading" constant="8" id="cQz-bO-b4l"/>
                                 <constraint firstItem="IH6-tV-EJc" firstAttribute="leading" secondItem="hsQ-dU-M5z" secondAttribute="trailing" constant="8" id="cug-JF-zLj"/>
                                 <constraint firstItem="kve-n5-BHn" firstAttribute="leading" secondItem="Iq5-HI-UT7" secondAttribute="trailing" constant="8" id="d5h-J8-BkX"/>
                                 <constraint firstItem="bwj-Io-mqe" firstAttribute="leading" secondItem="UqG-Qb-v2g" secondAttribute="trailing" constant="8" id="dzL-rN-lbA"/>
                                 <constraint firstItem="MgV-3N-wC4" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="f5n-w6-Az3"/>
+                                <constraint firstItem="S9k-CS-g7Q" firstAttribute="top" secondItem="zAF-Vh-DMg" secondAttribute="bottom" constant="8" id="fRw-iJ-vMM"/>
+                                <constraint firstItem="H5f-2t-06s" firstAttribute="leading" secondItem="DXG-MQ-Zvb" secondAttribute="trailing" constant="6" id="g3b-yn-oqB"/>
+                                <constraint firstItem="3ry-It-8Gp" firstAttribute="leading" secondItem="xRe-ae-V2C" secondAttribute="trailing" constant="8" id="gUM-aW-nRy"/>
                                 <constraint firstItem="9G2-SY-HVq" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="gff-yn-ADD"/>
+                                <constraint firstItem="ccQ-14-W5m" firstAttribute="top" secondItem="9G2-SY-HVq" secondAttribute="bottom" constant="8" id="hhP-Kr-PpQ"/>
+                                <constraint firstItem="WDw-Es-Y35" firstAttribute="top" secondItem="aL9-DH-kLd" secondAttribute="bottom" constant="8" id="inB-g7-YYr"/>
                                 <constraint firstItem="aL9-DH-kLd" firstAttribute="leading" secondItem="MgV-3N-wC4" secondAttribute="trailing" constant="8" id="j5I-E6-Od8"/>
                                 <constraint firstItem="mPF-6j-Uw2" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="k2k-uA-Axv"/>
+                                <constraint firstItem="3ry-It-8Gp" firstAttribute="top" secondItem="gLG-UW-WQf" secondAttribute="bottom" constant="8" id="kXT-9i-fKZ"/>
+                                <constraint firstItem="Glp-ri-LM0" firstAttribute="top" secondItem="bwj-Io-mqe" secondAttribute="bottom" constant="8" id="mSI-1D-Kzn"/>
                                 <constraint firstItem="Iq5-HI-UT7" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="mvT-H0-CD8"/>
                                 <constraint firstItem="gLG-UW-WQf" firstAttribute="leading" secondItem="kve-n5-BHn" secondAttribute="trailing" constant="8" id="pYV-bg-9wA"/>
+                                <constraint firstItem="xRe-ae-V2C" firstAttribute="top" secondItem="kve-n5-BHn" secondAttribute="bottom" constant="8" id="qm4-jp-goh"/>
+                                <constraint firstItem="ueP-Ym-p4i" firstAttribute="top" secondItem="IH6-tV-EJc" secondAttribute="bottom" constant="8" id="rBE-Kh-oO3"/>
+                                <constraint firstItem="Zt4-dm-g7G" firstAttribute="top" secondItem="UqG-Qb-v2g" secondAttribute="bottom" constant="8" id="rDQ-yS-8Md"/>
                                 <constraint firstItem="kve-n5-BHn" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="reX-qf-FGF"/>
+                                <constraint firstItem="0Mu-ih-0Tj" firstAttribute="leading" secondItem="gHv-qp-ec2" secondAttribute="trailing" constant="8" id="rpm-W3-uhW"/>
+                                <constraint firstItem="Glp-ri-LM0" firstAttribute="leading" secondItem="Zt4-dm-g7G" secondAttribute="trailing" constant="8" id="tdZ-13-MeE"/>
+                                <constraint firstItem="0Mu-ih-0Tj" firstAttribute="top" secondItem="MgV-3N-wC4" secondAttribute="bottom" constant="8" id="uLA-Hw-eNP"/>
+                                <constraint firstItem="gHv-qp-ec2" firstAttribute="top" secondItem="5na-d8-0VX" secondAttribute="bottom" constant="8" id="vN1-Y7-D4d"/>
                                 <constraint firstItem="TNM-Vp-PS7" firstAttribute="leading" secondItem="F38-kd-bKe" secondAttribute="leading" constant="8" id="y6Q-0g-F7E"/>
                                 <constraint firstItem="aL9-DH-kLd" firstAttribute="centerY" secondItem="F38-kd-bKe" secondAttribute="centerY" id="yt4-BX-edr"/>
                             </constraints>
@@ -249,11 +423,7 @@
                         <constraint firstAttribute="bottom" secondItem="F38-kd-bKe" secondAttribute="bottom" id="Mpk-Nj-MqT"/>
                         <constraint firstItem="oJf-Gt-It8" firstAttribute="top" secondItem="RiN-iG-NDd" secondAttribute="bottom" constant="16" id="WHS-Z8-3K0"/>
                         <constraint firstAttribute="bottom" secondItem="oJf-Gt-It8" secondAttribute="bottom" constant="-50" id="YGM-Z9-HR2"/>
-                        <constraint firstItem="4Xu-VP-lNo" firstAttribute="leading" secondItem="JS0-aN-Ji9" secondAttribute="leading" id="aZT-PH-7S1"/>
                         <constraint firstItem="F38-kd-bKe" firstAttribute="leading" secondItem="JS0-aN-Ji9" secondAttribute="leading" id="alE-Gm-Jlr"/>
-                        <constraint firstAttribute="bottom" secondItem="4Xu-VP-lNo" secondAttribute="bottom" id="bLw-h1-uNQ"/>
-                        <constraint firstItem="4Xu-VP-lNo" firstAttribute="top" secondItem="JS0-aN-Ji9" secondAttribute="top" id="mAE-LK-ysn"/>
-                        <constraint firstAttribute="trailing" secondItem="4Xu-VP-lNo" secondAttribute="trailing" id="u2X-4f-BUK"/>
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qcF-0a-gDr">
@@ -293,6 +463,20 @@
                 <outletCollection property="tableViews" destination="zAF-Vh-DMg" collectionClass="NSMutableArray" id="gAx-ar-bIB"/>
                 <outletCollection property="tableViews" destination="UqG-Qb-v2g" collectionClass="NSMutableArray" id="AyR-y2-jUT"/>
                 <outletCollection property="tableViews" destination="bwj-Io-mqe" collectionClass="NSMutableArray" id="cRB-6Z-98I"/>
+                <outletCollection property="doraLabels" destination="DXG-MQ-Zvb" collectionClass="NSMutableArray" id="Fmb-wp-qIw"/>
+                <outletCollection property="doraLabels" destination="H5f-2t-06s" collectionClass="NSMutableArray" id="QFj-yi-ZR0"/>
+                <outletCollection property="doraLabels" destination="ueP-Ym-p4i" collectionClass="NSMutableArray" id="xx7-pG-wvM"/>
+                <outletCollection property="doraLabels" destination="KYQ-H8-FkK" collectionClass="NSMutableArray" id="hNq-NY-paI"/>
+                <outletCollection property="doraLabels" destination="xRe-ae-V2C" collectionClass="NSMutableArray" id="5EY-Dm-62m"/>
+                <outletCollection property="doraLabels" destination="3ry-It-8Gp" collectionClass="NSMutableArray" id="VaI-Ge-3CM"/>
+                <outletCollection property="doraLabels" destination="ccQ-14-W5m" collectionClass="NSMutableArray" id="6FI-B4-jCd"/>
+                <outletCollection property="doraLabels" destination="7YP-Hr-uCp" collectionClass="NSMutableArray" id="4Yd-KO-byW"/>
+                <outletCollection property="doraLabels" destination="gHv-qp-ec2" collectionClass="NSMutableArray" id="s24-qA-GQR"/>
+                <outletCollection property="doraLabels" destination="0Mu-ih-0Tj" collectionClass="NSMutableArray" id="Dn6-9X-fE4"/>
+                <outletCollection property="doraLabels" destination="WDw-Es-Y35" collectionClass="NSMutableArray" id="tOf-MZ-z6Y"/>
+                <outletCollection property="doraLabels" destination="S9k-CS-g7Q" collectionClass="NSMutableArray" id="FsH-Fy-l6u"/>
+                <outletCollection property="doraLabels" destination="Zt4-dm-g7G" collectionClass="NSMutableArray" id="wqU-71-6dt"/>
+                <outletCollection property="doraLabels" destination="Glp-ri-LM0" collectionClass="NSMutableArray" id="ngj-bY-V0i"/>
             </connections>
             <point key="canvasLocation" x="25.5" y="51.5"/>
         </view>
