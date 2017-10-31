@@ -1,6 +1,6 @@
 # JongHelper
 
-[![JongHelper紹介動画](https://img.youtube.com/vi/1fCdh1iiX0A/0.jpg)](https://youtu.be/1fCdh1iiX0A)
+[![JongHelper紹介動画](https://raw.githubusercontent.com/jphacks/SD_1702/master/JongHelper.png)](https://youtu.be/1fCdh1iiX0A)
 
 ## 製品概要
 ### Mahjong X Tech 
