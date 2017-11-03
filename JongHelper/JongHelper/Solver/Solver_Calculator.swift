@@ -113,7 +113,7 @@ class Calculator {
             print("\(yaku.getName())", terminator:", ")
         }
         print(han)
-        print("符: \(fu)", terminator:"")
+        print("符: \(fu)")
         
         var hanindex: Int
         if han == 0 {
@@ -144,21 +144,23 @@ class Calculator {
                 case 11, 12: tmpscore = (36000, 36000)
                 default: tmpscore = (48000, 48000)
                 }
+                print(tmpscore)
                 return (tmpscore, fu, han)
             }
         } else {
             if (5 > han) {
-                return (scoreTableParent[fuindex][hanindex], fu, han)
+                return (scoreTableChild[fuindex][hanindex], fu, han)
             } else {
                 let tmpscore : (Int, Int)
                 switch han {
                 case 0: tmpscore = (0, 0)
                 case 5: tmpscore = (8000, 8000)
                 case 6, 7: tmpscore = (12000, 12000)
-                case 8, 9: tmpscore = (16000, 16000)
+                case 8, 9, 10: tmpscore = (16000, 16000)
                 case 11, 12: tmpscore = (24000, 24000)
                 default: tmpscore = (32000, 32000)
                 }
+                print(tmpscore)
                 return (tmpscore, fu, han)
             }
         }
