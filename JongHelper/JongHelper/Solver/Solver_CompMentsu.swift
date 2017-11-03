@@ -64,9 +64,9 @@ class  CompMentu: Hashable {
             syuntuList.append(Syuntu(isOpen: false, identifierTile: Tile(rawValue:tenpai.ukiList[0].getCode() + 1)!))
         } else if (tenpai.isPenchan()) {
             if(tenpai.ukiList[0].getNumber() == 1) {
-                syuntuList.append(Syuntu(isOpen: false, identifierTile: Tile(rawValue: tenpai.ukiList[1].getCode() + 1)!))
+                syuntuList.append(Syuntu(isOpen: false, identifierTile: Tile(rawValue: tenpai.ukiList[1].getCode())!))
             } else if(tenpai.ukiList[1].getNumber() == 9) {
-                syuntuList.append(Syuntu(isOpen: false, identifierTile: Tile(rawValue: tenpai.ukiList[0].getCode() - 1)!))
+                syuntuList.append(Syuntu(isOpen: false, identifierTile: Tile(rawValue: tenpai.ukiList[0].getCode())!))
             }
         } else if (tenpai.isRyanmen()) {
             if(tenpai.ukiList[0].getNumber() > tumo.getNumber()) {

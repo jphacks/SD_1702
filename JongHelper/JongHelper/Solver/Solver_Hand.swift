@@ -106,8 +106,13 @@ class Hand {
             return getKokusiTenpaiData()
         }
         
-        for tenpai in tenpaiSet { // テンパイ形の候補の中でループ
+        // テンパイ形の候補の中でループ
+        for tenpai in tenpaiSet {
+            // 待ち牌の候補の中でループ
             for mati in tenpai.getWait() {
+                print(mati)
+                tenpai.printTenpai()
+                
                 let compMentu = CompMentu(tenpai: tenpai, tumo: mati, isOpenHand: false)
                 
                 var calculator = Calculator(compMentu: compMentu ,generalSituation: genSituation, personalSituation: perSituation)
@@ -123,30 +128,33 @@ class Hand {
                 if result.count == 0 {
                     result.append(TenpaiData(sute: tenpai.suteTile, mati: [(mati, ronScore.score.ron, tumoScore.score.tumo)]))
                 } else {
-                    var flag1 = true
+                    var suteflag = true
                     
+                    // 既に追加されているものと比較し，点数が最大のものだけを残す処理
                     for (i, elem) in result.enumerated() {
                         if elem.suteTile == tenpai.suteTile {
-                            var flag2 = true
+                            suteflag = false
+                            var matiflag = true // 同じ待ち牌の手があるかどうかのフラグ
                             
                             for (j, matiTile) in elem.matiTiles.enumerated() {
                                 if matiTile.tile == mati {
                                     if matiTile.ron < ronScore.score.ron {
                                         result[i].matiTiles[j] = (mati, ronScore.score.ron, tumoScore.score.tumo)
                                     }
-                                    flag2 = false
+                                    matiflag = false
                                     break
                                 }
                             }
                             
-                            if flag2 {
+                            // なければそのままresurlに追加
+                            if matiflag {
                                 result[i].matiTiles.append((mati, ronScore.score.ron, tumoScore.score.tumo))
                             }
-                            flag1 = false
+                            
                         }
                     }
                     
-                    if flag1 {
+                    if suteflag {
                         result.append(TenpaiData(sute: tenpai.suteTile, mati: [(mati, ronScore.score.ron, tumoScore.score.tumo)]))
                     }
                 }
