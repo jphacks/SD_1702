@@ -18,19 +18,17 @@ import Foundation
 
 // 上がりの形を管理するクラス
 class  CompMentu: Hashable {
-    
-    var hashValue = 0
-    // 上がりの形における各面子のリスト
+    // ------- 上がりの形における各面子のリスト -------
     var toituList = [Toitu]()
     var syuntuList = [Syuntu]()
     var kotuList = [Kotu]()
-    var tumo = Tile.null
+    var tumo = Tile.null //上がり牌
     
+     // ------ 特別な状況に関するフラグ -------
     var isTitoitu = false
-    
     var isOpenHand = false
     
-    // [Mentu]の配列によりイニシャライズ
+    // 与えられた面子の配列によりイニシャライズ
     init(mentuList: [Mentu], tumo: Tile, isOpenHand: Bool) {
         
         for mentu in mentuList
@@ -193,6 +191,8 @@ class  CompMentu: Hashable {
         }
         return false
     }
+    
+    var hashValue = 0
     
     func hashCode() -> Int {
         var result = 0

@@ -8,17 +8,25 @@
 //
 import Foundation
 
-// 手牌 14枚
+// 手牌に関する操作全般を行う
+//　・和了時に関して
+//      getScoreを呼ぶことで役のリストと点数を得ることができる
+// ・テンパイ時に関して
+//      getTenpaiDataを呼ぶことでTenpaiDataのリストを得ることができる
+// ・ノーテン時に関して
+//      以下のプロパティに参照することで，各値を取ることができる
+//      syantenNum：シャンテン数
+//      suteArr:不要牌の配列
+//      :狙えそうな役のリストを返す
+
+
 class Hand {
     
-    // 面前手かどうか
-    var isOpenHand = false
-    
-    // ----- 上がり状態に関するプロパティ -----
+    // ----- 和了状態に関するプロパティ -----
     // 上がれるかどうか
     var isAgari = false
     // 上がりの形のセット　これをcalculator に投げることで得点を得ることができる
-    var agariSet = Set<CompMentu>()
+    var agariSet: Set<CompMentu> = []
     // チートイかどうか
     var isTitoitu = false
     // 国士かどうか
@@ -33,14 +41,16 @@ class Hand {
     // 国士テンパイかどうか
     var isKokusiTenpai = false
     // テンパイ形のセット tenpai: toituList, syuntuList, kotuList, uki, wait
-    var tenpaiSet = Set<Tenpai>()
+    var tenpaiSet: Set<Tenpai> = []
+    
+    // ----- ノーテン状態に関するプロパティ -----
+    var syantenNum = 99
+    var suteArr: Set<Tile> = [] //不要牌のリスト
     
     // ---- 状況に関するプロパティ -------
     var genSituation = GeneralSituation()
     var perSituation = PersonalSituation()
-    
-    // ----- ノーテン状態に関するプロパティ -----
-    var syantenNum = 99
+    var isOpenHand = false // 面前手かどうか（実装はしたが，現時点では面前手以外は考えないため実際は使わない）
     
     // 不正な手かどうか
     var invalidHand = false
@@ -52,7 +62,7 @@ class Hand {
     // 入力された面子リスト
     var inputteFuroList = [Mentu]()
     
-    // イニシャライざ
+    // イニシャライザ
     init(inputtedTiles: [Tile], tumo: Tile, genSituation: GeneralSituation, perSituation: PersonalSituation) {
         isOpenHand = false
         
@@ -68,8 +78,14 @@ class Hand {
         self.tumo = tumo
         self.genSituation = genSituation
         self.perSituation = perSituation
-        if (!invalidHand) {
+        if !invalidHand {
             getCompMentuSet()
+        }
+        
+        if !isTenpai {
+            let syanten = Syanten(hand: inputtedTiles).getSyantenNum()
+            syantenNum = syanten.0
+            suteArr = Set(syanten.1)
         }
     }
     
@@ -128,7 +144,7 @@ class Hand {
                 if result.count == 0 {
                     result.append(TenpaiData(sute: tenpai.suteTile, mati: [(mati, ronScore.score.ron, tumoScore.score.tumo)]))
                 } else {
-                    var suteflag = true
+                    var suteflag = true // 同じ捨て牌の手があるかどうか
                     
                     // 既に追加されているものと比較し，点数が最大のものだけを残す処理
                     for (i, elem) in result.enumerated() {
@@ -146,7 +162,7 @@ class Hand {
                                 }
                             }
                             
-                            // なければそのままresurlに追加
+                            // trueのままなら同じ待ち牌の手はないので，そのままresurlに追加
                             if matiflag {
                                 result[i].matiTiles.append((mati, ronScore.score.ron, tumoScore.score.tumo))
                             }
@@ -154,6 +170,7 @@ class Hand {
                         }
                     }
                     
+                    // trueのままなら同じ捨て牌の手はないので，そのままresultに追加
                     if suteflag {
                         result.append(TenpaiData(sute: tenpai.suteTile, mati: [(mati, ronScore.score.ron, tumoScore.score.tumo)]))
                     }
@@ -232,27 +249,25 @@ class Hand {
         searchPriorityKotu()
         searchPrioritySyuntu()
         
-        
-        
-        //多面チャンを探していく (浮き牌の数によって余りを何個許容するか変わることに注意)
+        // 多面チャンを探していく (浮き牌の数によって余りを何個許容するか変わることに注意)
+        // 多面チャン探索の戦略
+        // ・浮いている牌と同じ種類の順子を取ってきて，それらと浮き牌を組み合わせて出来る順子の組み合わせをすべて見ていく
         for tenpai in tenpaiSet {
             let tmp = tenpai.getSyuntuList() //浮き牌と同じ順子を取ってくる
             let oneTypeSyuntuList = tmp.0 // 浮き牌と同じタイプの順子のリスト
             var decidedMentuList = tmp.1 // 残った部分のリスト
             var tiles = [Tile]()
             for syuntu in oneTypeSyuntuList {
-                if (!syuntu.isOpen) { //鳴いている面子は絡めないようにする
-                    tiles.append(syuntu.identifierTile)
-                    tiles.append(Tile(rawValue: syuntu.identifierTile.getCode() - 1)!)
-                    tiles.append(Tile(rawValue: syuntu.identifierTile.getCode() + 1)!)
-                }
+                tiles.append(syuntu.identifierTile)
+                tiles.append(Tile(rawValue: syuntu.identifierTile.getCode() - 1)!)
+                tiles.append(Tile(rawValue: syuntu.identifierTile.getCode() + 1)!)
             }
-            
+                
             for uki in tenpai.ukiList {
                 tiles.append(uki)
             }
             tiles.append(tenpai.suteTile)
-                
+            
             tmpTiles = encodeTiles(tiles: tiles)
             let _tmpTiles = tmpTiles
             
@@ -263,22 +278,14 @@ class Hand {
                 decidedMentuList.append(contentsOf: serchSyuntuCandidate(start: i, end: 26))
                 decidedMentuList.append(contentsOf: serchSyuntuCandidate(start: 1, end: i))
                 
-                
-                let ukiList = getRemainderTiles()
-                if ukiList.count < 4 {
-                    for (i, elem) in ukiList.enumerated() {
-                        var arr = ukiList
-                        arr.remove(at: i)
-                        let tenpai = Tenpai(mentuList: decidedMentuList, ukiList: arr, suteTile: ukiList[i])
-                        if(tenpai.isTenpai) {
-                            tenpaiSet.insert(tenpai)
-                        }
-                    }
+                if countRemainderTiles() < 4 {
+                    serchTenpaiCandidate(mentuCandidate: decidedMentuList)
                 }
             }
         }
+        
     }
-    
+
     // 面子を抜き出した後に残った牌の数をカウントする関数
     func countRemainderTiles() -> Int {
         return tmpTiles.reduce(0) {(num1: Int, num2: Int) -> Int in num1 + num2 }
@@ -296,8 +303,22 @@ class Hand {
         return ukiList
     }
     
+    // テンパイ形を探索するための関数
+    func serchTenpaiCandidate(mentuCandidate: [Mentu]) {
+        
+        let ukiList = getRemainderTiles()
+        for (i, _) in ukiList.enumerated() {
+            var arr = ukiList
+            arr.remove(at: i)
+            let tenpai = Tenpai(mentuList: mentuCandidate, ukiList: arr, suteTile: ukiList[i])
+            if(tenpai.isTenpai) {
+                tenpaiSet.insert(tenpai)
+                isTenpai = true
+            }
+        }
+    }
 
-    // 順子を抜き出していく関数
+    // 順子を抜き出していく関数（探索範囲が設定できるのは多面チャンに対する探索において都合が良いため）
     func serchSyuntuCandidate(start: Int, end: Int) -> [Mentu] {
         var resultList = [Mentu]()
         
@@ -362,46 +383,13 @@ class Hand {
         mentuCandidate.append(contentsOf: serchSyuntuCandidate(start: 1, end: 26))
         
         
-        var ukiNum = countRemainderTiles()
+        let ukiNum = countRemainderTiles()
         
         if (ukiNum == 0) {
             isAgari = true
             agariSet.insert(CompMentu(mentuList: mentuCandidate, tumo: tumo, isOpenHand: false))
         } else if (ukiNum < 4) {
-            let ukiList = getRemainderTiles()
-            for (i, elem) in ukiList.enumerated() {
-                var arr = ukiList
-                arr.remove(at: i)
-                let tenpai = Tenpai(mentuList: mentuCandidate, ukiList: arr, suteTile: ukiList[i])
-                if(tenpai.isTenpai) {
-                    tenpaiSet.insert(tenpai)
-                    isTenpai = true
-                }
-            }
-        }
-    }
-    
-    //　雀頭を決めずに刻子優先探索を行う関数
-    func searchPriorityKotu()  {
-        initTmp()
-        
-        var mentuCandidate = [Mentu]()
-        
-        mentuCandidate.append(contentsOf: serchKotuCandidate())
-        mentuCandidate.append(contentsOf: serchSyuntuCandidate(start: 1, end: 26))
-        
-        let ukiNum = countRemainderTiles()
-        if (ukiNum < 3) {
-            let ukiList = getRemainderTiles()
-            for (i, elem) in ukiList.enumerated() {
-                var arr = ukiList
-                arr.remove(at: i)
-                let tenpai = Tenpai(mentuList: mentuCandidate, ukiList: arr, suteTile: ukiList[i])
-                if(tenpai.isTenpai) {
-                    tenpaiSet.insert(tenpai)
-                    isTenpai = true
-                }
-            }
+            serchTenpaiCandidate(mentuCandidate: mentuCandidate)
         }
     }
     
@@ -417,22 +405,27 @@ class Hand {
         mentuCandidate.append(contentsOf: serchSyuntuCandidate(start: 1, end: 26))
         mentuCandidate.append(contentsOf: serchKotuCandidate())
         
-        var ukiNum = countRemainderTiles()
+        let ukiNum = countRemainderTiles()
         if (ukiNum == 0) {
             isAgari = true
             agariSet.insert(CompMentu(mentuList: mentuCandidate, tumo: tumo, isOpenHand: isOpenHand))
         } else if (ukiNum < 4) {
-            let ukiList = getRemainderTiles()
-            for (i, elem) in ukiList.enumerated() {
-                var arr = ukiList
-                arr.remove(at: i)
-                let tenpai = Tenpai(mentuList: mentuCandidate, ukiList: arr, suteTile: ukiList[i])
-                
-                if(tenpai.isTenpai) {
-                    tenpaiSet.insert(tenpai)
-                    isTenpai = true
-                }
-            }
+            serchTenpaiCandidate(mentuCandidate: mentuCandidate)
+        }
+    }
+    
+    //　雀頭を決めずに刻子優先探索を行う関数
+    func searchPriorityKotu()  {
+        initTmp()
+        
+        var mentuCandidate = [Mentu]()
+        
+        mentuCandidate.append(contentsOf: serchKotuCandidate())
+        mentuCandidate.append(contentsOf: serchSyuntuCandidate(start: 1, end: 26))
+        
+        let ukiNum = countRemainderTiles()
+        if (ukiNum < 3) {
+            serchTenpaiCandidate(mentuCandidate: mentuCandidate)
         }
     }
     
@@ -447,17 +440,7 @@ class Hand {
         
         let ukiNum = countRemainderTiles()
         if (ukiNum < 3) {
-            let ukiList = getRemainderTiles()
-            for (i, elem) in ukiList.enumerated() {
-                var arr = ukiList
-                arr.remove(at: i)
-                let tenpai = Tenpai(mentuList: mentuCandidate, ukiList: arr, suteTile: ukiList[i])
-                
-                if(tenpai.isTenpai) {
-                    tenpaiSet.insert(tenpai)
-                    isTenpai = true
-                }
-            }
+            serchTenpaiCandidate(mentuCandidate: mentuCandidate)
         }
     }
     

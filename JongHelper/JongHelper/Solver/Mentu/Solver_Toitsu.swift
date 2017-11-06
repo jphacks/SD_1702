@@ -9,21 +9,9 @@
 import Foundation
 
 class Toitu: Mentu, Equatable, Comparable {
-    static func <(lhs: Toitu, rhs: Toitu) -> Bool {
-        if Int(lhs.identifierTile.rawValue) < Int(rhs.identifierTile.rawValue) {
-            return true
-        }
-        return false
-    }
-    
-    
-    static func ==(lhs: Toitu, rhs: Toitu) -> Bool {
-        return (lhs.isOpen == rhs.isOpen) && (lhs.isMentu == rhs.isMentu) && (lhs.identifierTile == rhs.identifierTile)
-    }
     
     var isOpen = false
     var isMentu = false
-    //順子はどっかしら決めて持っとく
     var identifierTile: Tile
     
     init() {
@@ -71,6 +59,19 @@ class Toitu: Mentu, Equatable, Comparable {
         var result: Int = identifierTile.getCode() != -1 ? identifierTile.hashValue : 0
         result = 31 * result + (isMentu ? 1 : 0)
         return result
+    }
+    
+    
+    static func <(lhs: Toitu, rhs: Toitu) -> Bool {
+        if Int(lhs.identifierTile.rawValue) < Int(rhs.identifierTile.rawValue) {
+            return true
+        }
+        return false
+    }
+    
+    
+    static func ==(lhs: Toitu, rhs: Toitu) -> Bool {
+        return (lhs.isOpen == rhs.isOpen) && (lhs.isMentu == rhs.isMentu) && (lhs.identifierTile == rhs.identifierTile)
     }
     
 }

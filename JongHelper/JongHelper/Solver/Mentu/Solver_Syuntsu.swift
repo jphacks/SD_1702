@@ -8,21 +8,11 @@
 import Foundation
 
 class Syuntu: Mentu, Equatable, Comparable {
-    static func <(lhs: Syuntu, rhs: Syuntu) -> Bool {
-        if Int(lhs.identifierTile.rawValue) < Int(rhs.identifierTile.rawValue) {
-            return true
-        }
-        return false
-    }
-    
-    static func ==(lhs: Syuntu, rhs: Syuntu) -> Bool {
-        return (lhs.isOpen == rhs.isOpen) && (lhs.isMentu == rhs.isMentu) && (lhs.identifierTile == rhs.identifierTile)
-    }
     
     var isOpen = false
     var isMentu = false
-    //順子はどっかしら決めて持っとく
-    var identifierTile: Tile
+    // その面子を表現するための牌
+    var identifierTile: Tile // 順子は真ん中の牌とする
     
     init() {
         self.identifierTile = Tile.null
@@ -77,6 +67,18 @@ class Syuntu: Mentu, Equatable, Comparable {
     
     func getFu() -> Int {
         return 0
+    }
+    
+    
+    static func <(lhs: Syuntu, rhs: Syuntu) -> Bool {
+        if Int(lhs.identifierTile.rawValue) < Int(rhs.identifierTile.rawValue) {
+            return true
+        }
+        return false
+    }
+    
+    static func ==(lhs: Syuntu, rhs: Syuntu) -> Bool {
+        return (lhs.isOpen == rhs.isOpen) && (lhs.isMentu == rhs.isMentu) && (lhs.identifierTile == rhs.identifierTile)
     }
     
     func hashCode() -> Int {

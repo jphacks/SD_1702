@@ -7,6 +7,7 @@
 
 import Foundation
 
+// 面子に関する抽象クラス
 protocol Mentu: class {
     
     var isOpen: Bool {get set}
