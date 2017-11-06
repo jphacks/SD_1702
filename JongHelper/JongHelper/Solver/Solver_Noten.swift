@@ -1,6 +1,6 @@
 import Foundation
 
-class Syanten {
+class Noten {
     
     //変数定義したい
     var mentu: Int=0      //メンツ数
