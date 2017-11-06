@@ -48,7 +48,8 @@ class Noten {
         let syanten_min = min(getKokusiSyantenNum().syanten, getTiitoituSyantenNum().syanten, getNormalSyantenNum().syanten)
         
         if (syanten_min == getKokusiSyantenNum().syanten){
-            return (syanten_min,getKokusiSyantenNum().gomi)
+            print(getKokusiSyantenNum().gomi)
+            return (syanten_min, getKokusiSyantenNum().gomi)
         }else if (syanten_min == getTiitoituSyantenNum().syanten){
             return (syanten_min,getTiitoituSyantenNum().gomi)
         }else{
@@ -69,7 +70,9 @@ class Noten {
                     syanten_kokusi -= 1
                     tmp[i] -= 1
                 }
-                if (tmp[i] >= 2 && !toituflag) {
+                
+                
+                if (tmp[i] >= 1 && !toituflag) {
                     toituflag  = true
                     tmp[i] -= 1
                 }
@@ -100,7 +103,7 @@ class Noten {
                 toitu += 1
                 tmp[i] -= 2
             }
-            if(tmp[i] == 4) {toitu -= 1}
+            if(tmp[i] == 2) {toitu -= 1}
         }
         
         var gomi_tiitoi: [Tile] = []
