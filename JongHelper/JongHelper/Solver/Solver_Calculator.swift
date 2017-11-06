@@ -17,7 +17,7 @@ class Calculator {
     
     // 役満を判定するための関数テーブル
     var yakumanFuncList:[() -> Bool] {
-        return[isSuankou, isSuankouTanki,  isDaisangen, isTuiso,  isSyoususi, isDaisusi, isRyuisou, isTyurenPoutou,  isJunseiTyurenpoutou, isTinroutou, isSukantu, isKokusimusou, isKokusimusou13, isTenhou, isTihou]
+        return[isSuankou, isSuankouTanki,  isDaisangen, isTuiso,  isSyoususi, isDaisusi, isRyuisou, isTyurenPoutou,  isJunseiTyurenpoutou, isTinroutou, isSukantu, isTenhou, isTihou]
     }
     
     /*var scoreTableParent = [
@@ -952,15 +952,8 @@ class Calculator {
         return true
     }
     
+    // 以降，現時点では未実装
     func isSukantu() -> Bool {
-        return false
-    }
-    
-    func isKokusimusou() -> Bool {
-        return false
-    }
-    
-    func isKokusimusou13() -> Bool {
         return false
     }
     

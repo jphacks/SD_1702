@@ -459,10 +459,8 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         tenpaiDatas = hand.getTenpaiData()
         
         if !hand.isTenpai {
-            let syanten = Syanten(hand: tehaiTileArray).getSyantenNum()
-            syantenNum = syanten.0
-            
-            suteArr = Set(syanten.1)
+            syantenNum = hand.syantenNum
+            suteArr = hand.suteArr
         }
         
         if(hand.invalidHand){

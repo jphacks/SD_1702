@@ -2,7 +2,6 @@ import Foundation
 
 class Syanten {
     
-    
     //変数定義したい
     var mentu: Int=0      //メンツ数
     var toitu: Int=0        //トイツ数

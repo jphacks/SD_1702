@@ -55,10 +55,10 @@ enum Yaku: Int {
     case JunseiTyurenpoutou
     case Tinroutou
     case Sukantu
-    case Kokusimusou
-    case Kokusimusou13
     case Tenhou
     case Tihou
+    case Kokusimusou
+    case Kokusimusou13
     
     func getHan() -> Int {
         switch self {
@@ -128,10 +128,10 @@ enum Yaku: Int {
         case .JunseiTyurenpoutou: return "純正九連宝燈"
         case .Tinroutou: return "清老頭"
         case .Sukantu: return "四槓子"
-        case .Kokusimusou: return "国士無双"
-        case .Kokusimusou13: return "国士無双十三面待ち"
         case .Tenhou: return "天和"
         case .Tihou: return "地和"
+        case .Kokusimusou: return "国士無双"
+        case .Kokusimusou13: return "国士無双十三面待ち"
         }
     }
     
@@ -179,10 +179,10 @@ enum Yaku: Int {
         case .JunseiTyurenpoutou: return "九連宝燈のうち、聴牌時の牌形が１１１２３４５６７８９９９の牌であり、１～９の牌いずれでも上がれる場合（９面待ち）に成立．ダブル役満"
         case .Tinroutou: return "すべての牌が老頭牌（１・９）だけである場合に成立"
         case .Sukantu: return "槓子（暗槓・明槓いずれでも可）が４つある場合に成立．ダブル役満"
-        case .Kokusimusou: return "13種類すべてのヤオ九牌（１・９と字牌）が最低１枚ずつあり、そのうちのどれか１種類が２枚ある場合に成立"
-        case .Kokusimusou13: return "国士無双のうち、聴牌時に13種類すべてのヤオ九牌が１枚ずつあり、ヤオ九牌ならどれでも上がれる場合（13面待ち）に成立．ダブル役満"
         case .Tenhou: return "親の配牌の時点で既にアガリ形になっている場合に成立"
         case .Tihou: return "子の最初のツモでツモアガリした場合に成立．そのツモの前にポン・チー・カン（暗カンを含む）が行われると無効"
+        case .Kokusimusou: return "13種類すべてのヤオ九牌（１・９と字牌）が最低１枚ずつあり、そのうちのどれか１種類が２枚ある場合に成立"
+        case .Kokusimusou13: return "国士無双のうち、聴牌時に13種類すべてのヤオ九牌が１枚ずつあり、ヤオ九牌ならどれでも上がれる場合（13面待ち）に成立．ダブル役満"
         }
     }
 }
