@@ -9,6 +9,7 @@ import Foundation
 
 class Calculator {
     
+    // 役満は通常役を喰うため，通常役と役満の判定は別にする必要がある
     // 通常役を判定するための関数テーブル
     var normalYakuFuncList:[()->Bool] {
         return [isReach, isIppatu, isTumo, isPinhu, isTanyao, isIpeiko, isHaku, isHatu, isTyun, isJikaze, isBakaze, isRinsyan, isTyankan, isHaitei, isHoutei, isDoubleReach, isTyanta, isHonroutou, isSansyokuDoujun, isIttuu, isToiToi, isSansyokuDoukou, isSanankou, isSankantu, isSyousangen, isTitoitu, isRyanpeiko, isJuntyan, isHonitu, isTinitu]
@@ -47,6 +48,7 @@ class Calculator {
         [(3600, (900, 1800)), (7100, (1800, 3600)), (8000, (2000, 4000)), (8000, (2000, 4000))]
     ]*/
     
+    // 満貫以下の親の上がりに対する点数表（インデックスは符と飜数）
     var scoreTableParent = [
         [(0, 0), (0, 2100), (0, 3900), (0, 7800)], //20符
         [(0, 0), (2400, 0), (4800, 4800), (9600, 9600)], //25符
@@ -60,7 +62,7 @@ class Calculator {
         [(4800, 4800), (9600, 9600), (12000, 12000), (12000, 12000)],
         [(5300, 5400), (10600, 10800), (12000, 12000), (12000, 12000)]
     ]
-    
+    // 満貫以下の子の上がりに対する点数表（インデックスは符と飜数）
     var scoreTableChild = [
         [(0, 0), (0, 1500), (0, 2400), (0, 5200)], //20符
         [(0, 0), (1600, 0), (3200, 3200), (6400, 6400)], //25符
@@ -75,15 +77,15 @@ class Calculator {
         [(3600, 3600), (7100, 7200), (8000, 8000), (8000, 8000)]
     ]
     
+    // 成立する役のリスト
     var yakuList = [Yaku]()
     
-    var compMentu: CompMentu
-    
+    // ----- 成立する役を調べるためのプロパティ -----
+    var compMentu: CompMentu //上がりの形
     var generalSituation: GeneralSituation
     var personalSituation: PersonalSituation
     
-
-    
+    // 与えられた上がりの形，状況によってイニシャライズ
     init(compMentu: CompMentu, generalSituation: GeneralSituation, personalSituation: PersonalSituation) {
         self.compMentu = compMentu
         self.generalSituation = generalSituation
@@ -93,7 +95,7 @@ class Calculator {
     // 返り値 ((ロン，ツモ），符，飜)
     func calculateScore(addHan: Int) -> (score: (ron: Int, tumo: Int), fu: Int, han: Int){
         
-        // 本当は役満を先に探さなければならないが，役満を未実装のため通常役のみみる
+        // 役満が成立するかどうかを調べる
         let yakumanCount = calculateYakuman()
 
         if yakumanCount > 0 {
@@ -105,6 +107,7 @@ class Calculator {
         }
         
         
+        // 役満が成立しない場合に，通常役の判定を行う
         let han = calculateHan() + addHan
         let fu = calculateFu()
         
@@ -115,6 +118,7 @@ class Calculator {
         print(han)
         print("符: \(fu)")
         
+        // 点数表にアクセスするために，飜数と符からインデックスを求める
         var hanindex: Int
         if han == 0 {
             return ((0, 0), 0, 0)
@@ -129,7 +133,6 @@ class Calculator {
         } else {
             fuindex = fu / 10 - 1
         }
-        
         
         if (personalSituation.isParent) {
             if (5 > han) {
@@ -166,6 +169,7 @@ class Calculator {
         }
     }
     
+    // 成立する役満を調べる関数
     func calculateYakuman() -> Int {
         var yakumanCount = 0
         for i in 0 ..< yakumanFuncList.count {
@@ -179,6 +183,7 @@ class Calculator {
     }
     
     
+    // 符の計算を行う関数
     func calculateFu() -> Int {
         
         if (yakuList.index(of: Yaku.Pinhu) != nil && yakuList.index(of: Yaku.Tumo) != nil) {
@@ -234,6 +239,7 @@ class Calculator {
         return 0
     }
     
+    // 飜の計算を行う関数
     func calculateHan()  -> Int {
         var tmpHan = 0
         for i in 0 ..< normalYakuFuncList.count {
@@ -263,6 +269,8 @@ class Calculator {
         }
         return dora
     }
+    
+    // ----- 以下は各役に対して成立するか調べる関数が書いてある -----
     
     func isReach() -> Bool {
         if (personalSituation.isReach) {

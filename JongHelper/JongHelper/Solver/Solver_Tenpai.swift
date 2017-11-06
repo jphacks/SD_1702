@@ -10,12 +10,8 @@ import Foundation
 
 // テンパイ形の情報を管理するクラス
 class Tenpai: Hashable {
-    var hashValue = 0
     
-    static func ==(lhs: Tenpai, rhs: Tenpai) -> Bool {
-        return (lhs.toituList == rhs.toituList) && (lhs.syuntuList == rhs.syuntuList) && (lhs.kotuList == rhs.kotuList) && (lhs.ukiList == rhs.ukiList) && (lhs.wait == rhs.wait)
-    }
-    
+    // ----- テンパイ形の情報を表すプロパティ -----
     // 面子のリスト
     var toituList = [Toitu]()
     var syuntuList = [Syuntu]()
@@ -202,6 +198,12 @@ class Tenpai: Hashable {
         
         return 31 * result + tmp;
         
+    }
+    
+    var hashValue = 0
+    
+    static func ==(lhs: Tenpai, rhs: Tenpai) -> Bool {
+        return (lhs.toituList == rhs.toituList) && (lhs.syuntuList == rhs.syuntuList) && (lhs.kotuList == rhs.kotuList) && (lhs.ukiList == rhs.ukiList) && (lhs.wait == rhs.wait)
     }
 }
 
