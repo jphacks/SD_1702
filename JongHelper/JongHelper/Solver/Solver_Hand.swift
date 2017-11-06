@@ -83,7 +83,7 @@ class Hand {
         }
         
         if !isTenpai {
-            let syanten = Noten(hand: inputtedTiles).getSyantenNum()
+            let syanten = Noten(inputtedTiles: self.inputtedTiles).getSyantenNum()
             syantenNum = syanten.0
             suteArr = Set(syanten.1)
         }
