@@ -86,6 +86,7 @@ class Hand {
             let syanten = Noten(inputtedTiles: self.inputtedTiles, genSituation: genSituation, perSituation: perSituation).getSyantenNum()
             syantenNum = syanten.0
             suteArr = Set(syanten.1)
+            print(Noten(inputtedTiles: self.inputtedTiles, genSituation: genSituation, perSituation: perSituation).getYakuCandidate())
         }
     }
     

@@ -40,6 +40,8 @@ class Noten {
     func getYakuCandidate() -> [Yaku] {
         var yakuList: [Yaku] = []
         
+        initTmp()
+        
         for i in 0 ..< yakuFuncList.count {
             if(yakuFuncList[i]()) {
                 yakuList.append(Yaku(rawValue: i)!)
@@ -281,47 +283,79 @@ class Noten {
     
     func isPinhu() -> Bool {
         
-        return false
+        for i in 0 ..< tmp.count {
+            if tmp[i] > 2 {
+                return false
+            }
+        }
+        
+        return true
     }
     
     func isTanyao() -> Bool {
+        var count = 0
+        
+        for i in 0 ..< tmp.count {
+            if !(Tile(rawValue: i)!.isYaochu()) {
+                count += tmp[i]
+            }
+        }
+        
+        if count >= 10 {
+            return true
+        }
         return false
     }
     
     func isIpeiko() -> Bool {
+        var roop = [(1, 7), (10, 16), (19, 25)]
+        
+        for elem in roop {
+            for i in elem.0 ... elem.1 {
+                var count = 0
+                count += tmp[i] > 0 ? 1 : 0
+                count += tmp[i - 1] > 0 ? 1 : 0
+                count += tmp[i + 1] > 0 ? 1 : 0
+                if count >= 2 {
+                    if tmp[i - 1] + tmp[i] + tmp[i + 1] >= 4 {
+                        return true
+                    }
+                }
+            }
+        }
         return false
     }
     
     func isHaku() -> Bool {
-        if (tmp[Tile.Haku.getCode()] > 2) {
+        if (tmp[Tile.Haku.getCode()] >= 2) {
             return true
         }
         return false
     }
     
     func isHatu() -> Bool {
-        if (tmp[Tile.Hatu.getCode()] > 2) {
+        if (tmp[Tile.Hatu.getCode()] >= 2) {
             return true
         }
         return false
     }
     
     func isTyun() -> Bool {
-        if (tmp[Tile.Tyun.getCode()] > 2) {
+        if (tmp[Tile.Tyun.getCode()] >= 2) {
             return true
         }
         return false
     }
     
     func isJikaze() -> Bool {
-        if (tmp[perSituation.jikaze.getCode()] > 2) {
+        if (tmp[perSituation.jikaze.getCode()] >= 2) {
             return true
         }
         return false
     }
     
     func isBakaze() -> Bool {
-        if (tmp[genSituation.bakaze.getCode()] > 2) {
+        if (tmp[genSituation.bakaze.getCode()] >= 2) {
             return true
         }
         return false
@@ -334,13 +368,15 @@ class Noten {
     func isHonroutou() -> Bool {
         var count = 0
         
-        for i in 0 ..< 33 {
-            if (Tile(rawValue: i)?.isYaochu())! {
+        for i in 0 ..< tmp.count {
+            if Tile(rawValue: i)!.isYaochu() {
                 count += tmp[i]
             }
         }
         
-        
+        if count > 11 {
+            return true
+        }
         return false
     }
     
@@ -367,10 +403,20 @@ class Noten {
     }
     
     func isIttuu() -> Bool {
-        return false
-    }
-    
-    func isToiToi() -> Bool {
+        var roop = [(0, 8), (9, 17), (18, 26)]
+        
+        for elem in roop {
+            var count = 0
+            for i in elem.0 ... elem.1 {
+                if tmp[i] > 0 {
+                    count += 1
+                }
+            }
+            
+            if count >= 7 {
+                return true
+            }
+        }
         return false
     }
     
@@ -429,10 +475,42 @@ class Noten {
     }
     
     func isHonitu() -> Bool {
+        var roop = [(0, 8), (9, 17), (18, 26)]
+        
+        for elem in roop {
+            var count = 0
+            for i in elem.0 ... elem.1 {
+                if tmp[i] > 0 {
+                    count += tmp[i]
+                }
+            }
+            
+            for i in 27 ... 33 {
+                count += tmp[i]
+            }
+            
+            if count >= 10 {
+                return true
+            }
+        }
         return false
     }
     
     func isTinitu() -> Bool {
+        var roop = [(0, 8), (9, 17), (18, 26)]
+        
+        for elem in roop {
+            var count = 0
+            for i in elem.0 ... elem.1 {
+                if tmp[i] > 0 {
+                    count += tmp[i]
+                }
+            }
+            
+            if count >= 10 {
+                return true
+            }
+        }
         return false
     }
     
@@ -446,10 +524,6 @@ class Noten {
         if(count > 2){
             return true
         }
-        return false
-    }
-    
-    func isSuankouTanki() -> Bool {
         return false
     }
     
@@ -485,15 +559,7 @@ class Noten {
         return false
     }
     
-    func isJunseiTyurenpoutou() -> Bool {
-        return false
-    }
-    
     func isTinroutou() -> Bool {
-        return false
-    }
-    
-    func isSukantu() -> Bool {
         return false
     }
     
@@ -510,10 +576,6 @@ class Noten {
         if(syanten_min == getKokusiSyantenNum().syanten){
             return true
         }
-        return false
-    }
-    
-    func isKokusi13() -> Bool {
         return false
     }
     
@@ -547,6 +609,14 @@ class Noten {
         return false
     }
     
+    func isDora() -> Bool {
+        return false
+    }
+    
+    func isToiToi() -> Bool {
+        return false
+    }
+    
     func isDoubleReach() -> Bool {
         return false
     }
@@ -555,7 +625,19 @@ class Noten {
         return false
     }
     
-    func isDora() -> Bool {
+    func isSukantu() -> Bool {
+        return false
+    }
+    
+    func isJunseiTyurenpoutou() -> Bool {
+        return false
+    }
+    
+    func isSuankouTanki() -> Bool {
+        return false
+    }
+    
+    func isKokusi13() -> Bool {
         return false
     }
 }
