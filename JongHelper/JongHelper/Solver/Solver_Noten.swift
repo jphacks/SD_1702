@@ -383,7 +383,7 @@ class Noten {
     func isSansyokuDoujun() -> Bool {
         var kazu = [Int](repeating: 0, count: 7)
         for i in 0 ..< 26 {
-            if(tmp[i] > 0){
+            if(tmp[i] > 0 && Tile(rawValue: i)!.getNumber() < 8 ){
                 kazu[Tile(rawValue: i)!.getNumber()-1] += 1
                 
                 if(Tile(rawValue: i)!.getNumber()>1){
@@ -422,11 +422,11 @@ class Noten {
     
     func isSansyokuDoukou() -> Bool {
         var kazu = [Int](repeating: 0, count: 9)
-        for i in 0 ..< 33 {
-            kazu[Tile(rawValue: i)!.getNumber()-1] += tmp[i]
+        for i in 0 ..< 26 {
+            kazu[Tile(rawValue: i)!.getNumber() - 1] += tmp[i]
         }
-        for i in 0 ..< 10{
-            if(kazu[i] > 6){
+        for i in 0 ..< 9{
+            if kazu[i] > 6 {
                 return true
             }
         }
@@ -436,11 +436,11 @@ class Noten {
     func isSanankou() -> Bool {
         var count = 0
         for i in 0 ..< 33 {
-            if (tmp[i] > 2) {
+            if tmp[i] > 2 {
                 count += 1
             }
         }
-        if(count > 1){
+        if count > 1 {
             return true
         }
         return false
@@ -452,7 +452,7 @@ class Noten {
         count += tmp[Tile.Hatu.getCode()]
         count += tmp[Tile.Tyun.getCode()]
         
-        if(count > 4){
+        if count > 4 {
             return true
         }
         return false
@@ -460,7 +460,7 @@ class Noten {
     
     func isTitoitu() -> Bool {
         let syanten_min = min(getKokusiSyantenNum().syanten, getTiitoituSyantenNum().syanten, getNormalSyantenNum().syanten)
-        if(syanten_min == getTiitoituSyantenNum().syanten){
+        if syanten_min == getTiitoituSyantenNum().syanten {
             return true
         }
         return false
@@ -517,11 +517,11 @@ class Noten {
     func isSuankou() -> Bool {
         var count = 0
         for i in 0 ..< 33 {
-            if (tmp[i] > 2) {
+            if tmp[i] > 2 {
                 count += 1
             }
         }
-        if(count > 2){
+        if count > 2 {
             return true
         }
         return false
@@ -533,47 +533,98 @@ class Noten {
         count += tmp[Tile.Hatu.getCode()]
         count += tmp[Tile.Tyun.getCode()]
         
-        if(count > 5){
+        if count > 5 {
             return true
         }
         return false
     }
     
     func isTuiso() -> Bool {
+        var count = 0
+        for i in 27 ... 33 {
+            count += tmp[i]
+        }
+        if count > 9 {
+            return true
+        }
+        
         return false
     }
     
     func isSyoususi() -> Bool {
+        var count = 0
+        for i in 26 ... 30 {
+            count += tmp[i]
+        }
+        if count > 7 {
+            return true
+        }
+        
         return false
     }
     
     func isDaisusi() -> Bool {
+        var count = 0
+        for i in 26 ... 30 {
+            count += tmp[i]
+        }
+        if count > 9 {
+            return true
+        }
         return false
     }
     
     func isRyuisou() -> Bool {
+        var count = 0
+        
+        for i in 18 ..< 33 {
+            if i == 18 || i == 19 || i == 20 || i == 22 || i == 24 || i == 31{
+                count += tmp[i]
+            }
+        }
+            
+        if count >= 10 {
+            return true
+        }
         return false
     }
     
     func isTyurenPoutou() -> Bool {
+        var roop = [(0, 8), (9, 17), (18, 26)]
+        
+        for elem in roop {
+            var count = 0
+            var count2 = 0
+            for i in elem.0 ... elem.1 {
+                if tmp[i] > 0 {
+                    count += tmp[i]
+                    count += 1
+                }
+            }
+            
+            if count >= 10 && count2 >= 7 {
+                return true
+            }
+        }
         return false
     }
     
     func isTinroutou() -> Bool {
-        return false
-    }
-    
-    func isTenhou() -> Bool {
-        return false
-    }
-    
-    func isTihou() -> Bool {
+        var count = 0
+        for i in 0 ..< tmp.count {
+            if Tile(rawValue: i)!.getNumber() == 1 ||  Tile(rawValue: i)!.getNumber() == 9 {
+                count += tmp[i]
+            }
+        }
+        if count > 9 {
+            return true
+        }
         return false
     }
     
     func isKokusi() -> Bool {
         let syanten_min = min(getKokusiSyantenNum().syanten, getTiitoituSyantenNum().syanten, getNormalSyantenNum().syanten)
-        if(syanten_min == getKokusiSyantenNum().syanten){
+        if syanten_min == getKokusiSyantenNum().syanten {
             return true
         }
         return false
@@ -638,6 +689,14 @@ class Noten {
     }
     
     func isKokusi13() -> Bool {
+        return false
+    }
+    
+    func isTenhou() -> Bool {
+        return false
+    }
+    
+    func isTihou() -> Bool {
         return false
     }
 }
