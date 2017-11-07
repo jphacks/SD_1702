@@ -12,6 +12,10 @@ class Noten {
     // 入力された各牌の数の配列
     var inputtedTiles: [Int]
     
+    // ---- 状況に関するプロパティ -------
+    var genSituation = GeneralSituation()
+    var perSituation = PersonalSituation()
+    
     // ------- 通常の和了の形におけるシャンテン数の計算のためのグローバル変数的な ------
     var mentu = 0      //メンツ数
     var toitu = 0        //トイツ数
@@ -21,8 +25,10 @@ class Noten {
     var gomi_normal: [Tile] = []
     
     // イニシャライズ
-    init(inputtedTiles: [Int]) {
+    init(inputtedTiles: [Int], genSituation: GeneralSituation, perSituation: PersonalSituation) {
         self.inputtedTiles = inputtedTiles
+        self.genSituation = genSituation
+        self.perSituation = perSituation
     }
     
     // 作業用配列の初期化関数
@@ -247,22 +253,34 @@ class Noten {
         taatu_cut(start: j+1)
     }
     
+    func getSyuntuCandidate() -> [Syuntu] {
+        var resultList = [Syuntu]()
+        
+        initTmp()
+        
+        for i in 0 ..< 26 {
+            if tmp[i - 1] > 0 && tmp[i] > 0 && tmp[i + 1] > 0 {
+                let syuntu = Syuntu(
+                    isOpen: false,
+                    tile1: Tile(rawValue: i - 1)!,
+                    tile2: Tile(rawValue: i)!,
+                    tile3: Tile(rawValue: i + 1)!
+                )
+                
+                if (syuntu.isMentu) {
+                    resultList.append(syuntu)
+                }
+            }
+        }
+        
+        return resultList
+    }
     
-    // ------ 以降，狙うべき役を判定するための関数テーブル ------
+    // ------ 以降，狙うべき役を判定するための関数 ------
     // リーチ等の本当は実装しなくていい関数群は列挙体との兼ね合いでfalseを返すだけの関数として定義しておく
-    func isReach() -> Bool {
-        return false
-    }
-    
-    func isIppatu() -> Bool {
-        return false
-    }
-    
-    func isTumo() -> Bool {
-        return false
-    }
     
     func isPinhu() -> Bool {
+        
         return false
     }
     
@@ -275,42 +293,37 @@ class Noten {
     }
     
     func isHaku() -> Bool {
+        if (tmp[Tile.Haku.getCode()] > 2) {
+            return true
+        }
         return false
     }
     
     func isHatu() -> Bool {
+        if (tmp[Tile.Hatu.getCode()] > 2) {
+            return true
+        }
         return false
     }
     
     func isTyun() -> Bool {
+        if (tmp[Tile.Tyun.getCode()] > 2) {
+            return true
+        }
         return false
     }
     
     func isJikaze() -> Bool {
+        if (tmp[perSituation.jikaze.getCode()] > 2) {
+            return true
+        }
         return false
     }
     
     func isBakaze() -> Bool {
-        return false
-    }
-    
-    func isRinsyan() -> Bool {
-        return false
-    }
-    
-    func isTyankan() -> Bool {
-        return false
-    }
-    
-    func isHaitei() -> Bool {
-        return false
-    }
-    
-    func isHoutei() -> Bool {
-        return false
-    }
-    
-    func isDoubleReach() -> Bool {
+        if (tmp[genSituation.bakaze.getCode()] > 2) {
+            return true
+        }
         return false
     }
     
@@ -319,6 +332,15 @@ class Noten {
     }
     
     func isHonroutou() -> Bool {
+        var count = 0
+        
+        for i in 0 ..< 33 {
+            if (Tile(rawValue: i)?.isYaochu())! {
+                count += tmp[i]
+            }
+        }
+        
+        
         return false
     }
     
@@ -327,6 +349,8 @@ class Noten {
     }
     
     func isIttuu() -> Bool {
+        
+        
         return false
     }
     
@@ -434,5 +458,38 @@ class Noten {
         return false
     }
     
+    // ------ 以降，falseを返すだけの関数 ------
+    
+    func isReach() -> Bool {
+        return false
+    }
+    
+    func isIppatu() -> Bool {
+        return false
+    }
+    
+    func isTumo() -> Bool {
+        return false
+    }
+    
+    func isRinsyan() -> Bool {
+        return false
+    }
+    
+    func isTyankan() -> Bool {
+        return false
+    }
+    
+    func isHaitei() -> Bool {
+        return false
+    }
+    
+    func isHoutei() -> Bool {
+        return false
+    }
+    
+    func isDoubleReach() -> Bool {
+        return false
+    }
 }
 
