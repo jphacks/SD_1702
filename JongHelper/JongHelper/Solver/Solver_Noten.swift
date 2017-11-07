@@ -577,8 +577,8 @@ class Noten {
     func isRyuisou() -> Bool {
         var count = 0
         
-        for i in 18 ..< 33 {
-            if i == 18 || i == 19 || i == 20 || i == 22 || i == 24 || i == 31{
+        for i in 19 ..< 33 {
+            if i == 19 || i == 20 || i == 21 || i == 23 || i == 25 || i == 32{
                 count += tmp[i]
             }
         }
