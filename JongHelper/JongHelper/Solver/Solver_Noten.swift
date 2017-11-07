@@ -516,7 +516,7 @@ class Noten {
     
     func isSuankou() -> Bool {
         var count = 0
-        for i in 0 ..< 33 {
+        for i in 0 ... 33 {
             if tmp[i] > 2 {
                 count += 1
             }
@@ -553,7 +553,7 @@ class Noten {
     
     func isSyoususi() -> Bool {
         var count = 0
-        for i in 26 ... 30 {
+        for i in 27 ... 30 {
             count += tmp[i]
         }
         if count > 7 {
@@ -565,7 +565,7 @@ class Noten {
     
     func isDaisusi() -> Bool {
         var count = 0
-        for i in 26 ... 30 {
+        for i in 27 ... 30 {
             count += tmp[i]
         }
         if count > 9 {
