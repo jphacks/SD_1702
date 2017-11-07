@@ -451,7 +451,6 @@ class Noten {
         count += tmp[Tile.Haku.getCode()]
         count += tmp[Tile.Hatu.getCode()]
         count += tmp[Tile.Tyun.getCode()]
-        
         if count > 4 {
             return true
         }
@@ -463,6 +462,7 @@ class Noten {
         if syanten_min == getTiitoituSyantenNum().syanten {
             return true
         }
+        initTmp()
         return false
     }
     

@@ -89,7 +89,11 @@ class Hand {
             print(Noten(inputtedTiles: self.inputtedTiles, genSituation: genSituation, perSituation: perSituation).getYakuCandidate())
         }
     }
-    
+    //ねらう役の候補を返す
+    func getYakuCandidate()->[Yaku]{
+        return Noten(inputtedTiles: self.inputtedTiles, genSituation: genSituation, perSituation: perSituation).getYakuCandidate()
+    }
+
     // 点数, 役のリストのタプルを返す関数
     func getScore(addHan: Int) -> (score: (ron: Int, tumo: Int), fu: Int, han:  Int, yakuList: [Yaku]) {
         // 点数 (点数，飜，符）と役のタプル
