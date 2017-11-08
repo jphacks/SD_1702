@@ -13,7 +13,8 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     @IBOutlet weak var imageView: UIImageView!
 
     var tehaiView: TehaiView!
-    var notenView: NotenView!
+    var notenView: NotenYakuView!
+//    var notenView: NotenView!
     var tenpaiView: TenpaiView!
     var agariView: AgariView!
     
@@ -28,6 +29,8 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     var doraTileArray: [Tile] = [Tile.m1, Tile.null, Tile.null, Tile.null]
     var bakazeTile = Tile.Ton
     var jikazeTile = Tile.Ton
+    
+    var yakuCandidates: [Yaku] = []
     //let initTehaiArray: [Tile] = Array(repeating: Tile.p7, count: 14)
     //let initTehaiArray: [Tile] = [Tile.m2,Tile.m3,Tile.m4,Tile.m2,Tile.m3,Tile.m4,Tile.p2,Tile.p3,Tile.p4,Tile.s3,Tile.s4,Tile.m7,Tile.m7,Tile.Haku]
     var tehaiTileArray = [Tile.m1,Tile.m9,Tile.p1,Tile.p9,Tile.s1,Tile.s9,Tile.Ton,Tile.Nan,Tile.Sya,Tile.Pe,Tile.Haku,Tile.Hatu,Tile.Tyun,Tile.Sya]
@@ -73,9 +76,17 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         tenpaiView.tableView.register(UINib(nibName: "TenpaiTableViewCell", bundle:nil), forCellReuseIdentifier:"TenpaiViewCell")
         
         //ノーテン時のビュー
-        notenView = UINib(nibName: "NotenView", bundle: nil).instantiate(withOwner: self, options: nil).first as? NotenView
+        notenView = UINib(nibName: "NotenYakuView", bundle: nil).instantiate(withOwner: self, options: nil).first as? NotenYakuView
+        notenView.tableView.delegate = self
+        notenView.tableView.dataSource = self
+        notenView.tableView.allowsSelection = false
+        notenView.tableView.register(UINib(nibName: "NotenYakuViewCell", bundle:nil), forCellReuseIdentifier:"NotenYakuViewCell")
         notenView.frame = CGRect(x: 0, y: 0, width:self.view.frame.size.width, height: self.view.frame.height - 120.0)
         addSubviewWithAutoLayoutTop(childView: notenView!, parentView: self.view)
+        
+//        notenView = UINib(nibName: "NotenView", bundle: nil).instantiate(withOwner: self, options: nil).first as? NotenView
+//        notenView.frame = CGRect(x: 0, y: 0, width:self.view.frame.size.width, height: self.view.frame.height - 120.0)
+//        addSubviewWithAutoLayoutTop(childView: notenView!, parentView: self.view)
         
         //アガリ時のビュー
         agariView = UINib(nibName: "AgariView", bundle: nil).instantiate(withOwner: self, options: nil).first as? AgariView
@@ -195,7 +206,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     }
     
     //tableview===============================================================
-    // tag: 0->役リスト 1~14->手牌 20->場風 21->自風 31~34->ドラ
+    // tag: 0->役リスト 1~14->手牌 20->場風 21->自風 31~34->ドラ 50->NotenYakuView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if(tableView.tag == 0){
@@ -211,10 +222,12 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
                 return 34
             }
             return 35
+        } else if (tableView.tag == 50) {
+            return yakuCandidates.count
         } else if (tableView.tag == 99) {
             return tenpaiDatas.count
         }
-        return 1
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -243,6 +256,10 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             } else {
                 cell.haiImage.image = Tile(rawValue: indexPath.row - 1)?.toUIImage()
             }
+            return cell
+        } else if (tableView.tag == 50) {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NotenYakuViewCell", for:indexPath) as! NotenYakuViewCell
+            cell.setYakuInfo(yakuCandidates[indexPath.row])
             return cell
         } else if(tableView.tag == 99) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "TenpaiViewCell", for:indexPath) as! TenpaiTableViewCell
@@ -277,8 +294,10 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if(tableView.tag > 0 && tableView.tag < 99) {
+        if(tableView.tag > 0 && tableView.tag < 49) {
             return 45
+        } else if (tableView.tag == 50) {
+            return 100
         } else if (tableView.tag == 99) {
             return 120
         }
@@ -286,7 +305,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     }
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        if ((scrollView as! UITableView).tag != 99) {
+        if ((scrollView as! UITableView).tag < 50) {
             stopTehaiCell(scrollView)
             self.calculate()
         }
@@ -473,16 +492,19 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
                 tenpaiView.tableView.reloadData()
             } else {
                 self.isTenpai = false
-                for elem in notenView.haiImage {
-                    elem.isHidden = true
-                }
-                for (k, elem) in suteArr.enumerated() {
-                    if(k < 8) {
-                        notenView.haiImage[k].image = elem.toUIImage()
-                        notenView.haiImage[k].isHidden = false
-                    }
-                }
+//                for elem in notenView.haiImage {
+//                    elem.isHidden = true
+//                }
+//                for (k, elem) in suteArr.enumerated() {
+//                    if(k < 8) {
+//                        notenView.haiImage[k].image = elem.toUIImage()
+//                        notenView.haiImage[k].isHidden = false
+//                    }
+//                }
                 notenView.syantenLabel.text = String(syantenNum) + "シャンテン"
+                yakuCandidates = hand.getYakuCandidate()
+                notenView.tableView.reloadData()
+                
             }
             switchView(hand.isTenpai)
         }
