@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class TokutenViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -125,6 +126,13 @@ class TokutenViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
         
         self.tableView.reloadData()
+        
+        // 音声読み上げ
+//        let talker = AVSpeechSynthesizer()
+//        let utterance = AVSpeechUtterance(string: yakuList[0].getName())
+//        utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+//        talker.speak(utterance)
+        
     }
     
     //tableview===============================================================

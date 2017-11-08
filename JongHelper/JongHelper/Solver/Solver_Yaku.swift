@@ -140,7 +140,7 @@ enum Yaku: Int {
         case .Reach: return "リーチ"
         case .Ippatu: return "一発"
         case .Tumo: return "門前清模和"
-        case .Pinhu: return "平和"
+        case .Pinhu: return "メンツが４つとも順子で、雀頭が役牌でなく、両面待ちの時に成立"
         case .Tanyao: return "２～８の数牌のみの場合に成立"
         case .Ipeiko: return "同じ順子が２組ある場合に成立"
         case .Haku: return "字牌の「白」の刻子（槓子）がある場合に成立"
