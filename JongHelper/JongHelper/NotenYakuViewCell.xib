@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="NotenYakuViewCell" id="KGk-i7-Jjw" customClass="NotenYakuViewCell" customModule="JongHelper" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="100"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="480" height="99.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="国士無双13面待ち" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sIv-3W-L7B">
+                        <rect key="frame" x="20" y="19" width="240" height="32"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="32" id="Sh0-Ba-iTu"/>
+                            <constraint firstAttribute="width" constant="240" id="zsP-Ec-5mn"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="国士無双のうち、聴牌時に13種類すべてのヤオ九牌が１枚ずつあり、ヤオ九牌ならどれでも上がれる場合（13面待ち）に成立．ダブル役満" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P6v-f3-Ar9">
+                        <rect key="frame" x="36" y="59" width="424" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="ghm-go-PgT"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="役満" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YjR-AA-pWk">
+                        <rect key="frame" x="312" y="19" width="140" height="32"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="140" id="c1j-OF-Boq"/>
+                            <constraint firstAttribute="height" constant="32" id="zLg-DB-6Qh"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                        <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="sIv-3W-L7B" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="6hc-vb-kYi"/>
+                    <constraint firstItem="P6v-f3-Ar9" firstAttribute="top" secondItem="sIv-3W-L7B" secondAttribute="bottom" constant="8" id="KZT-sg-P3v"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="YjR-AA-pWk" secondAttribute="trailing" constant="8" id="QeW-ZU-7Gw"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="P6v-f3-Ar9" secondAttribute="trailing" id="baU-UA-tKa"/>
+                    <constraint firstItem="sIv-3W-L7B" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="8" id="kDc-BP-M49"/>
+                    <constraint firstItem="YjR-AA-pWk" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="8" id="pSQ-ii-nkq"/>
+                    <constraint firstItem="P6v-f3-Ar9" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="16" id="xps-xn-gAa"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="hanLabel" destination="YjR-AA-pWk" id="dsJ-Ml-IXT"/>
+                <outlet property="yakuDescLabel" destination="P6v-f3-Ar9" id="Gk7-UK-cdI"/>
+                <outlet property="yakuNameLabel" destination="sIv-3W-L7B" id="3m7-0L-Gsy"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>
