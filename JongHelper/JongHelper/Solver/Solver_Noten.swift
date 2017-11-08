@@ -40,9 +40,8 @@ class Noten {
     func getYakuCandidate() -> [Yaku] {
         var yakuList: [Yaku] = []
         
-        initTmp()
-        
         for i in 0 ..< yakuFuncList.count {
+            initTmp()
             if(yakuFuncList[i]()) {
                 yakuList.append(Yaku(rawValue: i)!)
             }
@@ -308,7 +307,7 @@ class Noten {
     }
     
     func isIpeiko() -> Bool {
-        var roop = [(1, 7), (10, 16), (19, 25)]
+        let roop = [(1, 7), (10, 16), (19, 25)]
         
         for elem in roop {
             for i in elem.0 ... elem.1 {
@@ -473,15 +472,44 @@ class Noten {
     }
     
     func isTitoitu() -> Bool {
+        if isRyanpeiko() {
+            return false
+        }
+        
         let syanten_min = min(getKokusiSyantenNum().syanten, getTiitoituSyantenNum().syanten, getNormalSyantenNum().syanten)
         if syanten_min == getTiitoituSyantenNum().syanten {
             return true
         }
-        initTmp()
         return false
     }
     
     func isRyanpeiko() -> Bool {
+        var peikoflag = false
+        
+        let roop = [(1, 7), (10, 16), (19, 25)]
+        for elem in roop {
+            for i in elem.0 ... elem.1 {
+                var count = 0
+                count += tmp[i] > 0 ? 1 : 0
+                count += tmp[i - 1] > 0 ? 1 : 0
+                count += tmp[i + 1] > 0 ? 1 : 0
+                if count >= 2 {
+                    if tmp[i - 1] + tmp[i] + tmp[i + 1] < 4 {
+                        continue
+                    }
+                    
+                    tmp[i] = 0
+                    tmp[i - 1] = 0
+                    tmp[i + 1] = 0
+                    
+                    if !peikoflag {
+                        peikoflag = true
+                    } else {
+                        return true
+                    }
+                }
+            }
+        }
         return false
     }
     
