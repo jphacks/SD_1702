@@ -362,6 +362,21 @@ class Noten {
     }
     
     func isTyanta() -> Bool {
+        var count = 0
+        var count2 = 0
+        for i in 0 ..< tmp.count {
+            var suu = Tile(rawValue: i)!.getNumber()
+            if Tile(rawValue: i)!.isYaochu() {
+                count2 += 1
+            }
+            if suu > 6 || suu < 4 {
+                count += tmp[i]
+                count2 += 1
+            }
+        }
+        if count > 10 && count2 > 16 {
+            return true
+        }
         return false
     }
     
@@ -383,14 +398,14 @@ class Noten {
     func isSansyokuDoujun() -> Bool {
         var kazu = [Int](repeating: 0, count: 7)
         for i in 0 ..< 26 {
-            if(tmp[i] > 0 && Tile(rawValue: i)!.getNumber() < 8 ){
-                kazu[Tile(rawValue: i)!.getNumber()-1] += 1
-                
-                if(Tile(rawValue: i)!.getNumber()>1){
-                    kazu[Tile(rawValue: i)!.getNumber()-2] += 1
+            var suu = Tile(rawValue: i)!.getNumber()
+            if(tmp[i] > 0 && suu < 8 ){
+                kazu[suu - 1] += 1
+                if(suu > 1){
+                    kazu[suu - 2] += 1
                 }
-                if(Tile(rawValue: i)!.getNumber()>2){
-                    kazu[Tile(rawValue: i)!.getNumber()-3] += 1
+                if(suu > 2){
+                    kazu[suu - 3] += 1
                 }
             }
         }
@@ -471,6 +486,23 @@ class Noten {
     }
     
     func isJuntyan() -> Bool {
+        var count = 0
+        var count2 = 0
+        for i in 0 ..< tmp.count {
+            var suu = Tile(rawValue: i)!.getNumber()
+            if suu == 1 || suu == 9 {
+                count2 += 1
+            }
+            if suu != 0 {
+                if suu > 6 || suu < 4  {
+                    count += tmp[i]
+                    count2 += 1
+                }
+            }
+        }
+        if count > 10 && count2 > 16 {
+            return true
+        }
         return false
     }
     
@@ -598,7 +630,7 @@ class Noten {
             for i in elem.0 ... elem.1 {
                 if tmp[i] > 0 {
                     count += tmp[i]
-                    count += 1
+                    count2 += 1
                 }
             }
             
@@ -612,7 +644,8 @@ class Noten {
     func isTinroutou() -> Bool {
         var count = 0
         for i in 0 ..< tmp.count {
-            if Tile(rawValue: i)!.getNumber() == 1 ||  Tile(rawValue: i)!.getNumber() == 9 {
+            var suu = Tile(rawValue: i)!.getNumber()
+            if suu == 1 ||  suu == 9 {
                 count += tmp[i]
             }
         }
