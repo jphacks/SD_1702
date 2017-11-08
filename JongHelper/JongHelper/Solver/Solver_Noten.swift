@@ -307,6 +307,10 @@ class Noten {
     }
     
     func isIpeiko() -> Bool {
+        if isRyanpeiko() {
+            return false
+        }
+        
         let roop = [(1, 7), (10, 16), (19, 25)]
         
         for elem in roop {
