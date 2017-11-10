@@ -179,14 +179,14 @@ class TokutenViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.tableView.reloadData()
         
         // 音声読み上げ
-        for elem in yakuList {
-            let utterance = AVSpeechUtterance(string: elem.getSound())
-            utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
-            talker.speak(utterance)
-        }
-        let utterance = AVSpeechUtterance(string: scoreLabel.text!)
-        utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
-        talker.speak(utterance)
+//        for elem in yakuList {
+//            let utterance = AVSpeechUtterance(string: elem.getSound())
+//            utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+//            talker.speak(utterance)
+//        }
+//        let utterance = AVSpeechUtterance(string: scoreLabel.text!)
+//        utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+//        talker.speak(utterance)
         
     }
     
