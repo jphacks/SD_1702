@@ -800,7 +800,7 @@ class Calculator {
     }
     
     func isDaisusi() -> Bool {
-        if compMentu.getSyuntuCount() > 0 {
+        if compMentu.getKotuCount() < 4 {
             return false
         }
         
@@ -934,7 +934,7 @@ class Calculator {
     
     func isTinroutou() -> Bool {
         
-        if compMentu.syuntuList.count > 0 {
+        if compMentu.getKotuCount() < 4 {
             return false
         }
         

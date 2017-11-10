@@ -151,7 +151,7 @@ class TokutenViewController: UIViewController, UITableViewDelegate, UITableViewD
         let score = hand.getScore(addHan: plushan)
         
         var str = ""
-        for s in score.3 {
+        for s in score.yakuList {
             str += s.getName()
         }
         yakuList = score.yakuList
