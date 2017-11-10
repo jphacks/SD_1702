@@ -42,8 +42,9 @@ class Noten {
         
         for i in 0 ..< yakuFuncList.count {
             initTmp()
-            if(yakuFuncList[i]() > 0) {
-                yakuList.append((Yaku(rawValue: i)!, yakuFuncList[i]()))
+            let value = yakuFuncList[i]()
+            if(value > 0.0) {
+                yakuList.append((Yaku(rawValue: i)!, value))
             }
         }
         
@@ -280,8 +281,11 @@ class Noten {
     // ------ 以降，狙うべき役を判定するための関数 ------
     // リーチ等の本当は実装しなくていい関数群は列挙体との兼ね合いでfalseを返すだけの関数として定義しておく
     
+    
     func isPinhu() -> Float {
-        
+        // 0.33:
+        // 0.66: 頭があって，リャンメん二つ
+        // 1.0: テンパイ
         let roop = [(1, 7), (10, 16), (19, 25)]
         var count = 0
         
@@ -334,9 +338,8 @@ class Noten {
         }
         
         switch count {
-        case 10: return 0.33
-        case 11, 12: return 0.66
-        case 13, 14: return 1.0
+        case 10, 11: return 0.33
+        case 12, 13, 14: return 0.66
         default: return 0.0
         }
     }
@@ -424,9 +427,6 @@ class Noten {
                 count += tmp[i]
                 count2 += 1
             }
-        }
-        if count > 12 && count2 > 18 {
-            return 1.0
         }
         if count > 11 && count2 > 17 {
             return 0.66
@@ -568,8 +568,7 @@ class Noten {
         if syanten_min == getTiitoituSyantenNum().syanten {
             switch getTiitoituSyantenNum().syanten{
             case 3: return 0.33
-            case 2: return 0.66
-            case 1: return 1.0
+            case 2, 1: return 0.66
             default: return 0.0
             }
         }
@@ -615,9 +614,6 @@ class Noten {
                 }
             }
         }
-        if count > 12 && count2 > 18 {
-            return 1.0
-        }
         if count > 11 && count2 > 17 {
             return 0.66
         }
@@ -650,8 +646,7 @@ class Noten {
         
         switch max {
         case 10: return 0.33
-        case 11, 12: return 0.66
-        case 13, 14: return 1.0
+        case 11, 12, 13, 14: return 0.66
         default: return 0.0
         }
     }
@@ -675,8 +670,7 @@ class Noten {
         
         switch max {
         case 10: return 0.33
-        case 11, 12: return 0.66
-        case 13, 14: return 1.0
+        case 11, 12, 13, 14: return 0.66
         default: return 0.0
         }
     }
@@ -691,9 +685,6 @@ class Noten {
             if tmp[i] == 2 {
                 toituflag = true
             }
-        }
-        if count > 3{
-            return 1.0
         }
         if count > 2 {
             if toituflag{
@@ -728,8 +719,7 @@ class Noten {
         }
         switch count{
         case 10: return 0.33
-        case 11,12: return 0.66
-        case 13: return 1.0
+        case 11,12, 13, 14: return 0.66
         default: return 0.0
         }
     }
@@ -770,8 +760,7 @@ class Noten {
         }
         switch count{
         case 10: return 0.33
-        case 11,12: return 0.66
-        case 13: return 1.0
+        case 11, 12, 13, 14: return 0.66
         default: return 0.0
         }
     }
@@ -786,9 +775,6 @@ class Noten {
                     count += tmp[i]
                     count2 += 1
                 }
-            }
-            if count >= 13 && count2 == 9 {
-                return 1.0
             }
             if count >= 11 && count2 >= 8 {
                 return 0.66
@@ -810,8 +796,7 @@ class Noten {
         }
         switch count{
         case 10: return 0.33
-        case 11,12: return 0.66
-        case 13: return 1.0
+        case 11, 12, 13, 14: return 0.66
         default: return 0.0
         }
     }
@@ -821,8 +806,7 @@ class Noten {
         if syanten_min == getKokusiSyantenNum().syanten {
             switch getKokusiSyantenNum().syanten{
             case 3: return 0.33
-            case 2: return 0.66
-            case 1: return 1.0
+            case 2, 1: return 0.66
             default: return 0.0
             }
         }
