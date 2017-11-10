@@ -33,12 +33,65 @@ static const int PADDING_BOTTOM = 0;
 static const int PADDING_LEFT = 2;
 static const int PADDING_RIGHT = 2;
 
+static const double SSD_IMAGE_OFFSET = 0.1;
+
+static const int SSD_IMAGE_WIDTH = 300;
+static const int SSD_IMAGE_HEIGHT = 300;
+static const int SSD_TEHAI_WIDTH = 290;
+static const int SSD_TEHAI_HEIGHT = 29;
+
 cv::Point2f gCornerQuad[4];
 
 - (id) init {
     if (self = [super init]) {
     }
     return self;
+}
+
+- (UIImage *)getTehaiImage:(UIImage *)image
+{
+    cv::Mat mat;
+    UIImageToMat(image, mat);
+    
+    int width = mat.size().width;
+    int height = mat.size().height;
+    
+    // 射影変換
+    // 3  2
+    //
+    // 0  1
+    
+    cv::Point2f cornerQuadPixel[4];
+    cv::Point2f outputQuadPixel[4];
+    
+    cornerQuadPixel[0] = cv::Point2f(gCornerQuad[0].x * width, gCornerQuad[0].y * height);
+    cornerQuadPixel[1] = cv::Point2f(gCornerQuad[1].x * width, gCornerQuad[1].y * height);
+    cornerQuadPixel[2] = cv::Point2f(gCornerQuad[2].x * width, gCornerQuad[2].y * height);
+    cornerQuadPixel[3] = cv::Point2f(gCornerQuad[3].x * width, gCornerQuad[3].y * height);
+    
+    int outputWidth = SSD_IMAGE_WIDTH;
+    int outputHeight = SSD_IMAGE_HEIGHT;
+    cv::Mat output(outputHeight, outputWidth, mat.type());
+    output += cv::Scalar(5, 110, 100, 255);
+    
+    int outcx = SSD_IMAGE_WIDTH / 2;
+    int outcy = SSD_IMAGE_HEIGHT / 2;
+
+    outputQuadPixel[0] = cv::Point2f(outcx - SSD_TEHAI_WIDTH / 2, outcy + SSD_TEHAI_HEIGHT / 2);
+    outputQuadPixel[1] = cv::Point2f(outcx + SSD_TEHAI_WIDTH / 2, outcy + SSD_TEHAI_HEIGHT / 2);
+    outputQuadPixel[2] = cv::Point2f(outcx + SSD_TEHAI_WIDTH / 2, outcy - SSD_TEHAI_HEIGHT / 2);
+    outputQuadPixel[3] = cv::Point2f(outcx - SSD_TEHAI_WIDTH / 2, outcy - SSD_TEHAI_HEIGHT / 2);
+    
+    cv::Mat transform = cv::getPerspectiveTransform(cornerQuadPixel, outputQuadPixel);
+    cv::warpPerspective(mat, output, transform, output.size(), cv::INTER_CUBIC);
+
+    cv::Scalar bg = cv::Scalar(5, 110, 0, 255);
+    cv::rectangle(output, cv::Point(0, 0), cv::Point(outcx - SSD_TEHAI_WIDTH / 2 - 2, SSD_IMAGE_HEIGHT), bg, -1);
+    cv::rectangle(output, cv::Point(outcx + SSD_TEHAI_WIDTH / 2 + 2, 0), cv::Point(SSD_IMAGE_WIDTH, SSD_IMAGE_HEIGHT), bg, -1);
+    cv::rectangle(output, cv::Point(0, 0), cv::Point(SSD_IMAGE_WIDTH, outcy - SSD_TEHAI_HEIGHT / 2 - 2), bg, -1);
+    cv::rectangle(output, cv::Point(0, outcy + SSD_TEHAI_HEIGHT / 2 + 2), cv::Point(SSD_IMAGE_WIDTH, SSD_IMAGE_HEIGHT), bg, -1);
+    
+    return MatToUIImage(output);
 }
 
 - (NSArray *)getFeatures:(UIImage *)image
@@ -109,6 +162,8 @@ cv::Point2f gCornerQuad[4];
     cv::Mat filtered;
     
     UIImageToMat(image, mat);
+    
+    cv::Mat ret = cv::Mat::zeros(mat.size(), mat.type());
     
     int width = mat.size().width;
     int height = mat.size().height;
@@ -184,29 +239,43 @@ cv::Point2f gCornerQuad[4];
         cv::Point2f cornerQuad[4];
         cv::Point2f outputQuad[4];
         
-        cornerQuad[0] = pLeft;
-        cornerQuad[1] = pRight;
-        cornerQuad[2] = pRight + normal;
-        cornerQuad[3] = pLeft + normal;
+        cornerQuad[0] = pLeft - normal * SSD_IMAGE_OFFSET;
+        cornerQuad[1] = pRight - normal * SSD_IMAGE_OFFSET;
+        cornerQuad[2] = pRight + normal * (1 - SSD_IMAGE_OFFSET);
+        cornerQuad[3] = pLeft + normal * (1 - SSD_IMAGE_OFFSET);
         
         gCornerQuad[0] = cv::Point2f(cornerQuad[0].x / width, cornerQuad[0].y / height);
         gCornerQuad[1] = cv::Point2f(cornerQuad[1].x / width, cornerQuad[1].y / height);
         gCornerQuad[2] = cv::Point2f(cornerQuad[2].x / width, cornerQuad[2].y / height);
         gCornerQuad[3] = cv::Point2f(cornerQuad[3].x / width, cornerQuad[3].y / height);
         
-        int outputWidth = TEMPLATE_WIDTH * 14;
-        int outputHeight = TEMPLATE_HEIGHT;
+        int outputWidth = SSD_IMAGE_WIDTH;
+        int outputHeight = SSD_IMAGE_HEIGHT;
         cv::Mat output(outputHeight, outputWidth, mat.type());
-        output += cv::Scalar(100, 100, 100, 255);
+        output += cv::Scalar(5, 110, 100, 255);
         
-        outputQuad[0] = cv::Point2f(0, outputHeight - 1);
-        outputQuad[1] = cv::Point2f(outputWidth - 1, outputHeight - 1);
-        outputQuad[2] = cv::Point2f(outputWidth - 1, 0);
-        outputQuad[3] = cv::Point2f(0, 0);
+        int outcx = SSD_IMAGE_WIDTH / 2;
+        int outcy = SSD_IMAGE_HEIGHT / 2;
+        // 3  2
+        //
+        // 0  1
+        outputQuad[0] = cv::Point2f(outcx - SSD_TEHAI_WIDTH / 2, outcy + SSD_TEHAI_HEIGHT / 2);
+        outputQuad[1] = cv::Point2f(outcx + SSD_TEHAI_WIDTH / 2, outcy + SSD_TEHAI_HEIGHT / 2);
+        outputQuad[2] = cv::Point2f(outcx + SSD_TEHAI_WIDTH / 2, outcy - SSD_TEHAI_HEIGHT / 2);
+        outputQuad[3] = cv::Point2f(outcx - SSD_TEHAI_WIDTH / 2, outcy - SSD_TEHAI_HEIGHT / 2);
         
         cv::Mat transform = cv::getPerspectiveTransform(cornerQuad, outputQuad);
         cv::warpPerspective(mat, output, transform, output.size());
         
+        cv::Scalar bg = cv::Scalar(5, 110, 100, 255);
+        cv::rectangle(output, cv::Point(0, 0), cv::Point(outcx - SSD_TEHAI_WIDTH / 2, SSD_IMAGE_HEIGHT), bg, -1);
+        cv::rectangle(output, cv::Point(outcx + SSD_TEHAI_WIDTH / 2, 0), cv::Point(SSD_IMAGE_WIDTH, SSD_IMAGE_HEIGHT), bg, -1);
+        cv::rectangle(output, cv::Point(0, 0), cv::Point(SSD_IMAGE_WIDTH, outcy - SSD_TEHAI_HEIGHT / 2), bg, -1);
+        cv::rectangle(output, cv::Point(0, outcy + SSD_TEHAI_HEIGHT / 2), cv::Point(SSD_IMAGE_WIDTH, SSD_IMAGE_HEIGHT), bg, -1);
+        
+        //cv::Mat roi(mat, cv::Rect(0, 100, outputWidth, outputHeight));
+        
+        //output.copyTo(roi);
         
         // 輪郭点 をプレビュー
         //cv::Point2f delta = (pRight - pLeft) / 14;
@@ -216,10 +285,10 @@ cv::Point2f gCornerQuad[4];
         for (int i = 0; i < 15; ++i) {
             cv::Point bottom = pLeft + delta * i / 14;
             cv::Point top = bottom + normal;
-            cv::line(mat, bottom, top, linecolor, linewidth, CV_AA);
+            cv::line(ret, bottom, top, linecolor, linewidth, CV_AA);
         }
-        cv::line(mat, pRight, pLeft, linecolor, linewidth, CV_AA);
-        cv::line(mat, pRight + normal, pLeft + normal, linecolor, linewidth, CV_AA);
+        cv::line(ret, pRight, pLeft, linecolor, linewidth, CV_AA);
+        cv::line(ret, pRight + normal, pLeft + normal, linecolor, linewidth, CV_AA);
         
     }
     
@@ -228,7 +297,7 @@ cv::Point2f gCornerQuad[4];
     //    cv::putText(mat, label, cv::Point(40,80), cv::FONT_HERSHEY_PLAIN, 4.0, cv::Scalar(255,0,0,255), 5);
     //std::cout << std::endl << std::endl;
     
-    return MatToUIImage(mat);
+    return MatToUIImage(ret);
 }
 
 + (int)detectFromMat:(cv::Mat)resizedRoi
