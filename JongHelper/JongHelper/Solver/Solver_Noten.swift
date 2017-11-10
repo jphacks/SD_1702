@@ -3,7 +3,7 @@ import Foundation
 class Noten {
     
     // 狙うべき役を判定するための関数テーブル
-    var yakuFuncList:[()->Bool] {
+    var yakuFuncList:[()->Float] {
         return [isReach, isIppatu, isTumo, isPinhu, isTanyao, isIpeiko, isHaku, isHatu, isTyun, isJikaze, isBakaze, isRinsyan, isTyankan, isHaitei, isHoutei, isDoubleReach, isTyanta, isHonroutou, isSansyokuDoujun, isIttuu, isToiToi, isSansyokuDoukou, isSanankou, isSankantu, isSyousangen, isTitoitu, isRyanpeiko, isJuntyan, isHonitu, isTinitu, isDora, isSuankou, isSuankouTanki,  isDaisangen, isTuiso,  isSyoususi, isDaisusi, isRyuisou, isTyurenPoutou,  isJunseiTyurenpoutou, isTinroutou, isSukantu, isTenhou, isTihou, isKokusi, isKokusi13]
     }
     
@@ -37,13 +37,13 @@ class Noten {
     }
     
     // 狙えそうな役のリストを返すメソッド
-    func getYakuCandidate() -> [Yaku] {
-        var yakuList: [Yaku] = []
+    func getYakuCandidate() -> [(Yaku, Float)] {
+        var yakuList: [(Yaku, Float)] = []
         
         for i in 0 ..< yakuFuncList.count {
             initTmp()
-            if(yakuFuncList[i]()) {
-                yakuList.append(Yaku(rawValue: i)!)
+            if(yakuFuncList[i]() > 0) {
+                yakuList.append((Yaku(rawValue: i)!, yakuFuncList[i]()))
             }
         }
         
@@ -280,18 +280,18 @@ class Noten {
     // ------ 以降，狙うべき役を判定するための関数 ------
     // リーチ等の本当は実装しなくていい関数群は列挙体との兼ね合いでfalseを返すだけの関数として定義しておく
     
-    func isPinhu() -> Bool {
+    func isPinhu() -> Float {
         
         for i in 0 ..< tmp.count {
             if tmp[i] > 2 {
-                return false
+                return 0.0
             }
         }
         
-        return true
+        return 1.0
     }
     
-    func isTanyao() -> Bool {
+    func isTanyao() -> Float {
         var count = 0
         
         for i in 0 ..< tmp.count {
@@ -301,14 +301,14 @@ class Noten {
         }
         
         if count >= 10 {
-            return true
+            return 1.0
         }
-        return false
+        return 0.0
     }
     
-    func isIpeiko() -> Bool {
-        if isRyanpeiko() {
-            return false
+    func isIpeiko() -> Float {
+        if isRyanpeiko() > 0 {
+            return 0.0
         }
         
         let roop = [(1, 7), (10, 16), (19, 25)]
@@ -321,50 +321,50 @@ class Noten {
                 count += tmp[i + 1] > 0 ? 1 : 0
                 if count >= 2 {
                     if tmp[i - 1] + tmp[i] + tmp[i + 1] >= 4 {
-                        return true
+                        return 1.0
                     }
                 }
             }
         }
-        return false
+        return 0.0
     }
     
-    func isHaku() -> Bool {
+    func isHaku() -> Float {
         if (tmp[Tile.Haku.getCode()] >= 2) {
-            return true
+            return 1.0
         }
-        return false
+        return 0.0
     }
     
-    func isHatu() -> Bool {
+    func isHatu() -> Float {
         if (tmp[Tile.Hatu.getCode()] >= 2) {
-            return true
+            return 1.0
         }
-        return false
+        return 0.0
     }
     
-    func isTyun() -> Bool {
+    func isTyun() -> Float {
         if (tmp[Tile.Tyun.getCode()] >= 2) {
-            return true
+            return 1.0
         }
-        return false
+        return 0.0
     }
     
-    func isJikaze() -> Bool {
+    func isJikaze() -> Float {
         if (tmp[perSituation.jikaze.getCode()] >= 2) {
-            return true
+            return 1.0
         }
-        return false
+        return 0.0
     }
     
-    func isBakaze() -> Bool {
+    func isBakaze() -> Float {
         if (tmp[genSituation.bakaze.getCode()] >= 2) {
-            return true
+            return 1.0
         }
-        return false
+        return 0.0
     }
     
-    func isTyanta() -> Bool {
+    func isTyanta() -> Float {
         var count = 0
         var count2 = 0
         for i in 0 ..< tmp.count {
@@ -378,12 +378,12 @@ class Noten {
             }
         }
         if count > 10 && count2 > 16 {
-            return true
+            return 1.0
         }
-        return false
+        return 0.0
     }
     
-    func isHonroutou() -> Bool {
+    func isHonroutou() -> Float {
         var count = 0
         
         for i in 0 ..< tmp.count {
@@ -393,12 +393,12 @@ class Noten {
         }
         
         if count > 11 {
-            return true
+            return 1.0
         }
-        return false
+        return 0.0
     }
     
-    func isSansyokuDoujun() -> Bool {
+    func isSansyokuDoujun() -> Float {
         var kazu = [Int](repeating: 0, count: 7)
         for i in 0 ..< 26 {
             var suu = Tile(rawValue: i)!.getNumber()
@@ -414,13 +414,13 @@ class Noten {
         }
         for i in 0 ..< 7{
             if(kazu[i] > 5){
-                return true
+                return 1.0
             }
         }
-        return false
+        return 0.0
     }
     
-    func isIttuu() -> Bool {
+    func isIttuu() -> Float {
         var roop = [(0, 8), (9, 17), (18, 26)]
         
         for elem in roop {
@@ -432,26 +432,26 @@ class Noten {
             }
             
             if count >= 7 {
-                return true
+                return 1.0
             }
         }
-        return false
+        return 0.0
     }
     
-    func isSansyokuDoukou() -> Bool {
+    func isSansyokuDoukou() -> Float {
         var kazu = [Int](repeating: 0, count: 9)
         for i in 0 ..< 26 {
             kazu[Tile(rawValue: i)!.getNumber() - 1] += tmp[i]
         }
         for i in 0 ..< 9{
             if kazu[i] > 6 {
-                return true
+                return 1.0
             }
         }
-        return false
+        return 0.0
     }
     
-    func isSanankou() -> Bool {
+    func isSanankou() -> Float {
         var count = 0
         for i in 0 ..< 33 {
             if tmp[i] > 2 {
@@ -459,35 +459,35 @@ class Noten {
             }
         }
         if count > 1 {
-            return true
+            return 1.0
         }
-        return false
+        return 0.0
     }
     
-    func isSyousangen() -> Bool {
+    func isSyousangen() -> Float {
         var count = 0
         count += tmp[Tile.Haku.getCode()]
         count += tmp[Tile.Hatu.getCode()]
         count += tmp[Tile.Tyun.getCode()]
         if count > 4 {
-            return true
+            return 1.0
         }
-        return false
+        return 0.0
     }
     
-    func isTitoitu() -> Bool {
-        if isRyanpeiko() {
-            return false
+    func isTitoitu() -> Float {
+        if isRyanpeiko() > 0{
+            return 0.0
         }
         
         let syanten_min = min(getKokusiSyantenNum().syanten, getTiitoituSyantenNum().syanten, getNormalSyantenNum().syanten)
         if syanten_min == getTiitoituSyantenNum().syanten {
-            return true
+            return 1.0
         }
-        return false
+        return 0.0
     }
     
-    func isRyanpeiko() -> Bool {
+    func isRyanpeiko() -> Float {
         var peikoflag = false
         
         let roop = [(1, 7), (10, 16), (19, 25)]
@@ -509,15 +509,15 @@ class Noten {
                     if !peikoflag {
                         peikoflag = true
                     } else {
-                        return true
+                        return 1.0
                     }
                 }
             }
         }
-        return false
+        return 0.0
     }
     
-    func isJuntyan() -> Bool {
+    func isJuntyan() -> Float {
         var count = 0
         var count2 = 0
         for i in 0 ..< tmp.count {
@@ -533,12 +533,12 @@ class Noten {
             }
         }
         if count > 10 && count2 > 16 {
-            return true
+            return 1.0
         }
-        return false
+        return 0.0
     }
     
-    func isHonitu() -> Bool {
+    func isHonitu() -> Float {
         var roop = [(0, 8), (9, 17), (18, 26)]
         
         for elem in roop {
@@ -554,13 +554,13 @@ class Noten {
             }
             
             if count >= 10 {
-                return true
+                return 1.0
             }
         }
-        return false
+        return 0.0
     }
     
-    func isTinitu() -> Bool {
+    func isTinitu() -> Float {
         var roop = [(0, 8), (9, 17), (18, 26)]
         
         for elem in roop {
@@ -572,13 +572,13 @@ class Noten {
             }
             
             if count >= 10 {
-                return true
+                return 1.0
             }
         }
-        return false
+        return 0.0
     }
     
-    func isSuankou() -> Bool {
+    func isSuankou() -> Float {
         var count = 0
         for i in 0 ... 33 {
             if tmp[i] > 2 {
@@ -586,59 +586,59 @@ class Noten {
             }
         }
         if count > 2 {
-            return true
+            return 1.0
         }
-        return false
+        return 0.0
     }
     
-    func isDaisangen() -> Bool {
+    func isDaisangen() -> Float {
         var count = 0
         count += tmp[Tile.Haku.getCode()]
         count += tmp[Tile.Hatu.getCode()]
         count += tmp[Tile.Tyun.getCode()]
         
         if count > 5 {
-            return true
+            return 1.0
         }
-        return false
+        return 0.0
     }
     
-    func isTuiso() -> Bool {
+    func isTuiso() -> Float {
         var count = 0
         for i in 27 ... 33 {
             count += tmp[i]
         }
         if count > 9 {
-            return true
+            return 1.0
         }
         
-        return false
+        return 0.0
     }
     
-    func isSyoususi() -> Bool {
+    func isSyoususi() -> Float {
         var count = 0
         for i in 27 ... 30 {
             count += tmp[i]
         }
         if count > 7 {
-            return true
+            return 1.0
         }
         
-        return false
+        return 0.0
     }
     
-    func isDaisusi() -> Bool {
+    func isDaisusi() -> Float {
         var count = 0
         for i in 27 ... 30 {
             count += tmp[i]
         }
         if count > 9 {
-            return true
+            return 1.0
         }
-        return false
+        return 0.0
     }
     
-    func isRyuisou() -> Bool {
+    func isRyuisou() -> Float {
         var count = 0
         
         for i in 19 ..< 33 {
@@ -648,12 +648,12 @@ class Noten {
         }
             
         if count >= 10 {
-            return true
+            return 1.0
         }
-        return false
+        return 0.0
     }
     
-    func isTyurenPoutou() -> Bool {
+    func isTyurenPoutou() -> Float {
         var roop = [(0, 8), (9, 17), (18, 26)]
         
         for elem in roop {
@@ -667,13 +667,13 @@ class Noten {
             }
             
             if count >= 10 && count2 >= 7 {
-                return true
+                return 1.0
             }
         }
-        return false
+        return 0.0
     }
     
-    func isTinroutou() -> Bool {
+    func isTinroutou() -> Float {
         var count = 0
         for i in 0 ..< tmp.count {
             var suu = Tile(rawValue: i)!.getNumber()
@@ -682,87 +682,87 @@ class Noten {
             }
         }
         if count > 9 {
-            return true
+            return 1.0
         }
-        return false
+        return 0.0
     }
     
-    func isKokusi() -> Bool {
+    func isKokusi() -> Float {
         let syanten_min = min(getKokusiSyantenNum().syanten, getTiitoituSyantenNum().syanten, getNormalSyantenNum().syanten)
         if syanten_min == getKokusiSyantenNum().syanten {
-            return true
+            return 1.0
         }
-        return false
+        return 0.0
     }
     
-    // ------ 以降，falseを返すだけの関数 ------
+    // ------ 以降，0.0を返すだけの関数 ------
     
-    func isReach() -> Bool {
-        return false
+    func isReach() -> Float {
+        return 0.0
     }
     
-    func isIppatu() -> Bool {
-        return false
+    func isIppatu() -> Float {
+        return 0.0
     }
     
-    func isTumo() -> Bool {
-        return false
+    func isTumo() -> Float {
+        return 0.0
     }
     
-    func isRinsyan() -> Bool {
-        return false
+    func isRinsyan() -> Float {
+        return 0.0
     }
     
-    func isTyankan() -> Bool {
-        return false
+    func isTyankan() -> Float {
+        return 0.0
     }
     
-    func isHaitei() -> Bool {
-        return false
+    func isHaitei() -> Float {
+        return 0.0
     }
     
-    func isHoutei() -> Bool {
-        return false
+    func isHoutei() -> Float {
+        return 0.0
     }
     
-    func isDora() -> Bool {
-        return false
+    func isDora() -> Float {
+        return 0.0
     }
     
-    func isToiToi() -> Bool {
-        return false
+    func isToiToi() -> Float {
+        return 0.0
     }
     
-    func isDoubleReach() -> Bool {
-        return false
+    func isDoubleReach() -> Float {
+        return 0.0
     }
     
-    func isSankantu() -> Bool {
-        return false
+    func isSankantu() -> Float {
+        return 0.0
     }
     
-    func isSukantu() -> Bool {
-        return false
+    func isSukantu() -> Float {
+        return 0.0
     }
     
-    func isJunseiTyurenpoutou() -> Bool {
-        return false
+    func isJunseiTyurenpoutou() -> Float {
+        return 0.0
     }
     
-    func isSuankouTanki() -> Bool {
-        return false
+    func isSuankouTanki() -> Float {
+        return 0.0
     }
     
-    func isKokusi13() -> Bool {
-        return false
+    func isKokusi13() -> Float {
+        return 0.0
     }
     
-    func isTenhou() -> Bool {
-        return false
+    func isTenhou() -> Float {
+        return 0.0
     }
     
-    func isTihou() -> Bool {
-        return false
+    func isTihou() -> Float {
+        return 0.0
     }
 }
 

@@ -33,7 +33,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     var yakuCandidates: [Yaku] = []
     //let initTehaiArray: [Tile] = Array(repeating: Tile.p7, count: 14)
     //let initTehaiArray: [Tile] = [Tile.m2,Tile.m3,Tile.m4,Tile.m2,Tile.m3,Tile.m4,Tile.p2,Tile.p3,Tile.p4,Tile.s3,Tile.s4,Tile.m7,Tile.m7,Tile.Haku]
-    var tehaiTileArray = [Tile.m1,Tile.m9,Tile.p1,Tile.p9,Tile.s1,Tile.s9,Tile.Ton,Tile.Nan,Tile.Sya,Tile.Pe,Tile.Haku,Tile.Hatu,Tile.Tyun,Tile.Sya]
+    var tehaiTileArray = [Tile.m1,Tile.m2,Tile.m3,Tile.m4,Tile.m5,Tile.m6,Tile.p6,Tile.p7,Tile.p8,Tile.Pe,Tile.Pe,Tile.Pe,Tile.Tyun,Tile.Sya]
     //[Tile.p2,Tile.p3,Tile.p3,Tile.p3,Tile.p5,Tile.p6,Tile.p6,Tile.p7,Tile.p7,Tile.p8,Tile.p8,Tile.p9,Tile.p9,Tile.p9]
     
     var tenpaiDatas: [TenpaiData] = []
@@ -501,9 +501,9 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
 //                        notenView.haiImage[k].isHidden = false
 //                    }
 //                }
-                notenView.syantenLabel.text = String(syantenNum) + "シャンテン"
-                yakuCandidates = hand.getYakuCandidate()
-                notenView.tableView.reloadData()
+//                notenView.syantenLabel.text = String(syantenNum) + "シャンテン"
+//                yakuCandidates = hand.getYakuCandidate()
+//                notenView.tableView.reloadData()
                 
             }
             switchView(hand.isTenpai)

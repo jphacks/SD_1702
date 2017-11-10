@@ -135,6 +135,57 @@ enum Yaku: Int {
         }
     }
     
+    func getSound() -> String {
+        switch self {
+        case .Reach: return "りーち"
+        case .Ippatu: return "いっぱつ"
+        case .Tumo: return "つも"
+        case .Pinhu: return "ぴんふ"
+        case .Tanyao: return "たんやお"
+        case .Ipeiko: return "いーぺいこー"
+        case .Haku: return "はく"
+        case .Hatu: return "はつ"
+        case .Tyun: return "ちゅん"
+        case .Jikaze: return"じかぜ"
+        case .Bakaze: return "ばかぜ"
+        case .Rinsyan: return "りんしゃんかいほう"
+        case .Tyankan: return "ちゃんかん"
+        case .Haitei: return "はいてい"
+        case .Houtei: return "ほうてい"
+        case .DoubleReach: return "だぶるりーち"
+        case .Tyanta: return "ちゃんた"
+        case .Honroutou: return "ほんろうとう"
+        case .SansyokuDoujun: return "さんしょくどうじゅん"
+        case .Ittuu: return "いっきつうかん"
+        case .ToiToi: return "といとい"
+        case .SansyokuDoukou: return "さんしょくどうこう"
+        case .Sanankou: return "さんあんこう"
+        case .Sankantu: return "さんかんつ"
+        case .Syousangen: return "しょうさんげん"
+        case .Titoitu: return "ちーといつ"
+        case .Ryanpeikou: return "りゃんぺいこー"
+        case .Juntyan: return "じゅんちゃん"
+        case .Honitu: return "ほんいつ"
+        case .Tinitu: return "ちんいつ"
+        case .Dora: return "ドラ"
+        case .Suankou: return "すーあんこう"
+        case .SuankouTanki: return "すーあんこうたんきまち"
+        case .Daisangen: return "だいさんげん"
+        case .Tuisou: return "つーいーそー"
+        case .Syoususi: return "しょうすーしー"
+        case .Daisusi: return "だいすーシー"
+        case .Ryuisou: return "りゅういーそー"
+        case .Tyurenpoutou: return "ちゅうれんぽうとう"
+        case .JunseiTyurenpoutou: return "じゅんせいちゅうれんぽうとう"
+        case .Tinroutou: return "ちんろうとう"
+        case .Sukantu: return "すーかんつ"
+        case .Tenhou: return "てんほう"
+        case .Tihou: return "ちーほう"
+        case .Kokusimusou: return "こくしむそう"
+        case .Kokusimusou13: return "こくしむそう十三面待ち"
+        }
+    }
+    
     func getDesc() -> String {
         switch self {
         case .Reach: return "リーチ"
