@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,6 +18,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="a8Z-NI-ugn">
+                                <rect key="frame" x="0.0" y="0.0" width="667" height="255"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FbD-yw-ziN">
                                 <rect key="frame" x="0.0" y="0.0" width="667" height="255"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VKG-Wm-Sj6">
@@ -37,6 +40,7 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="a8Z-NI-ugn" secondAttribute="trailing" id="4Ak-TM-Xy4"/>
+                            <constraint firstItem="FbD-yw-ziN" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Aew-rv-hMM"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="a8Z-NI-ugn" secondAttribute="bottom" constant="120" id="CWZ-mC-co2"/>
                             <constraint firstItem="VKG-Wm-Sj6" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="DNj-0u-vG2"/>
                             <constraint firstItem="VKG-Wm-Sj6" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="ENV-dh-gaR"/>
@@ -45,11 +49,15 @@
                             <constraint firstItem="qF5-HZ-sWb" firstAttribute="centerY" secondItem="VKG-Wm-Sj6" secondAttribute="centerY" id="c1X-nj-LbU"/>
                             <constraint firstItem="qF5-HZ-sWb" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ckd-e5-GE9"/>
                             <constraint firstItem="a8Z-NI-ugn" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="dT4-AD-r5b"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="FbD-yw-ziN" secondAttribute="bottom" constant="120" id="kbw-4r-riY"/>
+                            <constraint firstItem="FbD-yw-ziN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="moi-iQ-66M"/>
+                            <constraint firstItem="FbD-yw-ziN" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="nt3-eV-az2"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="imageView" destination="a8Z-NI-ugn" id="gfX-xb-Qs9"/>
+                        <outlet property="imageViewOpenCv" destination="FbD-yw-ziN" id="iVO-ex-Omn"/>
                         <segue destination="RiG-tu-xBV" kind="show" identifier="toTokutenView" id="6Rn-F6-it9"/>
                     </connections>
                 </viewController>

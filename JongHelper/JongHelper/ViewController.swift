@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UITableViewDelegate, UITableViewDataSource, UIPopoverPresentationControllerDelegate, HaiSelecterDelegate, SettingViewDelegate {
     
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var imageViewOpenCv: UIImageView!
 
     var tehaiView: TehaiView!
     var notenView: NotenYakuView!
@@ -114,21 +115,58 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     }
     
     // AVCaptureDelegate
-    var count = 0
+    var prossecing = false
     func capture(image: UIImage) {
-        if (count % 5 == 0) {
-            imageView.image = openCVWrapper.filter(image)
-            count = 0
+        if (!prossecing) {
+            DispatchQueue.global().async {
+                self.prossecing = true
+                let filteredImage = self.openCVWrapper.filter(image)
+                DispatchQueue.main.async {
+                    self.imageViewOpenCv.image = filteredImage
+                }
+                self.prossecing = false
+            }
         }
-        count += 1
+        imageView.image = image
     }
+    
+    let url = URL(string: "http://10.32.228.169:50000/")!
     // AVCaptureDelegate
     func photo(image: UIImage){
-        let features = openCVWrapper.getFeatures(image)
-        var arr: [Int] = []
-        for (index, feature) in features!.enumerated() {
-            arr.append(recognizer.recognize(feature: feature as! NSArray))
+        
+        // get tehai image
+        let tehaiImage = openCVWrapper.getTehaiImage(image)
+        let tehaiImageData:Data = UIImagePNGRepresentation(tehaiImage!)!
+        let tehaiImageBase64 = tehaiImageData.base64EncodedString()
+        
+        print("ここから")
+        //print(tehaiImageBase64)
+        
+        var request = URLRequest(url: url)
+        request.setValue("text/plain", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        let postString = tehaiImageBase64
+        request.httpBody = postString.data(using: .utf8)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {                                                 // check for fundamental networking error
+                print("error=\(error)")
+                return
+            }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(response)")
+            }
+            
+            let responseString = String(data: data, encoding: .utf8)
+            print("responseString = \(responseString)")
         }
+        task.resume()
+        
+        print("まだサーバーとやりとりする部分書いてません")
+        
+        var arr: [Int] = []
+        // communicate with server
         
         if(arr.count == 14){
             let arr2 = intArrToTile(arr)
@@ -136,7 +174,6 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             setTehaiView(arr2, animated: true)
             self.calculate()
         }
-        
     }
     
     // TehaiViewDelegate
