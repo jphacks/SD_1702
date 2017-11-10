@@ -138,8 +138,8 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         let tehaiImage = openCVWrapper.getTehaiImage(image)
         let tehaiImageData:Data = UIImagePNGRepresentation(tehaiImage!)!
         let tehaiImageBase64 = tehaiImageData.base64EncodedString()
-        
-        print("ここから")
+
+        var arr: [Int] = []
         //print(tehaiImageBase64)
         
         var request = URLRequest(url: url)
@@ -160,20 +160,34 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             
             let responseString = String(data: data, encoding: .utf8)
             print("responseString = \(responseString)")
+            
+            do {
+                let json = try JSONSerialization.jsonObject(with: data) as! [String: Any]
+                let hais = json["hais"] as! [Int]
+                for hai in hais {
+                    print(hai)
+                    arr.append(hai)
+                }
+                
+                print(arr)
+                if(arr.count == 14){
+                    let arr2 = self.intArrToTile(arr)
+                    self.tehaiTileArray = arr2
+                    DispatchQueue.main.async {
+                        self.setTehaiView(arr2, animated: true)
+                        self.calculate()
+                    }
+                }
+                
+            } catch {
+                print("Error deserializing JSON: \(error)")
+            }
         }
         task.resume()
         
-        print("まだサーバーとやりとりする部分書いてません")
-        
-        var arr: [Int] = []
+        //print("まだサーバーとやりとりする部分書いてません")
         // communicate with server
-        
-        if(arr.count == 14){
-            let arr2 = intArrToTile(arr)
-            tehaiTileArray = arr2
-            setTehaiView(arr2, animated: true)
-            self.calculate()
-        }
+
     }
     
     // TehaiViewDelegate
