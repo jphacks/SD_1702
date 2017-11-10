@@ -30,7 +30,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     var bakazeTile = Tile.Ton
     var jikazeTile = Tile.Ton
     
-    var yakuCandidates: [Yaku] = []
+    var yakuCandidates: [(Yaku, Float)] = []
     //let initTehaiArray: [Tile] = Array(repeating: Tile.p7, count: 14)
     //let initTehaiArray: [Tile] = [Tile.m2,Tile.m3,Tile.m4,Tile.m2,Tile.m3,Tile.m4,Tile.p2,Tile.p3,Tile.p4,Tile.s3,Tile.s4,Tile.m7,Tile.m7,Tile.Haku]
     var tehaiTileArray = [Tile.m1,Tile.m2,Tile.m3,Tile.m4,Tile.m5,Tile.m6,Tile.p6,Tile.p7,Tile.p8,Tile.Pe,Tile.Pe,Tile.Pe,Tile.Tyun,Tile.Sya]
@@ -501,13 +501,9 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
 //                        notenView.haiImage[k].isHidden = false
 //                    }
 //                }
-                
-                yakuCandidates.removeAll()
+
                 notenView.syantenLabel.text = String(syantenNum) + "シャンテン"
-                for elem in hand.getYakuCandidate() {
-                      yakuCandidates.append(elem.0)
-                      print(elem.1)
-                }
+                yakuCandidates = hand.getYakuCandidate()
                 notenView.tableView.reloadData()
                 
             }

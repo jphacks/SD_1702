@@ -48,6 +48,12 @@
                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="amM-TX-Mj1">
+                        <rect key="frame" x="244" y="34" width="137" height="2"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="progressTintColor" red="0.90588235294117647" green="0.29803921568627451" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="trackTintColor" red="0.81397749352331605" green="0.81397749352331605" blue="0.81397749352331605" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    </progressView>
                 </subviews>
                 <constraints>
                     <constraint firstItem="sIv-3W-L7B" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="6hc-vb-kYi"/>
@@ -62,6 +68,7 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="hanLabel" destination="YjR-AA-pWk" id="dsJ-Ml-IXT"/>
+                <outlet property="progressView" destination="amM-TX-Mj1" id="3W9-Qv-QBs"/>
                 <outlet property="yakuDescLabel" destination="P6v-f3-Ar9" id="Gk7-UK-cdI"/>
                 <outlet property="yakuNameLabel" destination="sIv-3W-L7B" id="3m7-0L-Gsy"/>
             </connections>
