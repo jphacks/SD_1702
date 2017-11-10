@@ -501,9 +501,14 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
 //                        notenView.haiImage[k].isHidden = false
 //                    }
 //                }
-//                notenView.syantenLabel.text = String(syantenNum) + "シャンテン"
-//                yakuCandidates = hand.getYakuCandidate()
-//                notenView.tableView.reloadData()
+                
+                yakuCandidates.removeAll()
+                notenView.syantenLabel.text = String(syantenNum) + "シャンテン"
+                for elem in hand.getYakuCandidate() {
+                      yakuCandidates.append(elem.0)
+                      print(elem.1)
+                }
+                notenView.tableView.reloadData()
                 
             }
             switchView(hand.isTenpai)

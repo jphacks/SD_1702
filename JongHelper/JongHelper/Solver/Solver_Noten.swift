@@ -377,8 +377,14 @@ class Noten {
                 count2 += 1
             }
         }
-        if count > 10 && count2 > 16 {
+        if count > 12 && count2 > 18 {
             return 1.0
+        }
+        if count > 11 && count2 > 17 {
+            return 0.66
+        }
+        if count > 10 && count2 > 16 {
+            return 0.33
         }
         return 0.0
     }
@@ -400,6 +406,7 @@ class Noten {
     
     func isSansyokuDoujun() -> Float {
         var kazu = [Int](repeating: 0, count: 7)
+        var ans = 0
         for i in 0 ..< 26 {
             var suu = Tile(rawValue: i)!.getNumber()
             if(tmp[i] > 0 && suu < 8 ){
@@ -413,8 +420,14 @@ class Noten {
             }
         }
         for i in 0 ..< 7{
-            if(kazu[i] > 5){
-                return 1.0
+            if(kazu[i] > ans){
+                ans = kazu[i]
+            }
+            switch ans{
+            case 6: return 0.33
+            case 7,8: return 0.66
+            case 9: return 1.0
+            default: return 0.0
             }
         }
         return 0.0
@@ -431,8 +444,11 @@ class Noten {
                 }
             }
             
-            if count >= 7 {
-                return 1.0
+            switch count{
+            case 7: return 0.33
+            case 8: return 0.66
+            case 9: return 1.0
+            default: return 0.0
             }
         }
         return 0.0
@@ -440,12 +456,19 @@ class Noten {
     
     func isSansyokuDoukou() -> Float {
         var kazu = [Int](repeating: 0, count: 9)
+        var ans = 0
         for i in 0 ..< 26 {
             kazu[Tile(rawValue: i)!.getNumber() - 1] += tmp[i]
         }
         for i in 0 ..< 9{
-            if kazu[i] > 6 {
-                return 1.0
+            if(kazu[i] > ans){
+                ans = kazu[i]
+            }
+            switch ans{
+            case 6: return 0.33
+            case 7,8: return 0.66
+            case 9: return 1.0
+            default: return 0.0
             }
         }
         return 0.0
@@ -453,13 +476,23 @@ class Noten {
     
     func isSanankou() -> Float {
         var count = 0
+        var toituflag = false
         for i in 0 ..< 33 {
             if tmp[i] > 2 {
                 count += 1
             }
+            if tmp[i] == 2 {
+                toituflag = true
+            }
+        }
+        if count > 2{
+            return 1.0
         }
         if count > 1 {
-            return 1.0
+            if toituflag{
+                return 0.66
+            }
+            return 0.33
         }
         return 0.0
     }
@@ -469,10 +502,13 @@ class Noten {
         count += tmp[Tile.Haku.getCode()]
         count += tmp[Tile.Hatu.getCode()]
         count += tmp[Tile.Tyun.getCode()]
-        if count > 4 {
-            return 1.0
+        
+        switch count{
+        case 5: return 0.33
+        case 6,7: return 0.66
+        case 8: return 1.0
+        default: return 0.0
         }
-        return 0.0
     }
     
     func isTitoitu() -> Float {
@@ -482,7 +518,12 @@ class Noten {
         
         let syanten_min = min(getKokusiSyantenNum().syanten, getTiitoituSyantenNum().syanten, getNormalSyantenNum().syanten)
         if syanten_min == getTiitoituSyantenNum().syanten {
-            return 1.0
+            switch getTiitoituSyantenNum().syanten{
+            case 3: return 0.33
+            case 2: return 0.66
+            case 1: return 1.0
+            default: return 0.0
+            }
         }
         return 0.0
     }
@@ -532,8 +573,14 @@ class Noten {
                 }
             }
         }
-        if count > 10 && count2 > 16 {
+        if count > 12 && count2 > 18 {
             return 1.0
+        }
+        if count > 11 && count2 > 17 {
+            return 0.66
+        }
+        if count > 10 && count2 > 16 {
+            return 0.33
         }
         return 0.0
     }
@@ -580,13 +627,23 @@ class Noten {
     
     func isSuankou() -> Float {
         var count = 0
+        var toituflag = false
         for i in 0 ... 33 {
             if tmp[i] > 2 {
                 count += 1
             }
+            if tmp[i] == 2 {
+                toituflag = true
+            }
+        }
+        if count > 3{
+            return 1.0
         }
         if count > 2 {
-            return 1.0
+            if toituflag{
+                return 0.66
+            }
+            return 0.33
         }
         return 0.0
     }
@@ -597,10 +654,12 @@ class Noten {
         count += tmp[Tile.Hatu.getCode()]
         count += tmp[Tile.Tyun.getCode()]
         
-        if count > 5 {
-            return 1.0
+        switch count{
+        case 6: return 0.33
+        case 7,8: return 0.66
+        case 9: return 1.0
+        default: return 0.0
         }
-        return 0.0
     }
     
     func isTuiso() -> Float {
@@ -611,8 +670,12 @@ class Noten {
         if count > 9 {
             return 1.0
         }
-        
-        return 0.0
+        switch count{
+        case 10: return 0.33
+        case 11,12: return 0.66
+        case 13: return 1.0
+        default: return 0.0
+        }
     }
     
     func isSyoususi() -> Float {
@@ -620,11 +683,12 @@ class Noten {
         for i in 27 ... 30 {
             count += tmp[i]
         }
-        if count > 7 {
-            return 1.0
+        switch count{
+        case 8: return 0.33
+        case 9,10: return 0.66
+        case 11: return 1.0
+        default: return 0.0
         }
-        
-        return 0.0
     }
     
     func isDaisusi() -> Float {
@@ -632,10 +696,12 @@ class Noten {
         for i in 27 ... 30 {
             count += tmp[i]
         }
-        if count > 9 {
-            return 1.0
+        switch count{
+        case 10: return 0.33
+        case 11: return 0.66
+        case 12: return 1.0
+        default: return 0.0
         }
-        return 0.0
     }
     
     func isRyuisou() -> Float {
@@ -646,16 +712,16 @@ class Noten {
                 count += tmp[i]
             }
         }
-            
-        if count >= 10 {
-            return 1.0
+        switch count{
+        case 10: return 0.33
+        case 11,12: return 0.66
+        case 13: return 1.0
+        default: return 0.0
         }
-        return 0.0
     }
     
     func isTyurenPoutou() -> Float {
         var roop = [(0, 8), (9, 17), (18, 26)]
-        
         for elem in roop {
             var count = 0
             var count2 = 0
@@ -665,9 +731,14 @@ class Noten {
                     count2 += 1
                 }
             }
-            
-            if count >= 10 && count2 >= 7 {
+            if count >= 13 && count2 == 9 {
                 return 1.0
+            }
+            if count >= 11 && count2 >= 8 {
+                return 0.66
+            }
+            if count >= 10 && count2 >= 7 {
+                return 0.33
             }
         }
         return 0.0
@@ -681,16 +752,23 @@ class Noten {
                 count += tmp[i]
             }
         }
-        if count > 9 {
-            return 1.0
+        switch count{
+        case 10: return 0.33
+        case 11,12: return 0.66
+        case 13: return 1.0
+        default: return 0.0
         }
-        return 0.0
     }
     
     func isKokusi() -> Float {
         let syanten_min = min(getKokusiSyantenNum().syanten, getTiitoituSyantenNum().syanten, getNormalSyantenNum().syanten)
         if syanten_min == getKokusiSyantenNum().syanten {
-            return 1.0
+            switch getKokusiSyantenNum().syanten{
+            case 3: return 0.33
+            case 2: return 0.66
+            case 1: return 1.0
+            default: return 0.0
+            }
         }
         return 0.0
     }
