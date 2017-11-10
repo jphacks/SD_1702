@@ -90,7 +90,7 @@ class Hand {
         }
     }
     //ねらう役の候補を返す
-    func getYakuCandidate()->[Yaku]{
+    func getYakuCandidate() -> [(Yaku, Float)]{
         return Noten(inputtedTiles: self.inputtedTiles, genSituation: genSituation, perSituation: perSituation).getYakuCandidate()
     }
 

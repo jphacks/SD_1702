@@ -34,6 +34,10 @@ class TokutenViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     var yakuList: [Yaku] = []
     
+    
+    let talker = AVSpeechSynthesizer()
+    var audioPlayer:AVAudioPlayer!
+    
     @IBAction func pushClose(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
@@ -41,11 +45,57 @@ class TokutenViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBAction func switchTumo(_ sender: UISegmentedControl) {
         isTsumo = sender.selectedSegmentIndex == 1
         calculate()
+        
+//        if isTsumo {
+//
+//            let audioPath = Bundle.main.path(forResource: "Resource/Voice/tsumo", ofType:"wav")
+//            let audioUrl = URL(fileURLWithPath: audioPath!)
+//
+//            // auido を再生するプレイヤーを作成する
+//            var audioError:NSError?
+//            do {
+//                audioPlayer = try AVAudioPlayer(contentsOf: audioUrl)
+//            } catch let error as NSError {
+//                audioError = error
+//                audioPlayer = nil
+//            }
+//
+//            // エラーが起きたとき
+//            if let error = audioError {
+//                print("Error \(error.localizedDescription)")
+//            }
+//
+//            audioPlayer.prepareToPlay()
+//            audioPlayer.play()
+//        }
     }
     
     @IBAction func switchReach(_ sender: UISegmentedControl) {
         isReach = sender.selectedSegmentIndex == 1
         calculate()
+        
+//        if isReach {
+//
+//            let audioPath = Bundle.main.path(forResource: "Resource/Voice/richi", ofType:"wav")
+//            let audioUrl = URL(fileURLWithPath: audioPath!)
+//
+//            // auido を再生するプレイヤーを作成する
+//            var audioError:NSError?
+//            do {
+//                audioPlayer = try AVAudioPlayer(contentsOf: audioUrl)
+//            } catch let error as NSError {
+//                audioError = error
+//                audioPlayer = nil
+//            }
+//
+//            // エラーが起きたとき
+//            if let error = audioError {
+//                print("Error \(error.localizedDescription)")
+//            }
+//
+//            audioPlayer.prepareToPlay()
+//            audioPlayer.play()
+//        }
     }
     
     @IBAction func pushMinus(_ sender: UIButton) {
@@ -113,6 +163,7 @@ class TokutenViewController: UIViewController, UITableViewDelegate, UITableViewD
                 isYakuman = true
             }
         }
+        
         if(isYakuman){
             hanLabel.text = "役満"
         } else {
@@ -128,8 +179,12 @@ class TokutenViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.tableView.reloadData()
         
         // 音声読み上げ
-//        let talker = AVSpeechSynthesizer()
-//        let utterance = AVSpeechUtterance(string: yakuList[0].getName())
+//        for elem in yakuList {
+//            let utterance = AVSpeechUtterance(string: elem.getSound())
+//            utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+//            talker.speak(utterance)
+//        }
+//        let utterance = AVSpeechUtterance(string: scoreLabel.text!)
 //        utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
 //        talker.speak(utterance)
         
