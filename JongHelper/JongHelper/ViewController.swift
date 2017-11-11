@@ -12,6 +12,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var imageViewOpenCv: UIImageView!
+    @IBOutlet weak var indicator: UIActivityIndicatorView!
 
     var tehaiView: TehaiView!
     var notenView: NotenYakuView!
@@ -97,6 +98,8 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         calculate()
         tenpaiView.isHidden = true
         notenView.isHidden = true
+        
+        self.view.bringSubview(toFront: indicator)
     }
     
     func switchView(_ b: Bool) {
@@ -130,10 +133,10 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
         imageView.image = image
     }
     
-    let url = URL(string: "http://10.32.228.169:50000/")!
+    let url = URL(string: "http://133.130.117.251")!
     // AVCaptureDelegate
     func photo(image: UIImage){
-        
+        startGuruguru()
         // get tehai image
         let tehaiImage = openCVWrapper.getTehaiImage(image)
         let tehaiImageData:Data = UIImagePNGRepresentation(tehaiImage!)!
@@ -424,6 +427,16 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
     
     //tableview===============================================================
     
+    func startGuruguru() {
+        self.indicator.isHidden = false
+        self.indicator.startAnimating()
+    }
+    
+    func stopGuruguru() {
+        self.indicator.isHidden = true
+        self.indicator.stopAnimating()
+    }
+    
     // 画像がタップされたら呼ばれる
     @objc func matiImageViewTapped(_ sender: AgariTapGestureRecognizer) {
         performSegue(withIdentifier: "toTokutenView",sender: sender)
@@ -560,7 +573,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
             }
             switchView(hand.isTenpai)
         }
-        
+        stopGuruguru()
     }
 
 }
