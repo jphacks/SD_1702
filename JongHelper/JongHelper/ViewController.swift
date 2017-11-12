@@ -567,7 +567,7 @@ class ViewController: UIViewController, AVCaptureDelegate, TehaiViewDelegate, UI
 //                }
 
                 notenView.syantenLabel.text = String(syantenNum) + "シャンテン"
-                yakuCandidates = hand.getYakuCandidate()
+                yakuCandidates = hand.getYakuCandidate().reversed()
                 notenView.tableView.reloadData()
                 
             }
