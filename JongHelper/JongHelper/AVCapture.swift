@@ -38,6 +38,7 @@ class AVCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptu
             AVCaptureDevice.DeviceType.builtInWideAngleCamera,
             for: AVMediaType.video,
             position: .back) // position: .front
+        
         // カメラからの入力データ
         do {
             input = try AVCaptureDeviceInput(device: camera)
@@ -76,7 +77,7 @@ class AVCapture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptu
     
     func takePicture(){
         let photoSettings = AVCapturePhotoSettings()
-        photoSettings.flashMode = .auto
+        photoSettings.flashMode = .off
         photoSettings.isAutoStillImageStabilizationEnabled = true
         photoSettings.isHighResolutionPhotoEnabled = false
         output?.capturePhoto(with: photoSettings, delegate: self)
