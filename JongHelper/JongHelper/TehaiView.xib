@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -378,7 +378,7 @@
                             </constraints>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oJf-Gt-It8">
-                            <rect key="frame" x="617" y="70" width="100" height="100"/>
+                            <rect key="frame" x="607" y="60" width="100" height="100"/>
                             <color key="backgroundColor" red="0.90588235294117647" green="0.29803921568627451" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="100" id="Bmj-LB-jUo"/>
@@ -416,13 +416,13 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="oJf-Gt-It8" secondAttribute="trailing" constant="-50" id="2d1-Ty-Zed"/>
+                        <constraint firstAttribute="trailing" secondItem="oJf-Gt-It8" secondAttribute="trailing" constant="-40" id="2d1-Ty-Zed"/>
                         <constraint firstAttribute="trailing" secondItem="RiN-iG-NDd" secondAttribute="trailing" id="BNN-z4-Lnm"/>
                         <constraint firstAttribute="height" constant="120" id="Dnf-jf-m2e"/>
                         <constraint firstItem="F38-kd-bKe" firstAttribute="top" secondItem="JS0-aN-Ji9" secondAttribute="top" id="IPV-6r-a5L"/>
                         <constraint firstAttribute="bottom" secondItem="F38-kd-bKe" secondAttribute="bottom" id="Mpk-Nj-MqT"/>
-                        <constraint firstItem="oJf-Gt-It8" firstAttribute="top" secondItem="RiN-iG-NDd" secondAttribute="bottom" constant="16" id="WHS-Z8-3K0"/>
-                        <constraint firstAttribute="bottom" secondItem="oJf-Gt-It8" secondAttribute="bottom" constant="-50" id="YGM-Z9-HR2"/>
+                        <constraint firstItem="oJf-Gt-It8" firstAttribute="top" secondItem="RiN-iG-NDd" secondAttribute="bottom" constant="6" id="WHS-Z8-3K0"/>
+                        <constraint firstAttribute="bottom" secondItem="oJf-Gt-It8" secondAttribute="bottom" constant="-40" id="YGM-Z9-HR2"/>
                         <constraint firstItem="F38-kd-bKe" firstAttribute="leading" secondItem="JS0-aN-Ji9" secondAttribute="leading" id="alE-Gm-Jlr"/>
                     </constraints>
                 </view>
